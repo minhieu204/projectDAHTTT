@@ -17,7 +17,7 @@ function TopBar() {
         alignItems: 'center'
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         <Button
           key='cauchuyen'
           sx={{
@@ -55,12 +55,13 @@ function TopBar() {
       </Box>
       <Box
         sx={{
-          height: '40px'
+          height: '40px',
+          cursor: 'pointer'
         }}
       >
         <img src="https://cdn.pnj.io/images/logo/pnj.com.vn.png" alt="" style={{ height: '100%', objectFit: 'contain' }} />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         <Button
           key='taikhoan'
           sx={{

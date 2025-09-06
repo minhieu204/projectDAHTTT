@@ -31,6 +31,7 @@ function Banner({ banners }) {
         '& .slick-dots li.slick-active button:before': {
           color: 'white',
         },
+        cursor: 'pointer'
       }}
     >
       <Slider {...settings}>
