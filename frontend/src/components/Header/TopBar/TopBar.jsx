@@ -1,0 +1,121 @@
+import { Badge, Box, Button, IconButton } from '@mui/material'
+import React from 'react'
+import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined'
+import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+
+function TopBar() {
+  const itemCount = 0
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: '49px',
+        alignItems: 'center'
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Button
+          key='cauchuyen'
+          sx={{
+            my: 2,
+            color: '#696969',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: 'white'
+            },
+          }}
+        >
+          <AutoStoriesOutlinedIcon />
+          Câu Chuyện PNJ
+        </Button>
+        <Button
+          key='cuahang'
+          sx={{
+            my: 2,
+            color: '#696969',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: 'white'
+            },
+          }}
+        >
+          <PinDropOutlinedIcon />
+          Cửa hàng
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          height: '40px'
+        }}
+      >
+        <img src="https://cdn.pnj.io/images/logo/pnj.com.vn.png" alt="" style={{ height: '100%', objectFit: 'contain' }} />
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Button
+          key='taikhoan'
+          sx={{
+            my: 2,
+            color: '#696969',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: 'white'
+            },
+          }}
+        >
+          <PersonOutlineOutlinedIcon />
+          Tài Khoản Của Tôi
+        </Button>
+        <Button
+          key='giohang'
+          sx={{
+            my: 2,
+            color: '#696969',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: 'white'
+            },
+          }}
+        >
+          <Badge
+            badgeContent={itemCount}
+            color="error"
+            showZero
+            anchorOrigin={{
+              vertical: 'bottom', // Nằm ở phía dưới
+              horizontal: 'right', // Nằm ở phía bên phải
+            }}
+            sx={{
+              '& .MuiBadge-badge': {
+                width: '12px',
+                height: '20px',
+                top: 2,
+                right: 5,
+              }
+            }}
+          >
+            <ShoppingBagOutlinedIcon />
+          </Badge>
+          Giỏ Hàng
+        </Button>
+      </Box>
+    </Box>
+  )
+}
+
+export default TopBar

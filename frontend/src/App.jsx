@@ -4,9 +4,9 @@ import { Box, Container } from '@mui/material'
 function App() {
 
   return (
-    <Container>
+    <Box>
       <HomePage />
-    </Container>
+    </Box>
   )
 }
 
