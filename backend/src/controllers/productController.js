@@ -1,11 +1,11 @@
 import { StatusCodes } from 'http-status-codes'
-import ApiError from '~/utils/ApiError'
+import { productService } from '~/services/productService'
 
 const createNew = async (req, res, next) => {
   try {
-    console.log('req.body: ',req.body)
+    const createdProduct = await productService.createNew(req.body)
 
-    res.status(StatusCodes.CREATED).json({ message: 'APIs post product controller.', code: StatusCodes.CREATED})
+    res.status(StatusCodes.CREATED).json(createdProduct)
     
   } catch (error) {
     next(error)
