@@ -1,5 +1,7 @@
 import { slugify } from '~/utils/formatters'
 import { productModel } from '~/models/productModel'
+import ApiError from '~/utils/ApiError'
+import { StatusCodes } from 'http-status-codes'
  
 const createNew = async (reqBody) => {
   try {
@@ -18,6 +20,34 @@ const createNew = async (reqBody) => {
   }
 }
 
+const getDetails = async (productId) => {
+  try {
+    const product = await productModel.getDetails(productId)
+
+    if (!product) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Product not found')
+    }
+
+    return product
+  } catch (error) {
+    throw error
+  }
+}
+
+const getAll = async () => {
+  try {
+    const products = await productModel.getAll()
+    if (!products) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'No products found')
+    }
+    return products
+  } catch (error) {
+    throw error
+  }
+}
+
 export const productService = {
-  createNew
+  createNew,
+  getDetails,
+  getAll
 }

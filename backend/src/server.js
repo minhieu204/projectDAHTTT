@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-console
 import express from 'express'
+import cors from 'cors'
 import exitHook from 'async-exit-hook'
 
 import { CONNECT_DB, CLOSE_DB } from '~/config/mongodb'
@@ -10,6 +11,8 @@ import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware'
 
 const START_SERVER = () => {
   const app = express()
+
+  app.use(cors())
 
   app.use(express.json())
 

@@ -48,9 +48,31 @@ const findOneId = async (id) => {
   }
 }
 
+const getDetails = async (id) => {
+  try {
+    const result = await GET_DB().collection(PRODUCT_COLLECTION_NAME).findOne({
+      _id: new ObjectId(id)
+    })
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+const getAll = async () => {
+  try {
+    const result = await GET_DB().collection(PRODUCT_COLLECTION_NAME).find().toArray()
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
   PRODUCT_COLLECTION_SCHEMA,
   createNew,
-  findOneId
+  findOneId,
+  getDetails,
+  getAll
 }

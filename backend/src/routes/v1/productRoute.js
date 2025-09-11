@@ -11,4 +11,10 @@ Router.route('/')
   })
   .post(productValidation.createNew, productController.createNew)
 
+// Router.route('/:id')
+//   .get(productController.getDetails)
+
+Router.route('/getall')
+  .get(productController.getAll)
+
 export const productRoute = Router
