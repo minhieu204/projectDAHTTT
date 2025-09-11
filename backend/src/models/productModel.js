@@ -1,4 +1,5 @@
 import Joi from "joi"
+import { ObjectId } from 'mongodb'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 import { GET_DB } from "~/config/mongodb"
 
@@ -16,15 +17,20 @@ const PRODUCT_COLLECTION_SCHEMA = Joi.object({
   categoryId: Joi.string()
     .pattern(OBJECT_ID_RULE)
     .message(OBJECT_ID_RULE_MESSAGE)
-    .required(),
+    .default(null),
 
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
-  updatedAt: Joi.date().timestamp('javascript').default(Date.now)
+  updatedAt: Joi.date().timestamp('javascript').default(null)
 })
+
+const validateBeforeCreate = async (data) => {
+  return await PRODUCT_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
+}
 
 const createNew = async (data) => {
   try {
-    const createdProduct = await GET_DB().collection(PRODUCT_COLLECTION_NAME).insertOne(data)
+    const validData = await validateBeforeCreate(data)
+    const createdProduct = await GET_DB().collection(PRODUCT_COLLECTION_NAME).insertOne(validData)
     return createdProduct
   } catch (error) {
     throw new Error(error)
@@ -34,7 +40,7 @@ const createNew = async (data) => {
 const findOneId = async (id) => {
   try {
     const result = await GET_DB().collection(PRODUCT_COLLECTION_NAME).findOne({
-      _id: id
+      _id: new ObjectId(id)
     })
     return result
   } catch (error) {
