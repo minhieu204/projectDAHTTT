@@ -5,22 +5,24 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, isNew }) => {
   return (
     <Card sx={{ maxWidth: 400, borderRadius: 2, position: 'relative', m: 1, cursor: 'pointer' }}>
-      <Box sx={{
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        bgcolor: 'white',
-        p: 0.5,
-        borderRadius: '50%',
-        boxShadow: 1
-      }}>
-        <Typography variant="caption" sx={{ color: '#143765', fontWeight: 'bold' }}>
-          NEW
-        </Typography>
-      </Box>
+      {isNew && (
+        <Box sx={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          bgcolor: 'white',
+          p: 0.5,
+          borderRadius: '50%',
+          boxShadow: 1
+        }}>
+          <Typography variant="caption" sx={{ color: '#143765', fontWeight: 'bold' }}>
+            NEW
+          </Typography>
+        </Box>
+      )}
 
       <CardMedia
         component="img"

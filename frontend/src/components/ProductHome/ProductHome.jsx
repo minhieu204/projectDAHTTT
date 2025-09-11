@@ -1,80 +1,34 @@
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { Box, Button, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Slider from 'react-slick'
 import ProductCard from './ProductCard/ProductCard'
-
-const newProducts = [
-  {
-    id: 1,
-    name: 'Hạt Charm Bạc đính đá STYLE By PNJ',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-sixmxmc000012-hat-charm-bac-dinh-da-style-by-pnj-1.png',
-    code: 'XMXMC000012',
-    price: '655.000',
-    sold: '57'
-  },
-  {
-    id: 2,
-    name: 'Hạt Charm Bạc đính đá STYLE By PNJ',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-sixm00y000023-hat-charm-bac-dinh-da-style-by-pnj-1.png',
-    code: 'XMXMC000023',
-    price: '755.000',
-    sold: '100+'
-  },
-  {
-    id: 3,
-    name: 'Hạt Charm Bạc đính đá STYLE By PNJ',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-gmddddw002968-mat-day-chuyen-kim-cuong-vang-trang-14k-pnj-1.png',
-    code: 'XMXMC000023',
-    price: '755.000',
-    sold: '100+'
-  },
-  {
-    id: 4,
-    name: 'Hạt Charm Bạc đính đá STYLE By PNJ',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-gn0000y003857-nhan-nam-vang-24k-mancode-by-pnj-manh-me-vuon-tam-1.png',
-    code: 'XMXMC000023',
-    price: '755.000',
-    sold: '100+'
-  },
-  {
-    id: 5,
-    name: 'Hạt Charm Bạc đính đá STYLE By PNJ',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-gn0000y003857-nhan-nam-vang-24k-mancode-by-pnj-manh-me-vuon-tam-1.png',
-    code: 'XMXMC000023',
-    price: '755.000',
-    sold: '100+'
-  },
-  {
-    id: 6,
-    name: 'Hạt Charm Bạc đính đá STYLE By PNJ',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-gn0000y003857-nhan-nam-vang-24k-mancode-by-pnj-manh-me-vuon-tam-1.png',
-    code: 'XMXMC000023',
-    price: '755.000',
-    sold: '100+'
-  },
-]
-
-const bestSellerProducts = [
-  {
-    id: 3,
-    name: 'Mặt dây chuyền Kim cương Vàng Trắng',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-sixm00y000023-hat-charm-bac-dinh-da-style-by-pnj-1.png',
-    price: '8.868.000',
-    sold: '43'
-  },
-  {
-    id: 4,
-    name: 'Nhẫn nam Vàng 24K MANCODE by PNJ',
-    image: 'https://cdn.pnj.io/images/thumbnails/485/485/detailed/264/sp-sixm00y000023-hat-charm-bac-dinh-da-style-by-pnj-1.png',
-    price: '47.589.000',
-    sold: '42'
-  },
-]
+import { fetchAllProductsAPI } from '../../apis'
 
 function ProductHome() {
+  const [allProducts, setAllProducts] = useState([])
   const [selectedButton, setSelectedButton] = useState('new')
+
+  useEffect(() => {
+    // Gọi API để lấy tất cả sản phẩm
+    fetchAllProductsAPI().then((data) => {
+      setAllProducts(data)
+    })
+  }, [])
+
+  const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
+  // Lọc và sắp xếp sản phẩm mới
+  // Lọc sản phẩm có createdAt trong vòng 1 tuần và sắp xếp theo thời gian
+  const newProducts = [...allProducts]
+    .filter(product => product.createdAt > oneWeekAgo)
+    .sort((a, b) => b.createdAt - a.createdAt)
+
+  // Lọc và sắp xếp sản phẩm bán chạy
+  // Lọc sản phẩm có sold > 20 và sắp xếp theo số lượng đã bán
+  const bestSellerProducts = [...allProducts]
+    .filter(product => product.sold > 20)
+    .sort((a, b) => b.sold - a.sold)
 
   const productsToShow = selectedButton === 'new' ? newProducts : bestSellerProducts
 
@@ -138,8 +92,11 @@ function ProductHome() {
         <Box sx={{ width: '90%', margin: 'auto' }}>
           <Slider {...settings}>
             {productsToShow.map(product => (
-              <Box key={product.id}>
-                <ProductCard product={product} />
+              <Box key={product._id}>
+                <ProductCard
+                  product={product}
+                  isNew={selectedButton === 'new'}
+                />
               </Box>
             ))}
           </Slider>
