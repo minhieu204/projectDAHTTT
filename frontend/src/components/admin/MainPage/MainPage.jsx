@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import TableProduct from './TableProduct/TableProduct'
@@ -26,9 +26,11 @@ function MainPage() {
         <Typography variant='h5'>
           Quản Lý Sản Phẩm
         </Typography>
-        <Button sx={{ backgroundColor: '#66FF99', height: '40px', minWidth: '46px' }}>
-          <AddOutlinedIcon sx={{ color: 'white' }}/>
-        </Button>
+        <Tooltip title='Thêm sản phẩm'>
+          <Button sx={{ backgroundColor: '#66FF99', height: '40px', minWidth: '46px' }}>
+            <AddOutlinedIcon sx={{ color: 'white' }}/>
+          </Button>
+        </Tooltip>
       </Box>
       <Box sx={{ px: 6 }}>
         <TableProduct />

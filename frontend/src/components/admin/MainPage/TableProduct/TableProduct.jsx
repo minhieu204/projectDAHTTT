@@ -46,11 +46,11 @@ const TableProduct = () => {
         setDebouncedValue(value)
       }, delay)
       return () => {
-        clearTimeout(handler);
+        clearTimeout(handler)
       }
     }, [value, delay])
-    return debouncedValue;
-  };
+    return debouncedValue
+  }
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   useEffect(() => {
