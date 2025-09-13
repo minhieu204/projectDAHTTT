@@ -23,14 +23,18 @@ const createNew = async (req, res, next) => {
         'number.base': 'Price must be a number',
         'number.min': 'Price must be greater than or equal to 0'
       }),
-      quality: Joi.number().integer().min(0).default(0).messages({
+      stock: Joi.number().integer().min(0).default(0).messages({
         'number.base': 'Stock must be a number',
         'number.min': 'Stock must be greater than or equal to 0'
       }),
       image: Joi.string().uri().required().messages({
         'any.required': 'Image URL is required!',
         'string.uri': 'Image must be a valid URL'
-      })
+      }),
+      material: Joi.string().required().min(3).trim().strict().messages({
+        'any.required': 'Image URL is required!'
+      }),
+
     })
 
     try {

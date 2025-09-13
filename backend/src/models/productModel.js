@@ -9,10 +9,10 @@ const PRODUCT_COLLECTION_SCHEMA = Joi.object({
   slug: Joi.string().required().min(3).trim().strict(),
   description: Joi.string().max(500).trim().strict().allow(''),
   price: Joi.number().required().min(0),
-  quality: Joi.number().integer().min(0).default(0),
+  stock: Joi.number().integer().min(0).default(0),
   image: Joi.string().uri().required(),
   sold: Joi.number().integer().min(0).default(0),
-
+  material: Joi.string().required().min(3).trim().strict(),
   // Tham chiếu đến Category
   categoryId: Joi.string()
     .pattern(OBJECT_ID_RULE)
@@ -68,11 +68,23 @@ const getAll = async () => {
   }
 }
 
+const deleteOne = async (productId) => {
+  try {
+    const result = await GET_DB().collection(PRODUCT_COLLECTION_NAME).deleteOne({
+      _id: new ObjectId(productId)
+    })
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
   PRODUCT_COLLECTION_SCHEMA,
   createNew,
   findOneId,
   getDetails,
-  getAll
+  getAll,
+  deleteOne
 }

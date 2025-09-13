@@ -6,15 +6,10 @@ import { productController } from '~/controllers/productController'
 const Router = express.Router()
 
 Router.route('/')
-  .get((req, res) => {
-    res.status(StatusCodes.OK).json({ message: 'APIs get product.', code: StatusCodes.OK})
-  })
+  .get(productController.getAll)
   .post(productValidation.createNew, productController.createNew)
 
-// Router.route('/:id')
-//   .get(productController.getDetails)
-
-Router.route('/getall')
-  .get(productController.getAll)
+Router.route('/:id')
+  .delete(productController.deleteOne)
 
 export const productRoute = Router

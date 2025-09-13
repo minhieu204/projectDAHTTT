@@ -33,8 +33,22 @@ const getAll = async (req, res, next) => {
   }
 }
 
+const deleteOne = async (req, res, next) => {
+  try {
+    const productId = req.params.id
+    const result = await productService.deleteOne(productId)
+    res.status(StatusCodes.OK).json({ 
+      message: 'Product deleted successfully',
+      deletedCount: result.deletedCount 
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const productController = {
   createNew,
   getDetails,
-  getAll
+  getAll,
+  deleteOne
 }
