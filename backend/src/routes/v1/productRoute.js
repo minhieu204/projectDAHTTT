@@ -12,4 +12,7 @@ Router.route('/')
 Router.route('/:id')
   .delete(productController.deleteOne)
 
+Router.route('/search')
+  .get(productController.search)
+
 export const productRoute = Router

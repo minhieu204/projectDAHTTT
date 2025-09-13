@@ -46,9 +46,26 @@ const deleteOne = async (req, res, next) => {
   }
 }
 
+const search = async (req, res, next) => {
+  try {
+    const { name } = req.query
+
+    if (!name || name.trim() === '') {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Search query "name" is required' })
+    }
+
+    const products = await productService.search(name.trim())
+    res.status(StatusCodes.OK).json(products)
+  } catch (error) {
+    console.error("Search error:", error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" })
+  }
+}
+
 export const productController = {
   createNew,
   getDetails,
   getAll,
-  deleteOne
+  deleteOne,
+  search
 }

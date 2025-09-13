@@ -79,6 +79,18 @@ const deleteOne = async (productId) => {
   }
 }
 
+const search = async (query) => {
+  try {
+    const regex = new RegExp(query, 'i')
+    const result = await GET_DB().collection(PRODUCT_COLLECTION_NAME).find({ name: regex }).toArray()
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+
+
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
   PRODUCT_COLLECTION_SCHEMA,
@@ -86,5 +98,6 @@ export const productModel = {
   findOneId,
   getDetails,
   getAll,
-  deleteOne
+  deleteOne,
+  search
 }

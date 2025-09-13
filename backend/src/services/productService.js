@@ -58,9 +58,22 @@ const deleteOne = async (productId) => {
   }
 }
 
+const search = async (name) => {
+  try {
+    const products = await productModel.search(name)
+    if (!products) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'No products found matching your query')
+    }
+    return products
+  } catch (error) {
+    throw error
+  }
+}
+
 export const productService = {
   createNew,
   getDetails,
   getAll,
-  deleteOne
+  deleteOne,
+  search
 }
