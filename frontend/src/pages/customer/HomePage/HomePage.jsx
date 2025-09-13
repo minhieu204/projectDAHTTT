@@ -1,8 +1,8 @@
 import { Box, Container } from '@mui/material'
-import Banner from '../../components/Banner/Banner'
-import Header from '../../components/Header/Header'
-import Service from '../../components/Service/Service'
-import ProductHome from '../../components/ProductHome/ProductHome'
+import Banner from '~/components/customer/Banner/Banner'
+import Header from '~/components/customer/Header/Header'
+import Service from '~/components/customer/Service/Service'
+import ProductHome from '~/components/customer/ProductHome/ProductHome'
 
 function HomePage() {
   const bannerData = [
