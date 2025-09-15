@@ -21,11 +21,11 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { fetchAllProductsAPI, deleteProductAPI, searchProductsAPI } from '~/apis'
 import Snackbar from '@mui/material/Snackbar'
-import TablePageControls from '../../TablePageControls/TablePageControls'
-import TableRowsPerPage from '../../TableRowsPerPage/TableRowsPerPage'
+import TablePageControls from '../TablePageControls/TablePageControls'
+import TableRowsPerPage from '../TableRowsPerPage/TableRowsPerPage'
 
 
-const TableProduct = () => {
+const TableProduct = ({ onEditProduct }) => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false)
   const [deletingProductId, setDeletingProductId] = useState(null)
   const [rows, setRows] = useState([])
@@ -79,8 +79,7 @@ const TableProduct = () => {
 
   // Hàm xử lý sự kiện
   const handleEdit = (id) => {
-    console.log('Sửa sản phẩm với ID:', id)
-    // Thêm logic edit ở đây
+    onEditProduct(id)
   }
 
   const handleDelete = (id) => {

@@ -1,7 +1,8 @@
-import { Box } from '@mui/material'
+import { Box, Breadcrumbs, Link, Typography } from '@mui/material'
 import React from 'react'
+import { Outlet } from 'react-router-dom'
+import AdminBreadcrumbs from '~/components/admin/AdminBreadcrumbs/AdminBreadcrumbs'
 import AppBar from '~/components/admin/AppBar/AppBar'
-import MainPage from '~/components/admin/MainPage/MainPage'
 import SideBar from '~/components/admin/SideBar/SideBar'
 
 function AdminPage() {
@@ -26,7 +27,10 @@ function AdminPage() {
           <AppBar />
         </Box>
         <Box sx={{ flex: '1', overflow: 'auto' }}>
-          <MainPage />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mr: 6, mt: 4 }}>
+            <AdminBreadcrumbs />
+          </Box>
+          <Outlet />
         </Box>
       </Box>
     </Box>

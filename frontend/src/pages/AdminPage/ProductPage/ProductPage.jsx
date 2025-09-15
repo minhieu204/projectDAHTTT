@@ -1,9 +1,17 @@
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import TableProduct from './TableProduct/TableProduct'
+import TableProduct from '~/components/admin/TableProduct/TableProduct'
+import { useNavigate } from 'react-router-dom'
 
-function MainPage() {
+function ProductPage() {
+  const navigate = useNavigate()
+  const handleAddProductClick = () => {
+    navigate('/admin/product/add-product')
+  }
+  const handleEditProductClick = (productId) => {
+    navigate(`/admin/product/edit-product/${productId}`)
+  }
   return (
     <Box
       sx={{
@@ -11,7 +19,7 @@ function MainPage() {
         height: 'auto',
         overflow: 'auto',
         mx: 5,
-        my: 12,
+        my: 1,
         borderRadius: '8px'
       }}
     >
@@ -27,16 +35,16 @@ function MainPage() {
           Quản Lý Sản Phẩm
         </Typography>
         <Tooltip title='Thêm sản phẩm'>
-          <Button sx={{ backgroundColor: '#66FF99', height: '40px', minWidth: '46px' }}>
+          <Button onClick={handleAddProductClick} sx={{ backgroundColor: '#66FF99', height: '40px', minWidth: '46px' }}>
             <AddOutlinedIcon sx={{ color: 'white' }}/>
           </Button>
         </Tooltip>
       </Box>
       <Box sx={{ px: 6 }}>
-        <TableProduct />
+        <TableProduct onEditProduct={handleEditProductClick} />
       </Box>
     </Box>
   )
 }
 
-export default MainPage
+export default ProductPage

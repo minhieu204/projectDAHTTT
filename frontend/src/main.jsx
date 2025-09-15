@@ -4,6 +4,51 @@ import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './theme'
 import { ThemeProvider } from '@mui/material'
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router'
+import AdminPage from './pages/AdminPage/AdminPage.jsx'
+import HomePage from './pages/CustomerPage/HomePage/HomePage.jsx'
+import CustomerPage from './pages/CustomerPage/CustomerPage.jsx'
+import ProductPage from './pages/AdminPage/ProductPage/ProductPage.jsx'
+import AddProduct from './pages/AdminPage/ProductPage/AddProduct/AddProduct.jsx'
+import EditProduct from './pages/AdminPage/ProductPage/EditProduct/EditProduct.jsx'
+
+let router = createBrowserRouter([
+  {
+    path: '/admin',
+    element: <AdminPage />,
+    children: [
+      {
+        index: true,
+        element: <ProductPage />
+      },
+      {
+        path: 'product',
+        element: <ProductPage />,
+      },
+      {
+        path: 'product/add-product',
+        element: <AddProduct />,
+      },
+      {
+        path: 'product/edit-product/:productId',
+        element: <EditProduct />,
+      },
+    ]
+  },
+  {
+    path: '/customer',
+    element: <CustomerPage />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />
+      },
+    ]
+  },
+])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -11,7 +56,7 @@ createRoot(document.getElementById('root')).render(
       theme={theme}
       disableTransitionOnChange>
       <CssBaseline enableColorScheme/>
-      <App />
+      <RouterProvider router={router} />
     </ThemeProvider>
   </StrictMode>,
 )
