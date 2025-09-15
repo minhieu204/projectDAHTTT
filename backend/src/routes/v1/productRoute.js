@@ -10,7 +10,9 @@ Router.route('/')
   .post(productValidation.createNew, productController.createNew)
 
 Router.route('/:id')
+  .get(productController.getDetails)
   .delete(productController.deleteOne)
+  .put(productController.updateOne)
 
 Router.route('/search')
   .get(productController.search)

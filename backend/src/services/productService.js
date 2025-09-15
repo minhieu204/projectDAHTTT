@@ -70,10 +70,30 @@ const search = async (name) => {
   }
 }
 
+const updateOne = async (productId, reqBody) => {
+  try {
+    const updateData = {
+      ...reqBody,
+      updatedAt: Date.now()
+    }
+
+    const updatedProduct = await productModel.updateOne(productId, updateData)
+
+    if (!updatedProduct) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Product not found to update')
+    }
+
+    return updatedProduct
+  } catch (error) {
+    throw error
+  }
+}
+
 export const productService = {
   createNew,
   getDetails,
   getAll,
   deleteOne,
-  search
+  search,
+  updateOne
 }
