@@ -89,7 +89,28 @@ const search = async (query) => {
   }
 }
 
+const updateOne = async (productId, updateData) => {
+  try {
+    const result = await GET_DB()
+      .collection(PRODUCT_COLLECTION_NAME)
+      .findOneAndUpdate(
+        { _id: new ObjectId(productId) },
+        { $set: updateData },
+        { returnDocument: 'after' } // đảm bảo trả về doc sau update
+      )
 
+    if (!result.value) {
+      // Trường hợp update ok nhưng không trả về document -> fallback gọi findOne
+      return await GET_DB()
+        .collection(PRODUCT_COLLECTION_NAME)
+        .findOne({ _id: new ObjectId(productId) })
+    }
+
+    return result.value
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
@@ -99,5 +120,6 @@ export const productModel = {
   getDetails,
   getAll,
   deleteOne,
-  search
+  search,
+  updateOne
 }

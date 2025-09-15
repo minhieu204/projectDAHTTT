@@ -62,10 +62,24 @@ const search = async (req, res, next) => {
   }
 }
 
+const updateOne = async (req, res, next) => {
+  try {
+    console.log("PUT productId:", req.params.id)  // 👈 debug
+    console.log("PUT body:", req.body) 
+    const productId = req.params.id
+    const updatedProduct = await productService.updateOne(productId, req.body)
+
+    res.status(StatusCodes.OK).json(updatedProduct)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const productController = {
   createNew,
   getDetails,
   getAll,
   deleteOne,
-  search
+  search,
+  updateOne
 }

@@ -19,13 +19,13 @@ import Button from '@mui/material/Button'
 import Alert from '@mui/material/Alert'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { fetchAllProductsAPI, deleteProductAPI, searchProductsAPI } from '~/apis'
 import Snackbar from '@mui/material/Snackbar'
-import TablePageControls from '../../TablePageControls/TablePageControls'
-import TableRowsPerPage from '../../TableRowsPerPage/TableRowsPerPage'
 
+import { fetchAllProductsAPI, deleteProductAPI, searchProductsAPI } from '~/apis'
+import TablePageControls from '../TablePageControls/TablePageControls'
+import TableRowsPerPage from '../TableRowsPerPage/TableRowsPerPage'
 
-const TableProduct = () => {
+const TableProduct = ({ onEditProduct }) => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false)
   const [deletingProductId, setDeletingProductId] = useState(null)
   const [rows, setRows] = useState([])
@@ -39,48 +39,48 @@ const TableProduct = () => {
 
   const [searchQuery, setSearchQuery] = useState('')
 
+  // Hook debounce để giảm số lần gọi API
   const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value)
     useEffect(() => {
       const handler = setTimeout(() => {
         setDebouncedValue(value)
       }, delay)
-      return () => {
-        clearTimeout(handler)
-      }
+      return () => clearTimeout(handler)
     }, [value, delay])
     return debouncedValue
   }
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   useEffect(() => {
-    if (!debouncedSearchQuery) {
-      fetchAllProductsAPI().then((data) => {
-        setRows(data)
-      })
-    } else {
-      // Gọi API tìm kiếm với từ khóa đã debounce
-      searchProductsAPI(debouncedSearchQuery).then((data) => {
-        setRows(data)
-      }).catch(error => {
-        console.error('Lỗi khi tìm kiếm:', error)
+    const fetchProducts = async () => {
+      try {
+        if (!debouncedSearchQuery) {
+          const data = await fetchAllProductsAPI()
+          setRows(data)
+        } else {
+          const data = await searchProductsAPI(debouncedSearchQuery)
+          setRows(data)
+        }
+      } catch {
         setRows([])
-      })
+        setSnackbarMessage('Không thể tải dữ liệu sản phẩm. Vui lòng thử lại.')
+        setSnackbarSeverity('error')
+        setOpenSnackbar(true)
+      }
     }
+    fetchProducts()
   }, [debouncedSearchQuery])
 
-  // Định dạng tiền Việt Nam
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('vi-VN', {
+  // Format tiền VND
+  const formatCurrency = (amount) =>
+    new Intl.NumberFormat('vi-VN', {
       style: 'currency',
       currency: 'VND'
     }).format(amount)
-  }
 
-  // Hàm xử lý sự kiện
   const handleEdit = (id) => {
-    console.log('Sửa sản phẩm với ID:', id)
-    // Thêm logic edit ở đây
+    onEditProduct(id)
   }
 
   const handleDelete = (id) => {
@@ -91,23 +91,15 @@ const TableProduct = () => {
   const handleConfirmDelete = async () => {
     try {
       await deleteProductAPI(deletingProductId)
+      setRows(rows.filter((product) => product._id !== deletingProductId))
 
-      // Cập nhật state để xóa sản phẩm khỏi bảng
-      setRows(rows.filter(product => product._id !== deletingProductId))
-
-      // Hiển thị thông báo thành công
       setSnackbarMessage('Sản phẩm đã được xóa thành công!')
       setSnackbarSeverity('success')
-      setOpenSnackbar(true)
-
-    } catch (error) {
-      console.error('Lỗi khi xóa sản phẩm:', error)
-      // Hiển thị thông báo lỗi
+    } catch {
       setSnackbarMessage('Lỗi khi xóa sản phẩm. Vui lòng thử lại.')
       setSnackbarSeverity('error')
-      setOpenSnackbar(true)
     } finally {
-      // Luôn đóng dialog xác nhận, bất kể thành công hay thất bại
+      setOpenSnackbar(true)
       setOpenDeleteConfirm(false)
       setDeletingProductId(null)
     }
@@ -118,33 +110,24 @@ const TableProduct = () => {
     setDeletingProductId(null)
   }
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
+  const handleCloseSnackbar = (_, reason) => {
+    if (reason !== 'clickaway') {
+      setOpenSnackbar(false)
     }
-    setOpenSnackbar(false)
   }
 
+  const truncateDescription = (description, maxLength = 50) =>
+    description.length <= maxLength
+      ? description
+      : `${description.substring(0, maxLength)}...`
 
-  // Hàm cắt ngắn mô tả để hiển thị
-  const truncateDescription = (description, maxLength = 50) => {
-    if (description.length <= maxLength) return description
-    return description.substring(0, maxLength) + '...'
-  }
-
-  // Hàm xử lý khi thay đổi trang
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (_, newPage) => {
     setPage(newPage)
-    // Tải dữ liệu cho trang mới
-    // fetchProducts(newPage, rowsPerPage);
   }
 
-  // Hàm xử lý khi thay đổi số hàng mỗi trang
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0) // Quay về trang đầu tiên
-    // Tải dữ liệu với số hàng mới
-    // fetchProducts(0, parseInt(event.target.value, 10));
+    setPage(0)
   }
 
   return (
@@ -186,9 +169,7 @@ const TableProduct = () => {
                   '&:hover': { backgroundColor: '#fafafa' }
                 }}
               >
-                <TableCell>
-                  {page * rowsPerPage + index + 1}
-                </TableCell>
+                <TableCell>{page * rowsPerPage + index + 1}</TableCell>
 
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -213,9 +194,7 @@ const TableProduct = () => {
                 </TableCell>
 
                 <TableCell sx={{ maxWidth: 150 }}>
-                  <Typography variant="body2">
-                    {row.material}
-                  </Typography>
+                  <Typography variant="body2">{row.material}</Typography>
                 </TableCell>
 
                 <TableCell align="right">
@@ -241,13 +220,10 @@ const TableProduct = () => {
                   </Box>
                 </TableCell>
 
-                <TableCell align="center">
-                  {row.sold}
-                </TableCell>
+                <TableCell align="center">{row.sold}</TableCell>
 
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-
                     <Tooltip title="Sửa sản phẩm">
                       <IconButton
                         color="primary"
@@ -314,6 +290,7 @@ const TableProduct = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}

@@ -1,6 +1,5 @@
 import { Box, Container } from '@mui/material'
 import Banner from '~/components/customer/Banner/Banner'
-import Header from '~/components/customer/Header/Header'
 import Service from '~/components/customer/Service/Service'
 import ProductHome from '~/components/customer/ProductHome/ProductHome'
 
@@ -11,8 +10,7 @@ function HomePage() {
     { imageUrl: 'https://cdn.pnj.io/images/promo/264/PNJ_fast_2025-_banner-1972x640-CTA.png', altText: 'Banner 3' },
   ]
   return (
-    <Box sx={{ width: '100%', overflowX: 'hidden', overflowY: 'hidden' }}>
-      <Header />
+    <>
       <Banner banners={bannerData} />
       <Container sx={{ mt: 3 }}>
         <Service />
@@ -24,7 +22,7 @@ function HomePage() {
           Id maxime assumenda voluptatum alias natus tempora porro atque quod dolores a accusantium quaerat laborum sunt sed totam, nulla laboriosam velit adipisci quia esse! Sed dolorem omnis incidunt error aperiam?
         </Box>
       </Container>
-    </Box>
+    </>
   )
 }
 
