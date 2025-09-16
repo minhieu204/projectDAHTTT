@@ -5,7 +5,7 @@ import NavBar from './NavBar/NavBar'
 
 function Header() {
   return (
-    <Box>
+    <Box sx={{ borderBottom: '2px solid', pb: 1, boxShadow: 0.5 }}>
       <Box sx={{ borderBottom: 'solid 1px #DCDCDC', mx: 10, pb: 1 }}>
         <Container>
           <TopBar />

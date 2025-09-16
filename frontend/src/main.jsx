@@ -14,37 +14,49 @@ import CustomerPage from './pages/CustomerPage/CustomerPage.jsx'
 import ProductPage from './pages/AdminPage/ProductPage/ProductPage.jsx'
 import AddProduct from './pages/AdminPage/ProductPage/AddProduct/AddProduct.jsx'
 import EditProduct from './pages/AdminPage/ProductPage/EditProduct/EditProduct.jsx'
+import Register from './pages/CustomerPage/Register/Register.jsx'
+import PageRoute from './pages/PageRoute/PageRoute.jsx'
 
 let router = createBrowserRouter([
   {
-    path: '/admin',
-    element: <AdminPage />,
+    path: '/',
+    element: <PageRoute />,
     children: [
       {
         index: true,
-        element: <ProductPage />
+        element: <Register />
       },
       {
-        path: 'product',
-        element: <ProductPage />,
+        path: '/admin',
+        element: <AdminPage />,
+        children: [
+          {
+            index: true,
+            element: <ProductPage />
+          },
+          {
+            path: 'product',
+            element: <ProductPage />,
+          },
+          {
+            path: 'product/add-product',
+            element: <AddProduct />,
+          },
+          {
+            path: 'product/edit-product/:productId',
+            element: <EditProduct />,
+          },
+        ]
       },
       {
-        path: 'product/add-product',
-        element: <AddProduct />,
-      },
-      {
-        path: 'product/edit-product/:productId',
-        element: <EditProduct />,
-      },
-    ]
-  },
-  {
-    path: '/customer',
-    element: <CustomerPage />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />
+        path: '/customer',
+        element: <CustomerPage />,
+        children: [
+          {
+            index: true,
+            element: <HomePage />
+          },
+        ]
       },
     ]
   },

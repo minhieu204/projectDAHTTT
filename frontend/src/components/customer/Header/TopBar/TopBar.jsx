@@ -4,9 +4,14 @@ import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined'
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import { useNavigate } from 'react-router-dom'
 
 function TopBar() {
+  const navigate = useNavigate()
   const itemCount = 0
+  const handleAccountClick = () => {
+    navigate('/')
+  }
   return (
     <Box
       sx={{
@@ -75,6 +80,7 @@ function TopBar() {
               backgroundColor: 'white'
             },
           }}
+          onClick={handleAccountClick}
         >
           <PersonOutlineOutlinedIcon />
           Tài Khoản Của Tôi
