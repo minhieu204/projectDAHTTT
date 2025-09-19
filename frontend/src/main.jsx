@@ -8,6 +8,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router'
+import CreateInformation from './pages/CustomerPage/AccountInformation/CreateInformation.jsx'
 import AdminPage from './pages/AdminPage/AdminPage.jsx'
 import HomePage from './pages/CustomerPage/HomePage/HomePage.jsx'
 import CustomerPage from './pages/CustomerPage/CustomerPage.jsx'
@@ -46,6 +47,7 @@ let router = createBrowserRouter([
             path: 'product/edit-product/:productId',
             element: <EditProduct />,
           },
+          
         ]
       },
       {
@@ -55,6 +57,10 @@ let router = createBrowserRouter([
           {
             index: true,
             element: <HomePage />
+          },
+          {
+            path: 'Menbership/Create',
+            element: <CreateInformation />,
           },
         ]
       },
