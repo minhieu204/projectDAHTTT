@@ -1,4 +1,4 @@
-import { Box, TextField, Button, RadioGroup, FormControlLabel, Radio, FormLabel, MenuItem } from "@mui/material";
+import { Box, TextField, Button, RadioGroup, FormControlLabel, Radio, FormLabel, MenuItem, Container} from "@mui/material";
 import { useState } from "react";
 
 function CreateInformation() {
@@ -21,7 +21,6 @@ function CreateInformation() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Dữ liệu form:", form);
-    // TODO: Gọi API hoặc xử lý dữ liệu ở đây
   };
   
   return (
@@ -29,23 +28,25 @@ function CreateInformation() {
       component="form"
       onSubmit={handleSubmit}
       sx={{
-        maxWidth: 600,
+        maxWidth: 800,
         mx: "auto",
-        my: 4,
-        p: 3,
+        my: 3,
+        p: "25px 75px 30px 80px",
         bgcolor: "white",
         borderRadius: 2,
-        boxShadow: 2,
+        boxShadow: 4,
       }}
     >
 
-      <FormLabel component="legend">Giới Tính *</FormLabel>
+      <FormLabel sx={{display: "flex",justifyContent: "Center", fontSize: "30px", color:"black", mb: "4px"}}>Nhập Thông Tin</FormLabel>
+
+      <FormLabel component="legend" sx={{ml: 0.5}}>Giới Tính *</FormLabel>
       <RadioGroup
         row
         name="gender"
         value={form.gender}
         onChange={handleChange}
-        sx={{ mb: 0 }}
+        sx={{ mb: 0, ml: 0.5 }}
       >
         <FormControlLabel value="Chị" control={<Radio />} sx={{ mr: 4}}label="Chị" />
         <FormControlLabel value="Anh" control={<Radio />} label="Anh" />
