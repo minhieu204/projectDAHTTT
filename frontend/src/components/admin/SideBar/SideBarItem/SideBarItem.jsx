@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import React from 'react'
 
-function SideBarItem({ icon: Icon, title }) {
+function SideBarItem({ icon: Icon, title, handleSideBarCllick }) {
   return (
     <Button
       sx={{
@@ -23,6 +23,7 @@ function SideBarItem({ icon: Icon, title }) {
           backgroundColor: (theme) => theme.admin.focusColor,
         }
       }}
+      onClick={handleSideBarCllick}
     >
       {Icon && <Icon sx={{ fontSize: 28 }} />}
       {title}

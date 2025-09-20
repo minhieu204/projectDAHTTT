@@ -17,6 +17,7 @@ import EditProduct from './pages/AdminPage/ProductPage/EditProduct/EditProduct.j
 import Register from './pages/CustomerPage/Register/Register.jsx'
 import PageRoute from './pages/PageRoute/PageRoute.jsx'
 import CreateInformation from './pages/CustomerPage/AccountInformation/CreateInformation.jsx'
+import CategoryPage from './pages/AdminPage/CategoryPage/CategoryPage.jsx'
 
 let router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ let router = createBrowserRouter([
           {
             path: 'product/edit-product/:productId',
             element: <EditProduct />,
+          },
+          {
+            path: 'category',
+            element: <CategoryPage />,
           },
         ]
       },
