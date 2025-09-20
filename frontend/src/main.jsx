@@ -47,7 +47,6 @@ let router = createBrowserRouter([
             path: 'product/edit-product/:productId',
             element: <EditProduct />,
           },
-          
         ]
       },
       {
