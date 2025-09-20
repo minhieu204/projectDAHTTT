@@ -10,7 +10,6 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import Avatar from '@mui/material/Avatar'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
@@ -21,13 +20,13 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Snackbar from '@mui/material/Snackbar'
 
-import { fetchAllProductsAPI, deleteProductAPI, searchProductsAPI } from '~/apis/productAPIs'
+import { fetchAllCategorysAPI, deleteCategoryAPI, searchCategorysAPI } from '~/apis/categoryAPIs'
 import TablePageControls from '../TablePageControls/TablePageControls'
 import TableRowsPerPage from '../TableRowsPerPage/TableRowsPerPage'
 
-const TableProduct = ({ onEditProduct }) => {
+const TableCategory = ({ onEditCategory }) => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false)
-  const [deletingProductId, setDeletingProductId] = useState(null)
+  const [deletingCategoryId, setDeletingCategoryId] = useState(null)
   const [rows, setRows] = useState([])
 
   const [page, setPage] = useState(0)
@@ -53,61 +52,54 @@ const TableProduct = ({ onEditProduct }) => {
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchCategorys = async () => {
       try {
         if (!debouncedSearchQuery) {
-          const data = await fetchAllProductsAPI()
+          const data = await fetchAllCategorysAPI()
           setRows(data)
         } else {
-          const data = await searchProductsAPI(debouncedSearchQuery)
+          const data = await searchCategorysAPI(debouncedSearchQuery)
           setRows(data)
         }
       } catch {
         setRows([])
-        setSnackbarMessage('Không thể tải dữ liệu sản phẩm. Vui lòng thử lại.')
+        setSnackbarMessage('Không thể tải dữ liệu danh mục. Vui lòng thử lại.')
         setSnackbarSeverity('error')
         setOpenSnackbar(true)
       }
     }
-    fetchProducts()
+    fetchCategorys()
   }, [debouncedSearchQuery])
 
-  // Format tiền VND
-  const formatCurrency = (amount) =>
-    new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(amount)
-
   const handleEdit = (id) => {
-    onEditProduct(id)
+    onEditCategory(id)
   }
 
   const handleDelete = (id) => {
-    setDeletingProductId(id)
+    setDeletingCategoryId(id)
     setOpenDeleteConfirm(true)
   }
 
   const handleConfirmDelete = async () => {
     try {
-      await deleteProductAPI(deletingProductId)
-      setRows(rows.filter((product) => product._id !== deletingProductId))
+      await deleteCategoryAPI(deletingCategoryId)
+      setRows(rows.filter((category) => category._id !== deletingCategoryId))
 
-      setSnackbarMessage('Sản phẩm đã được xóa thành công!')
+      setSnackbarMessage('danh mục đã được xóa thành công!')
       setSnackbarSeverity('success')
     } catch {
-      setSnackbarMessage('Lỗi khi xóa sản phẩm. Vui lòng thử lại.')
+      setSnackbarMessage('Lỗi khi xóa danh mục. Vui lòng thử lại.')
       setSnackbarSeverity('error')
     } finally {
       setOpenSnackbar(true)
       setOpenDeleteConfirm(false)
-      setDeletingProductId(null)
+      setDeletingCategoryId(null)
     }
   }
 
   const handleCloseDeleteConfirm = () => {
     setOpenDeleteConfirm(false)
-    setDeletingProductId(null)
+    setDeletingCategoryId(null)
   }
 
   const handleCloseSnackbar = (_, reason) => {
@@ -115,11 +107,6 @@ const TableProduct = ({ onEditProduct }) => {
       setOpenSnackbar(false)
     }
   }
-
-  const truncateDescription = (description, maxLength = 50) =>
-    description.length <= maxLength
-      ? description
-      : `${description.substring(0, maxLength)}...`
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage)
@@ -147,16 +134,11 @@ const TableProduct = ({ onEditProduct }) => {
           overflowX: 'auto'
         }}
       >
-        <Table sx={{ minWidth: 1000 }} aria-label="product table">
+        <Table sx={{ minWidth: 1000 }} aria-label="category table">
           <TableHead>
             <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
               <TableCell><strong>STT</strong></TableCell>
-              <TableCell><strong>SẢN PHẨM</strong></TableCell>
-              <TableCell><strong>MÔ TẢ</strong></TableCell>
-              <TableCell><strong>CHẤT LIỆU</strong></TableCell>
-              <TableCell align="right"><strong>GIÁ</strong></TableCell>
-              <TableCell align="center"><strong>SỐ LƯỢNG</strong></TableCell>
-              <TableCell align="center"><strong>ĐÃ BÁN</strong></TableCell>
+              <TableCell><strong>DANH MỤC</strong></TableCell>
               <TableCell align="center"><strong>THAO TÁC</strong></TableCell>
             </TableRow>
           </TableHead>
@@ -173,58 +155,15 @@ const TableProduct = ({ onEditProduct }) => {
 
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar
-                      src={row.image}
-                      alt={row.name}
-                      sx={{ width: 60, height: 60, mr: 2 }}
-                      variant="rounded"
-                    />
                     <Typography variant="body2" fontWeight="medium">
                       {row.name}
                     </Typography>
                   </Box>
                 </TableCell>
 
-                <TableCell sx={{ maxWidth: 200 }}>
-                  <Tooltip title={row.description} placement="top-start">
-                    <Typography variant="body2">
-                      {truncateDescription(row.description)}
-                    </Typography>
-                  </Tooltip>
-                </TableCell>
-
-                <TableCell sx={{ maxWidth: 150 }}>
-                  <Typography variant="body2">{row.material}</Typography>
-                </TableCell>
-
-                <TableCell align="right">
-                  <Typography fontWeight="bold" color="primary">
-                    {formatCurrency(row.price)}
-                  </Typography>
-                </TableCell>
-
-                <TableCell align="center">
-                  <Box
-                    sx={{
-                      display: 'inline-block',
-                      px: 1,
-                      py: 0.5,
-                      borderRadius: 1,
-                      backgroundColor: row.stock > 0 ? '#e8f5e8' : '#ffe6e6',
-                      color: row.stock > 0 ? '#2e7d32' : '#d32f2f',
-                      fontSize: '0.75rem',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    {row.stock}
-                  </Box>
-                </TableCell>
-
-                <TableCell align="center">{row.sold}</TableCell>
-
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                    <Tooltip title="Sửa sản phẩm">
+                    <Tooltip title="Sửa danh mục">
                       <IconButton
                         color="primary"
                         size="small"
@@ -243,7 +182,7 @@ const TableProduct = ({ onEditProduct }) => {
                       </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="Xóa sản phẩm">
+                    <Tooltip title="Xóa danh mục">
                       <IconButton
                         color="error"
                         size="small"
@@ -279,7 +218,7 @@ const TableProduct = ({ onEditProduct }) => {
       <Dialog open={openDeleteConfirm} onClose={handleCloseDeleteConfirm}>
         <DialogTitle>Xác nhận xóa</DialogTitle>
         <DialogContent>
-          <Typography>Bạn có chắc chắn muốn xóa sản phẩm này không?</Typography>
+          <Typography>Bạn có chắc chắn muốn xóa danh mục này không?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDeleteConfirm} color="primary">
@@ -306,4 +245,4 @@ const TableProduct = ({ onEditProduct }) => {
   )
 }
 
-export default TableProduct
+export default TableCategory

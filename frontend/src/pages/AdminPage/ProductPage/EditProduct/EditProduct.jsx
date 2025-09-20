@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, Button, Typography, Snackbar, Alert, CircularProgress } from '@mui/material'
 import FieldCustom from '~/components/admin/FieldCustom/FieldCustom'
 import ImageUpload from '~/components/admin/ImageUpload/ImageUpload'
-import { getProductDetailAPI, uploadImageToCloudinaryAPI, updateProductAPI } from '~/apis'
+import { getProductDetailAPI, uploadImageToCloudinaryAPI, updateProductAPI } from '~/apis/productAPIs'
 import { useNavigate, useParams } from 'react-router-dom'
 import SaveIcon from '@mui/icons-material/Save'
 

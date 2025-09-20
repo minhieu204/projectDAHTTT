@@ -1,16 +1,16 @@
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import TableProduct from '~/components/admin/TableProduct/TableProduct'
 import { useNavigate } from 'react-router-dom'
+import TableCategory from '~/components/admin/TableCategory/TableCategory'
 
 function CategoryPage() {
   const navigate = useNavigate()
   const handleAddProductClick = () => {
-    navigate('/admin/product/add-product')
+    navigate('/admin/category/add-category')
   }
-  const handleEditProductClick = (productId) => {
-    navigate(`/admin/product/edit-product/${productId}`)
+  const handleEditCategoryClick = (categoryId) => {
+    navigate(`/admin/category/edit-category/${categoryId}`)
   }
   return (
     <Box
@@ -41,7 +41,7 @@ function CategoryPage() {
         </Tooltip>
       </Box>
       <Box sx={{ px: 6 }}>
-        <TableProduct onEditProduct={handleEditProductClick} />
+        <TableCategory onEditCategory={handleEditCategoryClick} />
       </Box>
     </Box>
   )

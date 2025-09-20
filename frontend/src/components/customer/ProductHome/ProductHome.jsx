@@ -4,7 +4,7 @@ import { Box, Button, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Slider from 'react-slick'
 import ProductCard from './ProductCard/ProductCard'
-import { fetchAllProductsAPI } from '~/apis'
+import { fetchAllProductsAPI } from '~/apis/productAPIs'
 
 function ProductHome() {
   const [allProducts, setAllProducts] = useState([])
