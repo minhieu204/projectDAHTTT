@@ -14,7 +14,7 @@ import ImageUpload from '~/components/admin/ImageUpload/ImageUpload'
 import {
   createProductAPI,
   uploadImageToCloudinaryAPI
-} from '~/apis'
+} from '~/apis/productAPIs'
 
 function AddProduct() {
   const navigate = useNavigate()

@@ -29,7 +29,7 @@ function SideBar() {
           justifyContent: 'center'
         }}
       >
-        <img src="logo.png" alt="" style={{ width: '120px' }} />
+        <img src="/logo.png" alt="" style={{ width: '120px' }} />
       </Box>
       <Box
         sx={{

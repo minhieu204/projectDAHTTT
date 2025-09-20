@@ -18,6 +18,8 @@ import Register from './pages/CustomerPage/Register/Register.jsx'
 import PageRoute from './pages/PageRoute/PageRoute.jsx'
 import CreateInformation from './pages/CustomerPage/AccountInformation/CreateInformation.jsx'
 import CategoryPage from './pages/AdminPage/CategoryPage/CategoryPage.jsx'
+import AddCategory from './pages/AdminPage/CategoryPage/AddCategory/AddCategory.jsx'
+import EditCategory from './pages/AdminPage/CategoryPage/EditCategory/EditCategory.jsx'
 
 let router = createBrowserRouter([
   {
@@ -51,6 +53,14 @@ let router = createBrowserRouter([
           {
             path: 'category',
             element: <CategoryPage />,
+          },
+          {
+            path: 'category/add-category',
+            element: <AddCategory />,
+          },
+          {
+            path: 'category/edit-category/:categoryId',
+            element: <EditCategory />,
           },
         ]
       },

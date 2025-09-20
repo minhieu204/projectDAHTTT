@@ -6,7 +6,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 const breadcrumbNameMap = {
   '/admin/product': 'Product',
   '/admin/product/add-product': 'Add Product',
-  '/admin/product/edit-product': 'Edit Product'
+  '/admin/product/edit-product': 'Edit Product',
+  '/admin/category': 'Category',
+  '/admin/category/add-category': 'Add Category',
+  '/admin/category/edit-category': 'Edit Category'
 }
 
 const AdminBreadcrumbs = () => {
