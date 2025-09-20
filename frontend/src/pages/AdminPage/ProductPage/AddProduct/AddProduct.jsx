@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -15,12 +15,34 @@ import {
   createProductAPI,
   uploadImageToCloudinaryAPI
 } from '~/apis/productAPIs'
+import { fetchAllCategorysAPI } from '~/apis/categoryAPIs'
 
 function AddProduct() {
   const navigate = useNavigate()
 
+  const [productCategories, setProductCategories] = useState([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await fetchAllCategorysAPI()
+        // Chỉ map ra id và name cho dropdown
+        const options = data.map(cat => ({
+          value: cat._id,
+          label: cat.name
+        }))
+        setProductCategories(options)
+      } catch {
+        //
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
   // State dữ liệu form
   const [formData, setFormData] = useState({
+    category: '',
     name: '',
     price: '',
     material: '',
@@ -62,6 +84,7 @@ function AddProduct() {
   // Validate dữ liệu
   const validate = () => {
     const tempErrors = {
+      category: formData.category ? '' : 'Vui lòng chọn danh mục.',
       name: formData.name ? '' : 'Vui lòng nhập tên sản phẩm.',
       price:
         /^[0-9]+$/.test(formData.price) && formData.price
@@ -93,6 +116,7 @@ function AddProduct() {
       }
 
       const productData = {
+        categoryId: formData.category,
         name: formData.name,
         description: formData.description,
         price: parseInt(formData.price, 10),
@@ -144,6 +168,19 @@ function AddProduct() {
 
       {/* Form */}
       <Box component="form" onSubmit={handleSubmit} sx={{ px: 6 }}>
+        <FieldCustom
+          label="Danh mục sản phẩm"
+          required={true}
+          options={productCategories}
+          value={formData.category}
+          onChange={(e) => setFormData(prev => ({
+            ...prev,
+            category: e.target.value
+          }))}
+          name="category"
+          error={!!errors.category}
+          helperText={errors.category}
+        />
         <FieldCustom
           label="Tên sản phẩm"
           required

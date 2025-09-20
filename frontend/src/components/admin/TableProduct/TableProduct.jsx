@@ -24,6 +24,7 @@ import Snackbar from '@mui/material/Snackbar'
 import { fetchAllProductsAPI, deleteProductAPI, searchProductsAPI } from '~/apis/productAPIs'
 import TablePageControls from '../TablePageControls/TablePageControls'
 import TableRowsPerPage from '../TableRowsPerPage/TableRowsPerPage'
+import { fetchAllCategorysAPI } from '~/apis/categoryAPIs'
 
 const TableProduct = ({ onEditProduct }) => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false)
@@ -38,6 +39,21 @@ const TableProduct = ({ onEditProduct }) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success')
 
   const [searchQuery, setSearchQuery] = useState('')
+
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const data = await fetchAllCategorysAPI()
+      setCategories(data)
+    }
+    fetchCategories()
+  }, [])
+
+  const getCategoryName = (id) => {
+    const category = categories.find(cat => cat._id === id)
+    return category ? category.name : 'Không có'
+  }
 
   // Hook debounce để giảm số lần gọi API
   const useDebounce = (value, delay) => {
@@ -152,6 +168,7 @@ const TableProduct = ({ onEditProduct }) => {
             <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
               <TableCell><strong>STT</strong></TableCell>
               <TableCell><strong>SẢN PHẨM</strong></TableCell>
+              <TableCell><strong>DANH MỤC</strong></TableCell>
               <TableCell><strong>MÔ TẢ</strong></TableCell>
               <TableCell><strong>CHẤT LIỆU</strong></TableCell>
               <TableCell align="right"><strong>GIÁ</strong></TableCell>
@@ -183,6 +200,12 @@ const TableProduct = ({ onEditProduct }) => {
                       {row.name}
                     </Typography>
                   </Box>
+                </TableCell>
+
+                <TableCell sx={{ maxWidth: 150 }}>
+                  <Typography variant="body2">
+                    {getCategoryName(row.categoryId)}
+                  </Typography>
                 </TableCell>
 
                 <TableCell sx={{ maxWidth: 200 }}>

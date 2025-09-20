@@ -5,6 +5,7 @@ import ImageUpload from '~/components/admin/ImageUpload/ImageUpload'
 import { getProductDetailAPI, uploadImageToCloudinaryAPI, updateProductAPI } from '~/apis/productAPIs'
 import { useNavigate, useParams } from 'react-router-dom'
 import SaveIcon from '@mui/icons-material/Save'
+import { fetchAllCategorysAPI } from '~/apis/categoryAPIs'
 
 function EditProduct() {
   const [openSnackbar, setOpenSnackbar] = useState(false)
@@ -16,6 +17,7 @@ function EditProduct() {
   const { productId } = useParams()
 
   const [formData, setFormData] = useState({
+    category: '',
     name: '',
     price: '',
     material: '',
@@ -25,6 +27,21 @@ function EditProduct() {
     currentImageUrl: null
   })
   const [errors, setErrors] = useState({})
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await fetchAllCategorysAPI()
+        setCategories(
+          data.map((cat) => ({ value: cat._id, label: cat.name }))
+        )
+      } catch {
+        //
+      }
+    }
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -32,6 +49,7 @@ function EditProduct() {
       try {
         const product = await getProductDetailAPI(productId)
         setFormData({
+          category: product.categoryId || '',
           name: product.name || '',
           price: product.price?.toString() || '',
           material: product.material || '',
@@ -71,6 +89,7 @@ function EditProduct() {
 
   const validate = () => {
     const tempErrors = {
+      category: formData.category ? '' : 'Vui lòng chọn danh mục.',
       name: formData.name ? '' : 'Vui lòng nhập tên sản phẩm.',
       price: /^[0-9]+$/.test(formData.price) ? '' : 'Giá phải là số và không được để trống.',
       material: formData.material ? '' : 'Vui lòng nhập chất liệu.',
@@ -96,6 +115,7 @@ function EditProduct() {
       }
 
       const productDataToUpdate = {
+        categoryId: formData.category,
         name: formData.name.trim(),
         description: formData.description.trim(),
         price: parseInt(formData.price, 10),
@@ -146,6 +166,16 @@ function EditProduct() {
         <Typography variant="h5">Chỉnh sửa sản phẩm</Typography>
       </Box>
       <Box sx={{ px: 6 }} component="form" onSubmit={handleSubmit}>
+        <FieldCustom
+          label="Danh mục sản phẩm"
+          required
+          options={categories}
+          value={formData.category}
+          onChange={handleChange}
+          name="category"
+          error={!!errors.category}
+          helperText={errors.category}
+        />
         <FieldCustom
           label="Tên sản phẩm"
           required

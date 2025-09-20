@@ -34,7 +34,13 @@ const createNew = async (req, res, next) => {
       material: Joi.string().required().min(3).trim().strict().messages({
         'any.required': 'Image URL is required!'
       }),
-
+      categoryId: Joi.string()
+      .pattern(/^[0-9a-fA-F]{24}$/)
+      .required()
+      .messages({
+        'any.required': 'Category ID is required!',
+        'string.pattern.base': 'Category ID must be a valid MongoDB ObjectId (24 hex chars)'
+      })
     })
 
     try {
