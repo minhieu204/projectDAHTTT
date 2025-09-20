@@ -58,7 +58,7 @@ let router = createBrowserRouter([
             element: <HomePage />
           },
           {
-            path: 'Menbership/Create',
+            path: 'editprofile',
             element: <CreateInformation />,
           },
         ]
