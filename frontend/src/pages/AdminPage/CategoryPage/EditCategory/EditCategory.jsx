@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Typography, Snackbar, Alert, CircularProgress } from '@mui/material'
 import FieldCustom from '~/components/admin/FieldCustom/FieldCustom'
-import { getCategoryDetailAPI, updateCategoryAPI } from '~/apis/categoryAPIs'
+import { fetchAllCategorysAPI, getCategoryDetailAPI, updateCategoryAPI } from '~/apis/categoryAPIs'
 import { useNavigate, useParams } from 'react-router-dom'
 import SaveIcon from '@mui/icons-material/Save'
 
@@ -10,14 +10,53 @@ function EditCategory() {
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState('success')
   const [loading, setLoading] = useState(false)
+  const [productCategories, setProductCategories] = useState([])
 
   const navigate = useNavigate()
   const { categoryId } = useParams()
 
   const [formData, setFormData] = useState({
     name: '',
+    parentId: ''
   })
   const [errors, setErrors] = useState({})
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await fetchAllCategorysAPI()
+
+        // Build tree
+        const map = {}
+        data.forEach(cat => (map[cat._id] = { ...cat, children: [] }))
+        data.forEach(cat => {
+          if (cat.parentId) {
+            map[cat.parentId]?.children.push(map[cat._id])
+          }
+        })
+
+        const options = []
+
+        // Chỉ cho phép tầng 1 và tầng 2 làm parent
+        data.forEach(cat => {
+          if (!cat.parentId) {
+            options.push({ value: cat._id, label: cat.name }) // tầng 1
+            map[cat._id].children.forEach(child => {
+              options.push({ value: child._id, label: `${child.name} - ${cat.name}` }) // tầng 2
+              // Tầng 3 sẽ không được thêm vào options
+            })
+          }
+        })
+
+        setProductCategories(options)
+      } catch {
+        //
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
 
   useEffect(() => {
     const fetchCategoryData = async () => {
@@ -26,6 +65,7 @@ function EditCategory() {
         const category = await getCategoryDetailAPI(categoryId)
         setFormData({
           name: category.name || '',
+          parentId: category.parentId || ''
         })
       } catch {
         setSnackbarMessage('Không thể lấy thông tin danh mục. Vui lòng thử lại!')
@@ -67,7 +107,8 @@ function EditCategory() {
     setLoading(true)
     try {
       const categoryDataToUpdate = {
-        name: formData.name.trim()
+        name: formData.name.trim(),
+        parentId: formData.parentId || null
       }
 
       await updateCategoryAPI(categoryId, categoryDataToUpdate)
@@ -112,6 +153,19 @@ function EditCategory() {
         <Typography variant="h5">Chỉnh sửa danh mục</Typography>
       </Box>
       <Box sx={{ px: 6 }} component="form" onSubmit={handleSubmit}>
+        <FieldCustom
+          label="Danh mục cha"
+          required={true}
+          options={productCategories}
+          value={productCategories.some(cat => cat.value === formData.parentId) ? formData.parentId : ''}
+          onChange={(e) => setFormData(prev => ({
+            ...prev,
+            parentId: e.target.value
+          }))}
+          name="parentId"
+          error={!!errors.parentId}
+          helperText={errors.parentId}
+        />
         <FieldCustom
           label="Tên danh mục"
           required

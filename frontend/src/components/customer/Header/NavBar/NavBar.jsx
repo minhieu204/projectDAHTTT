@@ -1,275 +1,146 @@
-import { Box, Modal, TextField, Typography } from '@mui/material'
-import React from 'react'
-import Button from '@mui/material/Button'
-import ListSubheader from '@mui/material/ListSubheader'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
+import React, { useState, useEffect } from 'react'
+import { Box, Button, Menu, MenuItem, ListSubheader, Modal, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-
+import { fetchAllCategorysAPI } from '~/apis/categoryAPIs' // API fetch danh mục từ backend
 
 const StyledListHeader = styled(ListSubheader)({
   backgroundImage: 'var(--Paper-overlay)',
+  fontWeight: 600
 })
 
+// Hàm chuyển mảng danh mục phẳng thành dạng cây
+function buildCategoryTree(data) {
+  const map = {}
+  data.forEach((cat) => (map[cat._id] = { ...cat, children: [] }))
+  const roots = []
+  data.forEach((cat) => {
+    if (cat.parentId) {
+      map[cat.parentId]?.children.push(map[cat._id])
+    } else {
+      roots.push(map[cat._id])
+    }
+  })
+  return roots
+}
+
 function NavBar() {
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const open = Boolean(anchorEl)
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
+  const [_categories, setCategories] = useState([])
+  const [categoryTree, setCategoryTree] = useState([])
+  const [anchorEls, setAnchorEls] = useState({})
+  const [openModal, setOpenModal] = useState(false)
+
+  // Fetch danh mục từ API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await fetchAllCategorysAPI() // trả về mảng danh mục
+        setCategories(data)
+        setCategoryTree(buildCategoryTree(data))
+      } catch {
+        //
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  const handleMenuOpen = (event, id) => {
+    setAnchorEls((prev) => ({ ...prev, [id]: event.currentTarget }))
   }
 
-  const [openModal, setOpenModel] = React.useState(false)
-  const handleOpenModal = () => setOpenModel(true)
-  const handleCloseModal = () => setOpenModel(false)
-  const style = {
+  const handleMenuClose = (id) => {
+    setAnchorEls((prev) => ({ ...prev, [id]: null }))
+  }
+
+  const styleModal = {
     position: 'absolute',
-    top: '46%',
+    top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 900,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    borderRadius: 2,
     boxShadow: 24,
-    borderRadius: 2
+    p: 2
   }
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        width: '100%',
-        height: '40px',
-        alignItems: 'center'
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 3
-        }}
-      >
-        <Box>
-          <Button
-            id="basic-button1"
-            aria-controls={open ? 'grouped-menu1' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            sx={{
-              color: '#696969',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: 'white'
-              }
-            }}
-          >
-            Nam
-          </Button>
-          <Menu
-            id="grouped-menu1"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            slotProps={{
-              list: {
-                'aria-labelledby': 'basic-button',
-                sx: {
-                  width: '800px', // Đặt chiều rộng của menu để chứa các cột
-                  py: 0,
-                  display: 'flex', // Sử dụng flexbox để chia cột
-                  padding: '20px', // Thêm padding cho menu
-                },
-              },
-            }}
-          >
-            <Box sx={{ flex: '1 1 50%', pr: 2 }}>
-              <StyledListHeader>Chủng loại</StyledListHeader>
-              <MenuItem onClick={handleClose}>Nhẫn</MenuItem>
-              <MenuItem onClick={handleClose}>Dây chuyền</MenuItem>
-              <MenuItem onClick={handleClose}>Bông tai</MenuItem>
-              <MenuItem onClick={handleClose}>Vòng tay</MenuItem>
-              <MenuItem onClick={handleClose}>Kiềng</MenuItem>
-              <MenuItem onClick={handleClose}>Vàng tài lộc</MenuItem>
-            </Box>
-
-            {/* Cột 2: Box chứa các mục */}
-            <Box sx={{ flex: '1 1 50%' }}>
-              <StyledListHeader>Chất liệu</StyledListHeader>
-              <MenuItem onClick={handleClose}>Vàng</MenuItem>
-              <MenuItem onClick={handleClose}>Bạc</MenuItem>
-              <MenuItem onClick={handleClose}>Platinum</MenuItem>
-            </Box>
-          </Menu>
-        </Box>
-        <Box>
-          <Button
-            id="basic-button2"
-            aria-controls={open ? 'grouped-menu2' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            sx={{
-              color: '#696969',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: 'white'
-              }
-            }}
-          >
-            Nữ
-          </Button>
-          <Menu
-            id="grouped-menu2"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            slotProps={{
-              list: {
-                'aria-labelledby': 'basic-button',
-                sx: {
-                  width: '800px', // Đặt chiều rộng của menu để chứa các cột
-                  py: 0,
-                  display: 'flex', // Sử dụng flexbox để chia cột
-                  padding: '20px', // Thêm padding cho menu
-                },
-              },
-            }}
-          >
-            <Box sx={{ flex: '1 1 50%', pr: 2 }}>
-              <StyledListHeader>Chủng loại</StyledListHeader>
-              <MenuItem onClick={handleClose}>Nhẫn</MenuItem>
-              <MenuItem onClick={handleClose}>Dây chuyền</MenuItem>
-              <MenuItem onClick={handleClose}>Bông tai</MenuItem>
-              <MenuItem onClick={handleClose}>Vòng tay</MenuItem>
-              <MenuItem onClick={handleClose}>Kiềng</MenuItem>
-              <MenuItem onClick={handleClose}>Vàng tài lộc</MenuItem>
-            </Box>
-
-            {/* Cột 2: Box chứa các mục */}
-            <Box sx={{ flex: '1 1 50%' }}>
-              <StyledListHeader>Chất liệu</StyledListHeader>
-              <MenuItem onClick={handleClose}>Vàng</MenuItem>
-              <MenuItem onClick={handleClose}>Bạc</MenuItem>
-              <MenuItem onClick={handleClose}>Platinum</MenuItem>
-            </Box>
-          </Menu>
-        </Box>
-        <Box>
-          <Button
-            id="basic-button3"
-            aria-controls={open ? 'grouped-menu3' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            sx={{
-              color: '#696969',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: 'white'
-              }
-            }}
-          >
-            Trẻ em
-          </Button>
-          <Menu
-            id="grouped-menu3"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            slotProps={{
-              list: {
-                'aria-labelledby': 'basic-button',
-                sx: {
-                  width: '800px', // Đặt chiều rộng của menu để chứa các cột
-                  py: 0,
-                  display: 'flex', // Sử dụng flexbox để chia cột
-                  padding: '20px', // Thêm padding cho menu
-                },
-              },
-            }}
-          >
-            <Box sx={{ flex: '1 1 50%', pr: 2 }}>
-              <StyledListHeader>Chủng loại</StyledListHeader>
-              <MenuItem onClick={handleClose}>Nhẫn</MenuItem>
-              <MenuItem onClick={handleClose}>Dây chuyền</MenuItem>
-              <MenuItem onClick={handleClose}>Bông tai</MenuItem>
-              <MenuItem onClick={handleClose}>Vòng tay</MenuItem>
-              <MenuItem onClick={handleClose}>Kiềng</MenuItem>
-              <MenuItem onClick={handleClose}>Vàng tài lộc</MenuItem>
-            </Box>
-
-            {/* Cột 2: Box chứa các mục */}
-            <Box sx={{ flex: '1 1 50%' }}>
-              <StyledListHeader>Chất liệu</StyledListHeader>
-              <MenuItem onClick={handleClose}>Vàng</MenuItem>
-              <MenuItem onClick={handleClose}>Bạc</MenuItem>
-              <MenuItem onClick={handleClose}>Platinum</MenuItem>
-            </Box>
-          </Menu>
-        </Box>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: 50, px: 4 }}>
+      {/* ==== Menu Danh mục ==== */}
+      <Box sx={{ display: 'flex', gap: 3 }}>
+        {categoryTree.map((root) => (
+          <Box key={root._id}>
+            <Button
+              aria-controls={anchorEls[root._id] ? `${root._id}-menu` : undefined}
+              aria-haspopup="true"
+              onClick={(e) => handleMenuOpen(e, root._id)}
+              sx={{ color: '#696969', textTransform: 'none', '&:hover': { backgroundColor: 'white' } }}
+            >
+              {root.name}
+            </Button>
+            <Menu
+              id={`${root._id}-menu`}
+              anchorEl={anchorEls[root._id]}
+              open={Boolean(anchorEls[root._id])}
+              onClose={() => handleMenuClose(root._id)}
+              slotProps={{
+                list: { sx: { width: 800, py: 0, display: 'flex', padding: '20px' } }
+              }}
+            >
+              {root.children.map((type) => (
+                <Box key={type._id} sx={{ flex: 1, pr: 2 }}>
+                  <StyledListHeader>{type.name}</StyledListHeader>
+                  {type.children.map((material) => (
+                    <MenuItem key={material._id} onClick={() => handleMenuClose(root._id)}>
+                      {material.name}
+                    </MenuItem>
+                  ))}
+                </Box>
+              ))}
+            </Menu>
+          </Box>
+        ))}
       </Box>
-      <Box
-      >
+
+      {/* ==== Search nhanh ==== */}
+      <Box>
         <Button
+          onClick={() => setOpenModal(true)}
           sx={{
-            height: '35px',
-            width: '350px',
+            height: 35,
+            width: 350,
             backgroundColor: '#F5F5F5',
-            display: 'flex',
-            justifyContent: 'space-between',
             color: '#696969',
             borderRadius: 6,
             textTransform: 'none',
             fontStyle: 'italic',
-            '&:hover': {
-              backgroundColor: '#F5F5F5'
-            },
+            display: 'flex',
+            justifyContent: 'space-between',
+            '&:hover': { backgroundColor: '#F5F5F5' }
           }}
-          onClick={handleOpenModal}
         >
           Tìm kiếm nhanh
           <SearchOutlinedIcon />
         </Button>
-        <Modal
-          open={openModal}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Box sx={{ m: 2 }}>
-              <TextField
-                id="outlined-search"
-                label="Tìm kiếm nhanh"
-                type="search"
-                sx={{
-                  '& .MuiInputBase-root': {
-                    width: '864px'// Đặt chiều cao mong muốn
-                  },
-                }}
-              />
-            </Box>
+        <Modal open={openModal} onClose={() => setOpenModal(false)}>
+          <Box sx={styleModal}>
+            <TextField fullWidth label="Tìm kiếm nhanh" type="search" sx={{ mb: 2 }} />
             <Box
               sx={{
-                height: '500px',
-                width: '100%',
+                height: 400,
                 borderTop: '6px solid #696969',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'center',
                 alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              <img style={{ height: '360px' }} src="https://cdn.pnj.io/images/2025/rebuild/a60759ad1dabe909c46a817ecbf71878.png?1740973018637" alt="" />
-              <Typography>
-                Không tìm thấy kết quả
-              </Typography>
+              <img
+                style={{ height: 200 }}
+                src="https://cdn.pnj.io/images/2025/rebuild/a60759ad1dabe909c46a817ecbf71878.png"
+                alt=""
+              />
+              <Typography>Không tìm thấy kết quả</Typography>
             </Box>
           </Box>
         </Modal>

@@ -38,13 +38,11 @@ const TableCategory = ({ onEditCategory }) => {
 
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Hook debounce để giảm số lần gọi API
+  // Debounce để giảm số lần gọi API
   const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value)
     useEffect(() => {
-      const handler = setTimeout(() => {
-        setDebouncedValue(value)
-      }, delay)
+      const handler = setTimeout(() => setDebouncedValue(value), delay)
       return () => clearTimeout(handler)
     }, [value, delay])
     return debouncedValue
@@ -54,13 +52,40 @@ const TableCategory = ({ onEditCategory }) => {
   useEffect(() => {
     const fetchCategorys = async () => {
       try {
-        if (!debouncedSearchQuery) {
-          const data = await fetchAllCategorysAPI()
-          setRows(data)
-        } else {
-          const data = await searchCategorysAPI(debouncedSearchQuery)
-          setRows(data)
-        }
+        // 1. Lấy tất cả category để build map cha-con
+        const allCategories = await fetchAllCategorysAPI()
+
+        // 2. Lấy data hiển thị theo search
+        const data = !debouncedSearchQuery
+          ? allCategories
+          : await searchCategorysAPI(debouncedSearchQuery)
+
+        // 3. Build map toàn bộ category để tra cứu parent/children
+        const map = {}
+        allCategories.forEach(cat => (map[cat._id] = { ...cat, children: [] }))
+        allCategories.forEach(cat => {
+          if (cat.parentId) {
+            map[cat.parentId]?.children.push(map[cat._id])
+          }
+        })
+
+        // 4. Thêm parentName cho mỗi category trong data
+        const categoriesWithParentName = data.map(cat => {
+          let parentName = null
+          let currentParent = cat.parentId ? map[cat.parentId] : null
+          const parentNames = []
+
+          while (currentParent) {
+            parentNames.push(currentParent.name) // Thêm vào đầu để đúng thứ tự root → parent
+            currentParent = currentParent.parentId ? map[currentParent.parentId] : null
+          }
+
+          if (parentNames.length > 0) parentName = parentNames.join(' - ')
+
+          return { ...cat, parentName }
+        })
+
+        setRows(categoriesWithParentName)
       } catch {
         setRows([])
         setSnackbarMessage('Không thể tải dữ liệu danh mục. Vui lòng thử lại.')
@@ -68,12 +93,12 @@ const TableCategory = ({ onEditCategory }) => {
         setOpenSnackbar(true)
       }
     }
+
     fetchCategorys()
   }, [debouncedSearchQuery])
 
-  const handleEdit = (id) => {
-    onEditCategory(id)
-  }
+
+  const handleEdit = (id) => onEditCategory(id)
 
   const handleDelete = (id) => {
     setDeletingCategoryId(id)
@@ -83,9 +108,8 @@ const TableCategory = ({ onEditCategory }) => {
   const handleConfirmDelete = async () => {
     try {
       await deleteCategoryAPI(deletingCategoryId)
-      setRows(rows.filter((category) => category._id !== deletingCategoryId))
-
-      setSnackbarMessage('danh mục đã được xóa thành công!')
+      setRows(rows.filter(cat => cat._id !== deletingCategoryId))
+      setSnackbarMessage('Danh mục đã được xóa thành công!')
       setSnackbarSeverity('success')
     } catch {
       setSnackbarMessage('Lỗi khi xóa danh mục. Vui lòng thử lại.')
@@ -103,15 +127,10 @@ const TableCategory = ({ onEditCategory }) => {
   }
 
   const handleCloseSnackbar = (_, reason) => {
-    if (reason !== 'clickaway') {
-      setOpenSnackbar(false)
-    }
+    if (reason !== 'clickaway') setOpenSnackbar(false)
   }
 
-  const handleChangePage = (_, newPage) => {
-    setPage(newPage)
-  }
-
+  const handleChangePage = (_, newPage) => setPage(newPage)
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
@@ -126,41 +145,26 @@ const TableCategory = ({ onEditCategory }) => {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-      <TableContainer
-        component={Paper}
-        sx={{
-          borderRadius: 2,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          overflowX: 'auto'
-        }}
-      >
-        <Table sx={{ minWidth: 1000 }} aria-label="category table">
+      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
+        <Table sx={{ minWidth: 800 }} aria-label="category table">
           <TableHead>
             <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
               <TableCell><strong>STT</strong></TableCell>
               <TableCell><strong>DANH MỤC</strong></TableCell>
+              <TableCell><strong>DANH MỤC CHA</strong></TableCell>
               <TableCell align="center"><strong>THAO TÁC</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-              <TableRow
-                key={row._id}
-                sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  '&:hover': { backgroundColor: '#fafafa' }
-                }}
-              >
+              <TableRow key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#fafafa' } }}>
                 <TableCell>{page * rowsPerPage + index + 1}</TableCell>
-
                 <TableCell>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body2" fontWeight="medium">
-                      {row.name}
-                    </Typography>
-                  </Box>
+                  <Typography variant="body2" fontWeight="medium">{row.name}</Typography>
                 </TableCell>
-
+                <TableCell>
+                  <Typography variant="body2">{row.parentName || 'Gốc'}</Typography>
+                </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
                     <Tooltip title="Sửa danh mục">
@@ -168,34 +172,17 @@ const TableCategory = ({ onEditCategory }) => {
                         color="primary"
                         size="small"
                         onClick={() => handleEdit(row._id)}
-                        sx={{
-                          width: 46,
-                          height: 46,
-                          minWidth: 32,
-                          padding: 0,
-                          borderRadius: 1,
-                          backgroundColor: '#e8f5e8',
-                          '&:hover': { backgroundColor: '#c8e6c9' }
-                        }}
+                        sx={{ width: 46, height: 46, minWidth: 32, padding: 0, borderRadius: 1, backgroundColor: '#e8f5e8', '&:hover': { backgroundColor: '#c8e6c9' } }}
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-
                     <Tooltip title="Xóa danh mục">
                       <IconButton
                         color="error"
                         size="small"
                         onClick={() => handleDelete(row._id)}
-                        sx={{
-                          width: 46,
-                          height: 46,
-                          minWidth: 32,
-                          padding: 0,
-                          borderRadius: 1,
-                          backgroundColor: '#ffebee',
-                          '&:hover': { backgroundColor: '#ffcdd2' }
-                        }}
+                        sx={{ width: 46, height: 46, minWidth: 32, padding: 0, borderRadius: 1, backgroundColor: '#ffebee', '&:hover': { backgroundColor: '#ffcdd2' } }}
                       >
                         <DeleteIcon fontSize="small" />
                       </IconButton>
@@ -208,12 +195,7 @@ const TableCategory = ({ onEditCategory }) => {
         </Table>
       </TableContainer>
 
-      <TablePageControls
-        page={page}
-        rowsPerPage={rowsPerPage}
-        count={rows.length}
-        onChangePage={handleChangePage}
-      />
+      <TablePageControls page={page} rowsPerPage={rowsPerPage} count={rows.length} onChangePage={handleChangePage} />
 
       <Dialog open={openDeleteConfirm} onClose={handleCloseDeleteConfirm}>
         <DialogTitle>Xác nhận xóa</DialogTitle>
@@ -221,22 +203,12 @@ const TableCategory = ({ onEditCategory }) => {
           <Typography>Bạn có chắc chắn muốn xóa danh mục này không?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeleteConfirm} color="primary">
-            Hủy
-          </Button>
-          <Button onClick={handleConfirmDelete} color="error" variant="contained">
-            Xóa
-          </Button>
+          <Button onClick={handleCloseDeleteConfirm} color="primary">Hủy</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">Xóa</Button>
         </DialogActions>
       </Dialog>
 
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        sx={{ marginTop: '46px' }}
-      >
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} sx={{ marginTop: '46px' }}>
         <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} variant="filled" sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>

@@ -11,6 +11,9 @@ const createNew = async (req, res, next) => {
         'string.min': 'Product name must be at least 3 characters long',
         'string.trim': 'Product name must not have leading or trailing whitespace'
       }),
+      parentId: Joi.string().allow(null).messages({
+      'string.base': 'parentId must be a string',
+    })
     })
 
     try {

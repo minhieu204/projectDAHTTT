@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -10,22 +10,57 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import { useNavigate } from 'react-router-dom'
 
 import FieldCustom from '~/components/admin/FieldCustom/FieldCustom'
-import ImageUpload from '~/components/admin/ImageUpload/ImageUpload'
 import {
-  createCategoryAPI
+  createCategoryAPI,
+  fetchAllCategorysAPI
 } from '~/apis/categoryAPIs'
 
 function AddCategory() {
   const navigate = useNavigate()
 
+  const [productCategories, setProductCategories] = useState([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await fetchAllCategorysAPI()
+
+        // Build tree
+        const map = {}
+        data.forEach(cat => (map[cat._id] = { ...cat, children: [] }))
+        data.forEach(cat => {
+          if (cat.parentId) {
+            map[cat.parentId]?.children.push(map[cat._id])
+          }
+        })
+
+        const options = []
+
+        // Chỉ cho phép tầng 1 và tầng 2 làm parent
+        data.forEach(cat => {
+          if (!cat.parentId) {
+            options.push({ value: cat._id, label: cat.name }) // tầng 1
+            map[cat._id].children.forEach(child => {
+              options.push({ value: child._id, label: `${child.name} - ${cat.name}` }) // tầng 2
+              // Tầng 3 sẽ không được thêm vào options
+            })
+          }
+        })
+
+        setProductCategories(options)
+      } catch {
+        //
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
+
   // State dữ liệu form
   const [formData, setFormData] = useState({
     name: '',
-    price: '',
-    material: '',
-    quantity: '',
-    description: '',
-    image: null
+    parentId: '',
   })
 
   // State lỗi validation
@@ -71,6 +106,7 @@ function AddCategory() {
     try {
       const categoryData = {
         name: formData.name,
+        parentId: formData.parentId || null
       }
 
       await createCategoryAPI(categoryData)
@@ -116,6 +152,19 @@ function AddCategory() {
 
       {/* Form */}
       <Box component="form" onSubmit={handleSubmit} sx={{ px: 6 }}>
+        <FieldCustom
+          label="Danh mục cha"
+          required={true}
+          options={productCategories}
+          value={formData.parentId}
+          onChange={(e) => setFormData(prev => ({
+            ...prev,
+            parentId: e.target.value
+          }))}
+          name="parentId"
+          error={!!errors.parentId}
+          helperText={errors.parentId}
+        />
         <FieldCustom
           label="Tên danh mục"
           required

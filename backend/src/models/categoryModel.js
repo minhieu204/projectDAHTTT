@@ -6,6 +6,7 @@ const CATEGORY_COLLECTION_NAME = 'category'
 export const CATEGORY_COLLECTION_SCHEMA = Joi.object({
   name: Joi.string().required().min(2).max(50).trim().strict(),
   slug: Joi.string().required().min(2).trim().strict(),
+  parentId: Joi.string().allow(null).default(null),
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp('javascript').default(Date.now)
 })
