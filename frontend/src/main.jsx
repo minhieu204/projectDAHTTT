@@ -20,6 +20,7 @@ import CreateInformation from './pages/CustomerPage/AccountInformation/CreateInf
 import CategoryPage from './pages/AdminPage/CategoryPage/CategoryPage.jsx'
 import AddCategory from './pages/AdminPage/CategoryPage/AddCategory/AddCategory.jsx'
 import EditCategory from './pages/AdminPage/CategoryPage/EditCategory/EditCategory.jsx'
+import ListProduct from './pages/CustomerPage/ListProduct/ListProduct.jsx'
 
 let router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ let router = createBrowserRouter([
           {
             path: 'editprofile',
             element: <CreateInformation />,
+          },
+          {
+            path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',
+            element: <ListProduct />,
           },
         ]
       },

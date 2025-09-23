@@ -3,6 +3,7 @@ import { Box, Button, Menu, MenuItem, ListSubheader, Modal, TextField, Typograph
 import { styled } from '@mui/material/styles'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { fetchAllCategorysAPI } from '~/apis/categoryAPIs' // API fetch danh mục từ backend
+import { useNavigate } from 'react-router-dom'
 
 const StyledListHeader = styled(ListSubheader)({
   backgroundImage: 'var(--Paper-overlay)',
@@ -29,6 +30,7 @@ function NavBar() {
   const [categoryTree, setCategoryTree] = useState([])
   const [anchorEls, setAnchorEls] = useState({})
   const [openModal, setOpenModal] = useState(false)
+  const navigate = useNavigate()
 
   // Fetch danh mục từ API
   useEffect(() => {
@@ -91,7 +93,13 @@ function NavBar() {
                 <Box key={type._id} sx={{ flex: 1, pr: 2 }}>
                   <StyledListHeader>{type.name}</StyledListHeader>
                   {type.children.map((material) => (
-                    <MenuItem key={material._id} onClick={() => handleMenuClose(root._id)}>
+                    <MenuItem
+                      key={material._id}
+                      onClick={() => {
+                        navigate(`/customer/listproduct/${root.slug}/${type.slug}/${material.slug}`)
+                        handleMenuClose(root._id)}
+                      }
+                    >
                       {material.name}
                     </MenuItem>
                   ))}

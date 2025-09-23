@@ -33,15 +33,33 @@ function EditProduct() {
     const fetchCategories = async () => {
       try {
         const data = await fetchAllCategorysAPI()
-        setCategories(
-          data.map((cat) => ({ value: cat._id, label: cat.name }))
-        )
+
+        // Build map để tra cứu cha
+        const map = {}
+        data.forEach(cat => (map[cat._id] = { ...cat }))
+
+        const level3Options = []
+
+        data.forEach(cat => {
+          // Lọc ra các category tầng 3
+          if (cat.parentId && map[cat.parentId]?.parentId) {
+            const parent = map[cat.parentId]
+            const grandParent = map[parent.parentId]
+
+            const label = `${cat.name} - ${parent.name} - ${grandParent.name}`
+            level3Options.push({ value: cat._id, label })
+          }
+        })
+
+        setCategories(level3Options)
       } catch {
         //
       }
     }
+
     fetchCategories()
   }, [])
+
 
   useEffect(() => {
     const fetchProductData = async () => {

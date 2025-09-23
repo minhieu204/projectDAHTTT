@@ -26,12 +26,25 @@ function AddProduct() {
     const fetchCategories = async () => {
       try {
         const data = await fetchAllCategorysAPI()
-        // Chỉ map ra id và name cho dropdown
-        const options = data.map(cat => ({
-          value: cat._id,
-          label: cat.name
-        }))
-        setProductCategories(options)
+
+        // Build map để tra cứu cha
+        const map = {}
+        data.forEach(cat => (map[cat._id] = { ...cat }))
+
+        const level3Options = []
+
+        data.forEach(cat => {
+          // Lọc ra các category tầng 3
+          if (cat.parentId && map[cat.parentId]?.parentId) {
+            const parent = map[cat.parentId]
+            const grandParent = map[parent.parentId]
+
+            const label = `${cat.name} - ${parent.name} - ${grandParent.name}`
+            level3Options.push({ value: cat._id, label })
+          }
+        })
+
+        setProductCategories(level3Options)
       } catch {
         //
       }
@@ -39,6 +52,7 @@ function AddProduct() {
 
     fetchCategories()
   }, [])
+
 
   // State dữ liệu form
   const [formData, setFormData] = useState({
