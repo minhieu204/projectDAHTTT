@@ -27,7 +27,7 @@ function Footer() {
       <Container maxWidth="lg" sx={{ borderTop: '1px solid #696969' }}>
         <img src="https://cdn.pnj.io/images/logo/pnj.com.vn.png" alt="" style={{ height: '100px', marginBottom: '24px', marginTop: '24px' }} />
         <Grid container spacing={8}>
-          <Grid item xs={12} md={4}>
+          <Grid sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
               © 2017 Công Ty Cổ Phần Vàng Bạc Đá Quý Phú Nhuận
             </Typography>
@@ -54,7 +54,7 @@ function Footer() {
             </Typography>
           </Grid>
 
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid sx={{ gridColumn: { xs: 'span 6', sm: 'span 4', md: 'span 2' } }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1.5 }}>
               VỀ PNJ
             </Typography>
@@ -65,7 +65,7 @@ function Footer() {
             ))}
           </Grid>
 
-          <Grid item xs={6} sm={4} md={3}>
+          <Grid sx={{ gridColumn: { xs: 'span 6', sm: 'span 4', md: 'span 3' } }}>
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1.5 }}>
               DỊCH VỤ KHÁCH HÀNG
@@ -83,7 +83,7 @@ function Footer() {
             </Box>
           </Grid>
 
-          <Grid item xs={12} sm={4} md={3}>
+          <Grid sx={{ gridColumn: { xs: 'span 6', sm: 'span 4', md: 'span 3' } }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1.5 }}>
               KẾT NỐI VỚI CHÚNG TÔI
             </Typography>

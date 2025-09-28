@@ -7,7 +7,7 @@ const PRODUCT_COLLECTION_NAME = 'products'
 const PRODUCT_COLLECTION_SCHEMA = Joi.object({
   name: Joi.string().required().min(3).max(100).trim().strict(),
   slug: Joi.string().required().min(3).trim().strict(),
-  description: Joi.string().max(500).trim().strict().allow(''),
+  description: Joi.string().max(1000).trim().strict().allow(''),
   price: Joi.number().required().min(0),
   stock: Joi.number().integer().min(0).default(0),
   image: Joi.string().uri().required(),

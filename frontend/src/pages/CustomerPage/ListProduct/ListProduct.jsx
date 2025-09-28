@@ -3,11 +3,12 @@ import {
   Box, Grid, Typography, Card,
   CardMedia, CardContent
 } from '@mui/material'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { fetchAllProductsAPI } from '~/apis/productAPIs'
 import { fetchAllCategorysAPI } from '~/apis/categoryAPIs'
 
 function ListProduct() {
+  const navigate = useNavigate()
   const { genderSlug, typeSlug, materialSlug } = useParams()
   const [allProducts, setAllProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -93,6 +94,9 @@ function ListProduct() {
                   position: 'relative',
                   cursor: 'pointer',
                   boxShadow: 2
+                }}
+                onClick={() => {
+                  navigate(`/customer/productdetail/${product._id}`)
                 }}
               >
                 {isNew && (
