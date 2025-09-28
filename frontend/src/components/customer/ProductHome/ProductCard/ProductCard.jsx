@@ -7,7 +7,7 @@ import Box from '@mui/material/Box'
 
 const ProductCard = ({ product, isNew }) => {
   return (
-    <Card sx={{ maxWidth: 400, borderRadius: 2, position: 'relative', m: 1, cursor: 'pointer' }}>
+    <Card sx={{ maxWidth: 400, borderRadius: 2, position: 'relative', m: 1, cursor: 'pointer', minHeight: '360px' }}>
       {isNew && (
         <Box sx={{
           position: 'absolute',
@@ -32,7 +32,7 @@ const ProductCard = ({ product, isNew }) => {
         alt={product.name}
       />
       <CardContent sx={{ pb: '4px !important' }}>
-        <Typography sx={{ fontSize: '14px', color: '#5A5A5A', textAlign: 'center' }}>
+        <Typography sx={{ fontSize: '14px', color: '#5A5A5A', textAlign: 'center', minHeight: '63px' }}>
           {product.name}
         </Typography>
         <Typography sx={{ fontSize: '16px', color: '#c48c46', textAlign: 'center', mt: 1 }}>

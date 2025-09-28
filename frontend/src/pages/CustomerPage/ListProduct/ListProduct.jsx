@@ -123,15 +123,15 @@ function ListProduct() {
                 />
 
                 <CardContent sx={{ p: 1 }}>
-                  <Typography sx={{ fontSize: 14, color: '#5A5A5A', textAlign: 'center' }}>
+                  <Typography sx={{ fontSize: 14, color: '#5A5A5A', textAlign: 'center', minHeight: '63px' }}>
                     {product.name}
                   </Typography>
                   <Typography sx={{ fontSize: 16, color: '#c48c46', textAlign: 'center', mt: 1 }}>
                     {product.price.toLocaleString()} ₫
                   </Typography>
-                  <Typography sx={{ fontSize: 10, color: '#DC2626', textAlign: 'center', mt: 1 }}>
+                  {/* <Typography sx={{ fontSize: 10, color: '#DC2626', textAlign: 'center', mt: 1 }}>
                     Ưu đãi lên đến 2 Triệu & giảm thêm 1% cho khách hàng mới
-                  </Typography>
+                  </Typography> */}
                   <Typography sx={{ fontSize: 10, color: '#5A5A5A', textAlign: 'right', mt: 1 }}>
                     {product.sold || 0} đã bán
                   </Typography>

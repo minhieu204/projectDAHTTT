@@ -12,6 +12,9 @@ function TopBar() {
   const handleAccountClick = () => {
     navigate('/')
   }
+  const handleHomeClick = () => {
+    navigate('/customer')
+  }
   return (
     <Box
       sx={{
@@ -63,6 +66,7 @@ function TopBar() {
           height: '40px',
           cursor: 'pointer'
         }}
+        onClick={handleHomeClick}
       >
         <img src="https://cdn.pnj.io/images/logo/pnj.com.vn.png" alt="" style={{ height: '100%', objectFit: 'contain' }} />
       </Box>

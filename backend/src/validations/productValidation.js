@@ -5,7 +5,7 @@ import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 
 const createNew = async (req, res, next) => {
     const correctCondition = Joi.object({
-      name: Joi.string().required().min(3).max(50).trim().strict().messages({
+      name: Joi.string().required().min(3).max(255).trim().strict().messages({
         'any.required': 'Product name is required!',
         'string.empty': 'Product name cannot be empty!',
         'string.max': 'Product name must be less than or equal to 50 characters long',

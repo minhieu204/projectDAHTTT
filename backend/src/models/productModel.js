@@ -5,7 +5,7 @@ import { GET_DB } from "~/config/mongodb"
 
 const PRODUCT_COLLECTION_NAME = 'products'
 const PRODUCT_COLLECTION_SCHEMA = Joi.object({
-  name: Joi.string().required().min(3).max(100).trim().strict(),
+  name: Joi.string().required().min(3).max(255).trim().strict(),
   slug: Joi.string().required().min(3).trim().strict(),
   description: Joi.string().max(1000).trim().strict().allow(''),
   price: Joi.number().required().min(0),

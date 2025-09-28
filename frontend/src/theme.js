@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles'
 
-const FOCUS_COLOR = '#b3a8c4ff'
+const FOCUS_COLOR = '#C0C0C0'
 
 // Create a theme instance.
 const theme = createTheme({
