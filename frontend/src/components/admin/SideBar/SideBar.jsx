@@ -10,6 +10,7 @@ import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined'
 import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined'
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import { useNavigate } from 'react-router-dom'
 
 function SideBar() {
@@ -49,6 +50,7 @@ function SideBar() {
         <SideBarItem icon={DiscountOutlinedIcon} title='Quản Lý Khuyến Mãi' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={RateReviewOutlinedIcon} title='Quản Lý Đánh Giá' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={PeopleAltOutlinedIcon} title='Quản Lý Khách Hàng' handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={GroupsOutlinedIcon} title='Quản Lý Nhân Viên' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={StoreOutlinedIcon} title='Quản Lý Chi Nhánh' handleSideBarCllick={() => { navigate('/admin/product') }}/>
       </Box>
     </Box>
