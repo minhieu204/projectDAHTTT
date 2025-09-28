@@ -12,7 +12,7 @@ const createNew = async (req, res, next) => {
         'string.min': 'Product name must be at least 3 characters long',
         'string.trim': 'Product name must not have leading or trailing whitespace'
       }),
-      description: Joi.string().required().min(3).max(255).trim().strict().messages({
+      description: Joi.string().required().min(3).max(1000).trim().strict().messages({
         'any.required': 'Description is required!',
         'string.empty': 'Description cannot be empty!',
         'string.max': 'Description must be less than or equal to 255 characters long',
