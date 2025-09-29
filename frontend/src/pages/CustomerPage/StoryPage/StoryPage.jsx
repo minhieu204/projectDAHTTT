@@ -1,6 +1,5 @@
 import { Box, Typography, IconButton } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { BrandsData, CollabData } from './BrandStoy.jsx'
 import { StaffData } from './StaffData.jsx'
 import { useEffect, useState } from 'react'
 
@@ -274,102 +273,6 @@ function StoryPage() {
           >
             THƯƠNG HIỆU SẢN PHẨM
           </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            mb: 5,
-          }}
-        >
-          {BrandsData.map((brand, i) => (
-            <Box
-              key={i}
-              sx={{
-                flex: '1 1 300px',
-                maxWidth: '320px',
-                p: 3,
-                borderRadius: '6px',
-                backgroundColor: '#fff4ec',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                textAlign: 'left',
-                minHeight: '200px',
-              }}
-            >
-              <Box
-                component='img'
-                src={brand.logo}
-                alt={brand.name}
-                sx={{ width: 100, height: 'auto', mb: 2 }}
-              />
-              <Typography
-                sx={{
-                  fontSize: '14px',
-                  color: '#333',
-                  lineHeight: 1.6,
-                }}
-              >
-                {brand.description}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        {/* Collab Title */}
-        <Typography
-          variant='subtitle1'
-          sx={{
-            fontWeight: 'bold',
-            color: '#003468',
-            mb: 3,
-            textTransform: 'uppercase',
-          }}
-        >
-          PNJ COLLAB THƯƠNG HIỆU QUỐC TẾ
-        </Typography>
-
-        {/* Collabs */}
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          {CollabData.map((brand, i) => (
-            <Box
-              key={i}
-              sx={{
-                flex: '1 1 300px',
-                maxWidth: '320px',
-                p: 3,
-                borderRadius: '6px',
-                backgroundColor: '#fff4ec',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                textAlign: 'left',
-                minHeight: '200px',
-              }}
-            >
-              <Box
-                component='img'
-                src={brand.logo}
-                alt={brand.name}
-                sx={{ width: 100, height: 'auto', mb: 2 }}
-              />
-              <Typography
-                sx={{
-                  fontSize: '14px',
-                  color: '#333',
-                  lineHeight: 1.6,
-                }}
-              >
-                {brand.description}
-              </Typography>
-            </Box>
-          ))}
         </Box>
       </Box>
 
