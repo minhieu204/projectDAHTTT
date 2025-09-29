@@ -63,6 +63,7 @@ function ProductHome() {
         width: '1152px',
         backgroundImage: 'url("https://cdn.pnj.io/images/2023/relayout-pdp/Frame%2055883.png?1730781085068")',
         mt: 6,
+        borderRadius: '8px'
       }}
     >
       <Box
@@ -105,25 +106,6 @@ function ProductHome() {
         </Box>
       </Box>
 
-      {/* Button xem them */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
-        <Box
-          sx={{
-            height: '40px',
-            textTransform: 'none',
-            backgroundColor: '#FFFFFF80',
-            width: '111px',
-            textAlign: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}
-        >
-          Xem thêm
-        </Box>
-      </Box>
     </Box>
   )
 }
