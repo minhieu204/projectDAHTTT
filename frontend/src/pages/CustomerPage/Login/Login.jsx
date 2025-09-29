@@ -6,24 +6,18 @@ import {
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import FieldCustom from '~/components/admin/FieldCustom/FieldCustom'
-import { registerUserAPI } from '~/apis/userAPIs'
+import { loginUserAPI } from '~/apis/userAPIs'
 import { useNavigate } from 'react-router-dom'
 
-function Register() {
+function Login() {
   const navigate = useNavigate()
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  })
+  const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState('success')
 
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -37,41 +31,53 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
-      return showError('Vui lòng nhập đầy đủ thông tin!')
+    if (!form.email || !form.password) {
+      setSnackbarMessage('Vui lòng nhập email và mật khẩu!')
+      setSnackbarSeverity('error')
+      setOpenSnackbar(true)
+      return
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(form.email)) return showError('Email không hợp lệ!')
-    if (form.password.length < 6) return showError('Mật khẩu phải ít nhất 6 ký tự!')
-    if (form.password !== form.confirmPassword) return showError('Mật khẩu xác nhận không khớp!')
+    if (!emailRegex.test(form.email)) {
+      setSnackbarMessage('Email không hợp lệ!')
+      setSnackbarSeverity('error')
+      setOpenSnackbar(true)
+      return
+    }
 
     setLoading(true)
     try {
-      const res = await registerUserAPI({
-        name: form.name,
-        email: form.email,
-        password: form.password
-      })
-      showSuccess(res.message || 'Đăng ký thành công!')
-      setTimeout(() => navigate('/login'), 1000)
+      const res = await loginUserAPI(form)
+
+      if (res.token) {
+        localStorage.setItem('accessToken', res.token)
+        localStorage.setItem('user', JSON.stringify(res.user))
+      }
+
+      // ✅ Kiểm tra role
+      const role = res.user?.role
+      setSnackbarMessage('Đăng nhập thành công!')
+      setSnackbarSeverity('success')
+      setOpenSnackbar(true)
+
+      setTimeout(() => {
+        if (role === 'admin') {
+          navigate('/admin')
+        } else if (role === 'customer') {
+          navigate('/customer')
+        } else {
+          navigate('/')
+        }
+      }, 800)
     } catch (err) {
-      showError(err.response?.data?.message || 'Đăng ký thất bại, vui lòng thử lại!')
+      const msg = err.response?.data?.message || 'Đăng nhập thất bại, vui lòng thử lại!'
+      setSnackbarMessage(msg)
+      setSnackbarSeverity('error')
+      setOpenSnackbar(true)
     } finally {
       setLoading(false)
     }
-  }
-
-  const showError = (msg) => {
-    setSnackbarMessage(msg)
-    setSnackbarSeverity('error')
-    setOpenSnackbar(true)
-  }
-
-  const showSuccess = (msg) => {
-    setSnackbarMessage(msg)
-    setSnackbarSeverity('success')
-    setOpenSnackbar(true)
   }
 
   return (
@@ -100,19 +106,10 @@ function Register() {
           color="white"
           sx={{ textAlign: 'center', mb: 2 }}
         >
-          Đăng ký
+          Đăng nhập
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <FieldCustom
-            label="Họ và tên"
-            required
-            placeholder="Nhập tên..."
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            sx={{ mb: 2 }}
-          />
           <FieldCustom
             label="Email"
             required
@@ -122,6 +119,7 @@ function Register() {
             onChange={handleChange}
             sx={{ mb: 2 }}
           />
+
           <FieldCustom
             label="Mật khẩu"
             required
@@ -135,34 +133,11 @@ function Register() {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowPassword((prev) => !prev)}
+                    onClick={() => setShowPassword(prev => !prev)}
                     edge="end"
                     sx={{ color: 'white' }}
                   >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-          <FieldCustom
-            label="Xác nhận mật khẩu"
-            required
-            placeholder="Nhập lại mật khẩu..."
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            type={showConfirmPassword ? 'text' : 'password'}
-            sx={{ mb: 2 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowConfirmPassword((prev) => !prev)}
-                    edge="end"
-                    sx={{ color: 'white' }}
-                  >
-                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               )
@@ -182,7 +157,7 @@ function Register() {
               fontWeight: 'bold'
             }}
           >
-            {loading ? <CircularProgress size={22} color="inherit" /> : 'Đăng ký'}
+            {loading ? <CircularProgress size={22} color="inherit" /> : 'Đăng nhập'}
           </Button>
         </form>
 
@@ -191,9 +166,9 @@ function Register() {
           color="white"
           sx={{ mt: 2, textAlign: 'center' }}
         >
-          Đã có tài khoản?{' '}
-          <a href="/login" style={{ color: '#0d6efd' }}>
-            Đăng nhập
+          Chưa có tài khoản?{' '}
+          <a href="/" style={{ color: '#0d6efd' }}>
+            Đăng ký
           </a>
         </Typography>
       </Box>
@@ -218,4 +193,4 @@ function Register() {
   )
 }
 
-export default Register
+export default Login

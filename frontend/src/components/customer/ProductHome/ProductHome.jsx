@@ -1,12 +1,14 @@
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Slider from 'react-slick'
 import ProductCard from './ProductCard/ProductCard'
 import { fetchAllProductsAPI } from '~/apis/productAPIs'
+import { useNavigate } from 'react-router-dom'
 
 function ProductHome() {
+  const navigate = useNavigate()
   const [allProducts, setAllProducts] = useState([])
   const [selectedButton, setSelectedButton] = useState('new')
 
@@ -92,7 +94,7 @@ function ProductHome() {
         <Box sx={{ width: '90%', margin: 'auto' }}>
           <Slider {...settings}>
             {productsToShow.map(product => (
-              <Box key={product._id}>
+              <Box key={product._id} onClick={() => {navigate(`/customer/productdetail/${product._id}`)}} >
                 <ProductCard
                   product={product}
                   isNew={selectedButton === 'new'}

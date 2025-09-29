@@ -22,6 +22,8 @@ import AddCategory from './pages/AdminPage/CategoryPage/AddCategory/AddCategory.
 import EditCategory from './pages/AdminPage/CategoryPage/EditCategory/EditCategory.jsx'
 import ListProduct from './pages/CustomerPage/ListProduct/ListProduct.jsx'
 import ProductDetail from './pages/CustomerPage/ProductDetail/ProductDetail.jsx'
+import Login from './pages/CustomerPage/Login/Login.jsx'
+import PrivateRoute from './components/PrivateRoute.jsx'
 
 let router = createBrowserRouter([
   {
@@ -33,37 +35,46 @@ let router = createBrowserRouter([
         element: <Register />
       },
       {
+        path: '/login',
+        element: <Login />,
+      },
+      {
         path: '/admin',
-        element: <AdminPage />,
+        element: <PrivateRoute allowedRoles={['admin']} />,
         children: [
           {
-            index: true,
-            element: <ProductPage />
-          },
-          {
-            path: 'product',
-            element: <ProductPage />,
-          },
-          {
-            path: 'product/add-product',
-            element: <AddProduct />,
-          },
-          {
-            path: 'product/edit-product/:productId',
-            element: <EditProduct />,
-          },
-          {
-            path: 'category',
-            element: <CategoryPage />,
-          },
-          {
-            path: 'category/add-category',
-            element: <AddCategory />,
-          },
-          {
-            path: 'category/edit-category/:categoryId',
-            element: <EditCategory />,
-          },
+            element: <AdminPage />,
+            children: [
+              {
+                index: true,
+                element: <ProductPage />
+              },
+              {
+                path: 'product',
+                element: <ProductPage />,
+              },
+              {
+                path: 'product/add-product',
+                element: <AddProduct />,
+              },
+              {
+                path: 'product/edit-product/:productId',
+                element: <EditProduct />,
+              },
+              {
+                path: 'category',
+                element: <CategoryPage />,
+              },
+              {
+                path: 'category/add-category',
+                element: <AddCategory />,
+              },
+              {
+                path: 'category/edit-category/:categoryId',
+                element: <EditCategory />,
+              },
+            ]
+          }
         ]
       },
       {

@@ -1,8 +1,19 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import { useNavigate } from 'react-router-dom'
 
 function AppBar() {
+  const navigate = useNavigate()
+
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const userName = user?.name || ''
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('user')
+    navigate('/login')
+  }
   return (
     <Box
       sx={{
@@ -26,7 +37,7 @@ function AppBar() {
           textTransform: 'none'
         }}
       >
-        Xin chào, Nguyễn Minh Hiếu
+        Xin chào, {userName}
       </Box>
       <Box
         sx={{
@@ -37,8 +48,10 @@ function AppBar() {
           gap: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          textTransform: 'none'
+          textTransform: 'none',
+          cursor: 'pointer'
         }}
+        onClick={handleLogout}
       >
         <LogoutOutlinedIcon sx={{ fontSize: 28 }}/>
         Đăng Xuất
