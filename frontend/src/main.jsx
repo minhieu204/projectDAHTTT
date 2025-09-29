@@ -24,6 +24,7 @@ import ListProduct from './pages/CustomerPage/ListProduct/ListProduct.jsx'
 import ProductDetail from './pages/CustomerPage/ProductDetail/ProductDetail.jsx'
 import Login from './pages/CustomerPage/Login/Login.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
+import StoryPage from './pages/CustomerPage/StoryPage/StoryPage.jsx'
 
 let router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ let router = createBrowserRouter([
           {
             path: 'editprofile',
             element: <CreateInformation />,
+          },
+          {
+            path: 'story',
+            element: <StoryPage />,
           },
           {
             path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',

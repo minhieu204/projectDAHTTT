@@ -6,7 +6,7 @@ import { Navigate, Outlet } from 'react-router-dom'
  * @param {string[]} allowedRoles - danh sách role được phép (nếu có)
  */
 function PrivateRoute({ allowedRoles = [] }) {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('accessToken')
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   // ✅ Nếu chưa đăng nhập

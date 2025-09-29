@@ -15,6 +15,9 @@ function TopBar() {
   const handleHomeClick = () => {
     navigate('/customer')
   }
+  const handleStoryClick = () => {
+    navigate('/customer/story')
+  }
   return (
     <Box
       sx={{
@@ -39,6 +42,7 @@ function TopBar() {
               backgroundColor: 'white'
             },
           }}
+          onClick={handleStoryClick}
         >
           <AutoStoriesOutlinedIcon />
           Câu Chuyện PNJ

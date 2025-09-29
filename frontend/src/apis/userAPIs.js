@@ -8,7 +8,6 @@ export const registerUserAPI = async (userData) => {
 
 export const loginUserAPI = async (loginData) => {
   const request = await axios.post(`${API_ROOT}/v1/user/login`, loginData)
-  console.log(request.data)
   return request.data
 }
 
