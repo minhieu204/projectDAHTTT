@@ -163,14 +163,14 @@ function StoryPage() {
                 alignItems: 'center',
                 opacity: currentIndex === index ? 1 : 0.5,
                 transition: 'opacity 0.3s ease',
+                pl: 10
               }}
             >
               <img
                 src={staff.Image}
                 alt={staff.name}
                 style={{
-                  width: '60%',
-                  height: '60%',
+                  height: '400px',
                   objectFit: 'cover',
                   borderRadius: '12px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
@@ -208,7 +208,7 @@ function StoryPage() {
         </IconButton>
       </Box>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 2, mb: 3 }}>
         {StaffData.map((_, index) => (
           <Box
             key={index}

@@ -2,11 +2,12 @@ import { Box, TextField, Button, RadioGroup, FormControlLabel, Radio, FormLabel,
 import { useState } from 'react'
 
 function CreateInformation() {
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
   const [form, setForm] = useState({
     gender: '',
-    fullName: '',
+    fullName: user?.name || '',
     birthday: '',
-    email: '',
+    email: user?.email || '',
     phone: '',
     address: '',
     city: '',

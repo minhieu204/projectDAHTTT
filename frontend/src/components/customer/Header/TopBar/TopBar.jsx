@@ -10,7 +10,12 @@ function TopBar() {
   const navigate = useNavigate()
   const itemCount = 0
   const handleAccountClick = () => {
-    navigate('/')
+    const token = localStorage.getItem('accessToken')
+    if (!token) {
+      navigate('/login')
+    } else {
+      navigate('/customer/editprofile')
+    }
   }
   const handleHomeClick = () => {
     navigate('/customer')

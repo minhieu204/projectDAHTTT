@@ -2,7 +2,7 @@ import { Box, Button, Container, Typography } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import React, { useEffect, useState } from 'react'
 import ServiceDetail from '~/components/customer/ServiceDetail/ServiceDetail'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getProductDetailAPI } from '~/apis/productAPIs'
 
 const formatCurrency = (amount) =>
@@ -12,6 +12,7 @@ const formatCurrency = (amount) =>
   }).format(amount)
 
 function ProductDetail() {
+  const navigate = useNavigate()
   const { productId } = useParams()
   const [product, setProduct] = useState({})
   const [_loading, setLoading] = useState(true)
@@ -30,6 +31,14 @@ function ProductDetail() {
     }
     fetchProduct()
   }, [productId])
+
+  const handleCartClick = () => {
+    const token = localStorage.getItem('accessToken')
+    if (!token) {
+      navigate('/login')
+    }
+  }
+
   return (
     <Container sx={{ px: 10, py: 4, display: 'flex', gap: 10 }}>
       <Box sx={{ backgroundColor: '#f7f7f7' }}>
@@ -70,7 +79,7 @@ function ProductDetail() {
           </Box>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
-        <Button variant='outlined' sx={{ width: '100%', mt: 2, textTransform: 'none' }}>
+        <Button variant='outlined' sx={{ width: '100%', mt: 2, textTransform: 'none' }} onClick={handleCartClick}>
           <Typography sx={{ m: 0.5 }}>
             Thêm vào giỏ hàng
           </Typography>

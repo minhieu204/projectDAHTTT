@@ -17,7 +17,7 @@ function PrivateRoute({ allowedRoles = [] }) {
   // ✅ Nếu có quy định role mà user không thuộc nhóm được phép
   if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
     // ví dụ: admin cố truy cập customer hoặc ngược lại
-    return <Navigate to="/" replace />
+    return <Navigate to="/login" replace />
   }
 
   // ✅ Cho phép vào trang (Outlet đại diện cho các route con)
