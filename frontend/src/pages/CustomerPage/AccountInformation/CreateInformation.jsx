@@ -1,4 +1,4 @@
-import { Box, TextField, Button, RadioGroup, FormControlLabel, Radio, FormLabel, MenuItem, Container } from '@mui/material'
+import { Box, TextField, Button, RadioGroup, FormControlLabel, Radio, FormLabel, MenuItem } from '@mui/material'
 import { useState } from 'react'
 
 function CreateInformation() {
@@ -30,7 +30,8 @@ function CreateInformation() {
       alignItems: 'center',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
+      backgroundRepeat: 'no-repeat',
+      minHeight: '100vh'
     }}>
 
       <Box
