@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import ServiceDetail from '~/components/customer/ServiceDetail/ServiceDetail'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getProductDetailAPI } from '~/apis/productAPIs'
+import { useCart } from '~/context/Cart/useCart'
 
 const formatCurrency = (amount) =>
   new Intl.NumberFormat('vi-VN', {
@@ -14,8 +15,10 @@ const formatCurrency = (amount) =>
 function ProductDetail() {
   const navigate = useNavigate()
   const { productId } = useParams()
+  const { addToCart } = useCart()
   const [product, setProduct] = useState({})
   const [_loading, setLoading] = useState(true)
+  const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -32,10 +35,28 @@ function ProductDetail() {
     fetchProduct()
   }, [productId])
 
-  const handleCartClick = () => {
+  const handleCartClick = async () => { // ĐÃ THÊM ASYNC
     const token = localStorage.getItem('accessToken')
     if (!token) {
       navigate('/login')
+      return
+    }
+
+    if (product && product._id) {
+      try {
+        setIsAdding(true)
+
+        console.log('Sending Product ID:', product._id)
+
+        await addToCart(product, 1)
+
+      } catch (error) {
+        // LỖI XẢY RA. Kiểm tra console.error này!
+        console.error('LỖI THÊM GIỎ HÀNG:', error)
+        // alert('Thêm vào giỏ hàng thất bại: ' + error.message)
+      } finally {
+        setIsAdding(false) // Kết thúc loading nút
+      }
     }
   }
 
@@ -79,7 +100,7 @@ function ProductDetail() {
           </Box>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
-        <Button variant='outlined' sx={{ width: '100%', mt: 2, textTransform: 'none' }} onClick={handleCartClick}>
+        <Button variant='outlined' sx={{ width: '100%', mt: 2, textTransform: 'none' }} onClick={handleCartClick} disabled={_loading || isAdding}>
           <Typography sx={{ m: 0.5 }}>
             Thêm vào giỏ hàng
           </Typography>

@@ -5,10 +5,12 @@ import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import { useNavigate } from 'react-router-dom'
+import { useCart } from '~/context/Cart/useCart'
 
 function TopBar() {
   const navigate = useNavigate()
-  const itemCount = 0
+  const { cartItems = [] } = useCart()
+  const itemCount = cartItems.reduce((sum, i) => sum + (i.quantity || 0), 0)
   const handleAccountClick = () => {
     const token = localStorage.getItem('accessToken')
     if (!token) {
@@ -22,6 +24,9 @@ function TopBar() {
   }
   const handleStoryClick = () => {
     navigate('/customer/story')
+  }
+  const handleCartClick = () => {
+    navigate('/customer/cart')
   }
   return (
     <Box
@@ -111,6 +116,7 @@ function TopBar() {
               backgroundColor: 'white'
             },
           }}
+          onClick={handleCartClick}
         >
           <Badge
             badgeContent={itemCount}

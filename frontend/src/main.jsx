@@ -25,6 +25,7 @@ import ProductDetail from './pages/CustomerPage/ProductDetail/ProductDetail.jsx'
 import Login from './pages/CustomerPage/Login/Login.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
 import StoryPage from './pages/CustomerPage/StoryPage/StoryPage.jsx'
+import CartProvider from './context/Cart/CartProvider.jsx'
 
 let router = createBrowserRouter([
   {
@@ -114,7 +115,9 @@ createRoot(document.getElementById('root')).render(
       theme={theme}
       disableTransitionOnChange>
       <CssBaseline enableColorScheme/>
-      <RouterProvider router={router} />
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
     </ThemeProvider>
   </StrictMode>,
 )
