@@ -12,7 +12,6 @@ const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Fetch cart từ backend
   const fetchCart = async () => {
     try {
       setLoading(true)
@@ -33,7 +32,6 @@ const CartProvider = ({ children }) => {
     fetchCart()
   }, [])
 
-  // Thêm sản phẩm
   const addToCart = async (product, quantity = 1) => {
     if (!product?._id) return
     try {
@@ -46,27 +44,41 @@ const CartProvider = ({ children }) => {
     }
   }
 
-  // Cập nhật số lượng
-  const updateQuantity = async (productId, quantity) => {
+  const updateQuantity = async (productId, newQuantity) => {
     try {
-      const res = await updateQuantityAPI(productId, quantity)
-      if (res.success) setCartItems(res.data?.items || [])
+      const item = cartItems.find(i => i.productId === productId)
+      if (!item) return
+
+      const maxQuantity = item.product?.stock || Infinity
+      if (newQuantity > maxQuantity) {
+        newQuantity = maxQuantity
+      }
+      if (newQuantity < 1) newQuantity = 1
+
+      const res = await updateQuantityAPI(productId, newQuantity)
+      if (res.success) {
+        setCartItems(prev =>
+          prev.map(i =>
+            i.productId === productId ? { ...i, quantity: newQuantity } : i
+          )
+        )
+      }
     } catch {
       //
     }
   }
 
-  // Xóa 1 sản phẩm
   const removeFromCart = async (productId) => {
     try {
-      const res = await removeItemAPI(productId)
-      if (res.success) setCartItems(res.data?.items || [])
+      await removeItemAPI(productId)
+
+      setCartItems((prev) => prev.filter(item => item.productId !== productId))
     } catch {
       //
     }
   }
 
-  // Xóa toàn bộ giỏ hàng
+
   const clearCart = async () => {
     try {
       const res = await clearCartAPI()
@@ -85,7 +97,7 @@ const CartProvider = ({ children }) => {
         updateQuantity,
         removeFromCart,
         clearCart,
-        refreshCart: fetchCart // optional: force fetch
+        refreshCart: fetchCart
       }}
     >
       {children}

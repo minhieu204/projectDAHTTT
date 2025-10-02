@@ -26,6 +26,7 @@ import Login from './pages/CustomerPage/Login/Login.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
 import StoryPage from './pages/CustomerPage/StoryPage/StoryPage.jsx'
 import CartProvider from './context/Cart/CartProvider.jsx'
+import CartPage from './pages/CustomerPage/CartPage/CartPage.jsx'
 
 let router = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ let router = createBrowserRouter([
           {
             path: 'story',
             element: <StoryPage />,
+          },
+          {
+            path: 'cart',
+            element: <CartPage />,
           },
           {
             path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',

@@ -15,7 +15,7 @@ const formatCurrency = (amount) =>
 function ProductDetail() {
   const navigate = useNavigate()
   const { productId } = useParams()
-  const { addToCart } = useCart()
+  const { addToCart, cartItems } = useCart()
   const [product, setProduct] = useState({})
   const [_loading, setLoading] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
@@ -35,27 +35,28 @@ function ProductDetail() {
     fetchProduct()
   }, [productId])
 
-  const handleCartClick = async () => { // ĐÃ THÊM ASYNC
+  const existingItem = cartItems.find(item => item.productId === product._id)
+  const currentQuantity = existingItem ? existingItem.quantity : 0
+  const maxStock = product.stock || 0
+  const isOutOfStock = currentQuantity >= maxStock || maxStock === 0
+
+  const handleCartClick = async () => {
     const token = localStorage.getItem('accessToken')
     if (!token) {
       navigate('/login')
       return
     }
 
-    if (product && product._id) {
+    if (product && product._id && !isOutOfStock) {
       try {
         setIsAdding(true)
 
-        console.log('Sending Product ID:', product._id)
-
         await addToCart(product, 1)
 
-      } catch (error) {
-        // LỖI XẢY RA. Kiểm tra console.error này!
-        console.error('LỖI THÊM GIỎ HÀNG:', error)
-        // alert('Thêm vào giỏ hàng thất bại: ' + error.message)
+      } catch {
+        //
       } finally {
-        setIsAdding(false) // Kết thúc loading nút
+        setIsAdding(false)
       }
     }
   }
@@ -100,7 +101,7 @@ function ProductDetail() {
           </Box>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
-        <Button variant='outlined' sx={{ width: '100%', mt: 2, textTransform: 'none' }} onClick={handleCartClick} disabled={_loading || isAdding}>
+        <Button variant='outlined' sx={{ width: '100%', mt: 2, textTransform: 'none' }} onClick={handleCartClick} disabled={_loading || isAdding || isOutOfStock}>
           <Typography sx={{ m: 0.5 }}>
             Thêm vào giỏ hàng
           </Typography>
