@@ -27,6 +27,9 @@ import PrivateRoute from './components/PrivateRoute.jsx'
 import StoryPage from './pages/CustomerPage/StoryPage/StoryPage.jsx'
 import CartProvider from './context/Cart/CartProvider.jsx'
 import CartPage from './pages/CustomerPage/CartPage/CartPage.jsx'
+import Checkout from './pages/CustomerPage/Checkout/Checkout.jsx'
+import ThankYou from './pages/CustomerPage/ThankYou/ThankYou.jsx'
+import OrderPage from './pages/AdminPage/OrderPage/OrderPage.jsx'
 
 let router = createBrowserRouter([
   {
@@ -76,6 +79,10 @@ let router = createBrowserRouter([
                 path: 'category/edit-category/:categoryId',
                 element: <EditCategory />,
               },
+              {
+                path: 'order',
+                element: <OrderPage />,
+              },
             ]
           }
         ]
@@ -99,6 +106,14 @@ let router = createBrowserRouter([
           {
             path: 'cart',
             element: <CartPage />,
+          },
+          {
+            path: 'checkout',
+            element: <Checkout />,
+          },
+          {
+            path: 'thank-you',
+            element: <ThankYou />,
           },
           {
             path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',

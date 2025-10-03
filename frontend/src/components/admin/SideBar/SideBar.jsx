@@ -46,7 +46,7 @@ function SideBar() {
         <SideBarItem icon={PersonOutlineOutlinedIcon} title='Quản Lý Tài Khoản' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={ShoppingBagOutlinedIcon} title='Quản Lý Sản Phẩm' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={ListAltOutlinedIcon} title='Quản Lý Danh Mục' handleSideBarCllick={() => { navigate('/admin/category') }}/>
-        <SideBarItem icon={ShoppingCartOutlinedIcon} title='Quản Lý Đơn Hàng' handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={ShoppingCartOutlinedIcon} title='Quản Lý Đơn Hàng' handleSideBarCllick={() => { navigate('/admin/order') }}/>
         <SideBarItem icon={DiscountOutlinedIcon} title='Quản Lý Khuyến Mãi' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={RateReviewOutlinedIcon} title='Quản Lý Đánh Giá' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={PeopleAltOutlinedIcon} title='Quản Lý Khách Hàng' handleSideBarCllick={() => { navigate('/admin/product') }}/>

@@ -5,12 +5,14 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import RemoveIcon from '@mui/icons-material/Remove'
 import AddIcon from '@mui/icons-material/Add'
 import CartContext from '~/context/Cart/CartContext'
+import { useNavigate } from 'react-router-dom'
 
 function CartPage() {
   const { cartItems, updateQuantity, removeFromCart, clearCart } = useContext(CartContext)
 
   const [selectedItems, setSelectedItems] = useState([])
 
+  const navigate = useNavigate()
 
   // Toggle chọn 1 sản phẩm
   const handleSelectItem = (id, checked) => {
@@ -29,6 +31,14 @@ function CartPage() {
 
   const discount = 0
   const total = subtotal - discount
+
+  const handleCheckout = () => {
+    if (selectedItems.length === 0) return
+    const productsToCheckout = cartItems.filter(item =>
+      selectedItems.includes(item.productId)
+    )
+    navigate('/customer/checkout', { state: { products: productsToCheckout } })
+  }
 
   return (
     <Box sx={{ backgroundColor: '#F5F5F5', py: 6 }}>
@@ -147,8 +157,28 @@ function CartPage() {
                   {total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: '#003468', height: '40px', borderRadius: '8px', mt: 2, cursor: 'pointer', '&:hover': { bgcolor: '#004c8f' } }}>
-                <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'white' }}>Tiếp tục</Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  bgcolor: selectedItems.length > 0 ? '#003468' : '#ccc',
+                  height: '40px',
+                  borderRadius: '8px',
+                  mt: 2,
+                  cursor: selectedItems.length > 0 ? 'pointer' : 'not-allowed',
+                  '&:hover': {
+                    bgcolor: selectedItems.length > 0 ? '#004c8f' : '#ccc'
+                  }
+                }}
+                onClick={handleCheckout}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: 'bold', color: 'white' }}
+                >
+                  Tiếp tục
+                </Typography>
               </Box>
             </Box>
           </Box>

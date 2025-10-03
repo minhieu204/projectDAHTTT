@@ -88,6 +88,18 @@ const CartProvider = ({ children }) => {
     }
   }
 
+  const removeManyFromCart = async (productIds = []) => {
+    try {
+      for (const productId of productIds) {
+        await removeItemAPI(productId)
+      }
+      setCartItems(prev => prev.filter(i => !productIds.includes(i.productId)))
+    } catch {
+      //
+    }
+  }
+
+
   return (
     <CartContext.Provider
       value={{
@@ -96,6 +108,7 @@ const CartProvider = ({ children }) => {
         addToCart,
         updateQuantity,
         removeFromCart,
+        removeManyFromCart,
         clearCart,
         refreshCart: fetchCart
       }}

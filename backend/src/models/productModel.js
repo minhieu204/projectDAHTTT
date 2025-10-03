@@ -112,6 +112,17 @@ const updateOne = async (productId, updateData) => {
   }
 }
 
+const decreaseStock = async (productId, quantity) => {
+  const result = await GET_DB().collection('products').findOneAndUpdate(
+    { _id: new ObjectId(productId), stock: { $gte: quantity } },
+    { $inc: { stock: -quantity } },
+    { returnDocument: 'after' }
+  )
+  if (!result) throw new ApiError(StatusCodes.BAD_REQUEST, 'Số lượng sản phẩm không đủ')
+  return result
+}
+
+
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
   PRODUCT_COLLECTION_SCHEMA,
@@ -121,5 +132,6 @@ export const productModel = {
   getAll,
   deleteOne,
   search,
-  updateOne
+  updateOne,
+  decreaseStock
 }
