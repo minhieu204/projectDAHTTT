@@ -10,7 +10,7 @@ export const USER_COLLECTION_SCHEMA = Joi.object({
   name: Joi.string().min(3).max(50).trim().required(),
   email: Joi.string().email().trim().required(),
   password: Joi.string().min(6).required(),
-  role: Joi.string().valid('customer', 'admin').default('customer'),
+  role: Joi.string().valid('customer', 'employee', 'admin').default('customer'),
   phone: Joi.string().allow(''),
   address: Joi.string().allow(''),
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
@@ -61,7 +61,35 @@ const updateOne = async (userId, updateData) => {
 const getAll = async () => {
   return await GET_DB().collection(USER_COLLECTION_NAME).find().toArray()
 }
-
+const search = async (query) => {
+  try {
+    const regex = new RegExp(query, 'i')
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).find({ name: regex }).toArray()
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+const deleteOne = async (productId) => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).deleteOne({
+      _id: new ObjectId(productId)
+    })
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+const getDetails = async (id) => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).findOne({
+      _id: new ObjectId(id)
+    })
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 export const userModel = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
@@ -69,5 +97,8 @@ export const userModel = {
   findByEmail,
   findOneId,
   updateOne,
-  getAll
+  getAll,
+  search,
+  deleteOne,
+  getDetails
 }

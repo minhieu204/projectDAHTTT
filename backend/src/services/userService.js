@@ -53,10 +53,74 @@ const updateProfile = async (userId, updateData) => {
   delete updatedUser.password
   return updatedUser
 }
+const search = async (name) => {
+  try {
+    const products = await userModel.search(name)
+    if (!products) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'No Account found matching your query')
+    }
+    return products
+  } catch (error) {
+    throw error
+  }
+}
+const getAll = async () => {
+  try {
+    const products = await userModel.getAll()
+    if (!products) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'No users found')
+    }
+    return products
+  } catch (error) {
+    throw error
+  }
+}
+const createUser = async (data) => {
+  const existed = await userModel.findByEmail(data.email)
+  if (existed) throw new ApiError(StatusCodes.CONFLICT, 'Email đã tồn tại')
 
+  // Nếu admin tạo user mà chưa set password thì gán mật khẩu mặc định
+  if (!data.password) {
+    data.password = '123456'
+  }
+  data.role = data.role || 'user' // gán role mặc định nếu chưa có
+  const createdUser = await userModel.createNew(data)
+  const newUser = await userModel.findOneId(createdUser.insertedId)
+  delete newUser.password
+  return newUser
+}
+const deleteOne = async (productId) => {
+  try {
+    const result = await userModel.deleteOne(productId)
+    if (!result) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'No users found')
+    }
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+const getDetails = async (productId) => {
+  try {
+    const product = await userModel.getDetails(productId)
+
+    if (!product) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'User not found')
+    }
+
+    return product
+  } catch (error) {
+    throw error
+  }
+}
 export const userService = {
   register,
   login,
   getProfile,
-  updateProfile
+  updateProfile,
+  search,
+  getAll,
+  createUser,
+  deleteOne,
+  getDetails
 }

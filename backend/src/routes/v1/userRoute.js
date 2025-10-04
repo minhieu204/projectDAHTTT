@@ -15,4 +15,15 @@ Router.route('/profile')
   .get(authMiddleware, userController.getProfile)
   .put(authMiddleware, userController.updateProfile)
 
+Router.route('/search')
+  .get(userController.search)
+
+Router.route('/')
+.get(userController.getAll)
+.post(userController.createUser)
+
+Router.route('/:id')
+  .delete(userController.deleteOne)
+  .get(userController.getDetails)
+  .put(userController.updateAccount)
 export const userRoute = Router
