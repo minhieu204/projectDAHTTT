@@ -61,6 +61,7 @@ const search = async (req, res, next) => {
 const getAll = async (req, res, next) => {
   try {
     const products = await userService.getAll()
+    console.log(products)
     res.status(StatusCodes.OK).json(products)
     
   } catch (error) {

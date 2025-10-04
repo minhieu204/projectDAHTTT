@@ -9,7 +9,11 @@ const breadcrumbNameMap = {
   '/admin/product/edit-product': 'Edit Product',
   '/admin/category': 'Category',
   '/admin/category/add-category': 'Add Category',
-  '/admin/category/edit-category': 'Edit Category'
+  '/admin/category/edit-category': 'Edit Category',
+  '/admin/order': 'Order',
+  '/admin/account': 'Account',
+  '/admin/account/add-account': 'Add Account',
+  '/admin/account/edit-account': 'Edit Account',
 }
 
 const AdminBreadcrumbs = () => {

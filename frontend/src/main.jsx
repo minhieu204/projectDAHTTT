@@ -32,6 +32,8 @@ import ThankYou from './pages/CustomerPage/ThankYou/ThankYou.jsx'
 import OrderPage from './pages/AdminPage/OrderPage/OrderPage.jsx'
 import MyOrders from './pages/CustomerPage/MyOrders/MyOrders.jsx'
 import AccountPage from './pages/AdminPage/AccountPage/AccountPage.jsx'
+import EditAccount from './pages/AdminPage/AccountPage/EditAccount/EditAccount.jsx'
+import AddAccount from './pages/AdminPage/AccountPage/AddAccount/AddAccount.jsx'
 
 let router = createBrowserRouter([
   {
@@ -88,6 +90,14 @@ let router = createBrowserRouter([
               {
                 path: 'account',
                 element: <AccountPage />,
+              },
+              {
+                path: 'account/add-account',
+                element: <AddAccount />,
+              },
+              {
+                path: 'account/edit-account/:id',
+                element: <EditAccount />,
               },
             ]
           }

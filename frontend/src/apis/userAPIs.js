@@ -37,7 +37,7 @@ export const updateAccountAPI = async (id ,updateData, token) => {
   return request.data
 }
 export const searchUserAPI = async (query, token) => {
-  const request = await axios.get(`${API_ROOT}/v1/user/search?name=${query}`,{
+  const request = await axios.get(`${API_ROOT}/v1/user/search?name=${query}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -45,7 +45,7 @@ export const searchUserAPI = async (query, token) => {
   return request.data
 }
 export const AllUsersAPI = async (token) => {
-  const request = await axios.get(`${API_ROOT}/v1/user/`, {headers: {
+  const request = await axios.get(`${API_ROOT}/v1/user/`, { headers: {
     Authorization: `Bearer ${token}`
   }
   })

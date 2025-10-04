@@ -25,5 +25,5 @@ Router.route('/')
 Router.route('/:id')
   .delete(userController.deleteOne)
   .get(userController.getDetails)
-  .put(userController.updateAccount)
+  .put(authMiddleware, userController.updateAccount)
 export const userRoute = Router
