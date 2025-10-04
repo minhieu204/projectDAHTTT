@@ -43,7 +43,7 @@ function SideBar() {
         }}
       >
         <SideBarItem icon={DashboardOutlinedIcon} title='Trang Chủ' handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={PersonOutlineOutlinedIcon} title='Quản Lý Tài Khoản' handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={PersonOutlineOutlinedIcon} title='Quản Lý Tài Khoản' handleSideBarCllick={() => { navigate('/admin/account') }}/>
         <SideBarItem icon={ShoppingBagOutlinedIcon} title='Quản Lý Sản Phẩm' handleSideBarCllick={() => { navigate('/admin/product') }}/>
         <SideBarItem icon={ListAltOutlinedIcon} title='Quản Lý Danh Mục' handleSideBarCllick={() => { navigate('/admin/category') }}/>
         <SideBarItem icon={ShoppingCartOutlinedIcon} title='Quản Lý Đơn Hàng' handleSideBarCllick={() => { navigate('/admin/order') }}/>
