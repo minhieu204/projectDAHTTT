@@ -89,6 +89,36 @@ const confirmOrder = async (req, res, next) => {
   }
 }
 
+const getMyOrders = async (req, res, next) => {
+  try {
+    console.log('hi')
+    const userId = req.user.userId
+    const myOrders = await orderService.getMyOrders(userId)
+    res.status(StatusCodes.OK).json(myOrders)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Tìm kiếm đơn hàng của user đăng nhập
+const searchMyOrders = async (req, res, next) => {
+  try {
+    const userId = req.user.userId
+    const { keyword } = req.query
+
+    if (!keyword || keyword.trim() === '') {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Search query "keyword" is required'
+      })
+    }
+
+    const orders = await orderService.searchMyOrders(userId, keyword.trim())
+    res.status(StatusCodes.OK).json(orders)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const orderController = {
   createNew,
   getDetails,
@@ -96,5 +126,7 @@ export const orderController = {
   deleteOne,
   search,
   updateOne,
-  confirmOrder
+  confirmOrder,
+  getMyOrders,
+  searchMyOrders
 }

@@ -158,7 +158,22 @@ const updateOne = async (orderId, updateData) => {
     { $set: updateData },
     { returnDocument: 'after' }
   )
-  return result.value || null
+  return result || null
+}
+
+export const searchByUser = async (userId, query) => {
+  const regex = new RegExp(query, 'i')
+
+  const orders = await GET_DB().collection(ORDER_COLLECTION_NAME).find({
+    userId: new ObjectId(userId),
+    $or: [
+      { 'buyerInfo.name': regex },
+      { 'buyerInfo.email': regex },
+      { status: regex }
+    ]
+  }).toArray()
+
+  return orders || []
 }
 
 export const orderModel = {
@@ -171,5 +186,6 @@ export const orderModel = {
   getAll,
   deleteOne,
   search,
-  updateOne
+  updateOne,
+  searchByUser
 }

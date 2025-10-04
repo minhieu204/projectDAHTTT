@@ -30,6 +30,7 @@ import CartPage from './pages/CustomerPage/CartPage/CartPage.jsx'
 import Checkout from './pages/CustomerPage/Checkout/Checkout.jsx'
 import ThankYou from './pages/CustomerPage/ThankYou/ThankYou.jsx'
 import OrderPage from './pages/AdminPage/OrderPage/OrderPage.jsx'
+import MyOrders from './pages/CustomerPage/MyOrders/MyOrders.jsx'
 
 let router = createBrowserRouter([
   {
@@ -114,6 +115,10 @@ let router = createBrowserRouter([
           {
             path: 'thank-you',
             element: <ThankYou />,
+          },
+          {
+            path: 'myorders',
+            element: <MyOrders />,
           },
           {
             path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',

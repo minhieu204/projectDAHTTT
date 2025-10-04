@@ -114,13 +114,26 @@ const updateOne = async (productId, updateData) => {
 
 const decreaseStock = async (productId, quantity) => {
   const result = await GET_DB().collection('products').findOneAndUpdate(
-    { _id: new ObjectId(productId), stock: { $gte: quantity } },
-    { $inc: { stock: -quantity } },
+    {
+      _id: new ObjectId(productId),
+      stock: { $gte: quantity } // chỉ cập nhật nếu còn đủ hàng
+    },
+    {
+      $inc: {
+        stock: -quantity, // trừ tồn kho
+        sold: quantity     // tăng số lượng đã bán
+      }
+    },
     { returnDocument: 'after' }
   )
-  if (!result) throw new ApiError(StatusCodes.BAD_REQUEST, 'Số lượng sản phẩm không đủ')
+
+  if (!result) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Số lượng sản phẩm không đủ')
+  }
+
   return result
 }
+
 
 
 export const productModel = {

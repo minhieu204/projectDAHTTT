@@ -85,8 +85,22 @@ const confirmOrder = async (orderId) => {
   return updatedOrder || await orderModel.getDetailsWithProducts(orderId)
 }
 
+const getMyOrders = async (userId) => {
+  if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not logged in')
 
+  const orders = await orderModel.getAllWithProducts({ userId })
+  if (!orders || orders.length === 0)
+    throw new ApiError(StatusCodes.NOT_FOUND, 'No orders found for this user')
 
+  return orders
+}
+
+const searchMyOrders = async (userId, keyword) => {
+  if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not logged in')
+
+  const orders = await orderModel.searchByUser(userId, keyword)
+  return orders || []
+}
 
 export const orderService = {
   createNew,
@@ -95,5 +109,7 @@ export const orderService = {
   deleteOne,
   search,
   updateOne,
-  confirmOrder
+  confirmOrder,
+  getMyOrders,
+  searchMyOrders
 }
