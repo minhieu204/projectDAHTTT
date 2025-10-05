@@ -48,7 +48,7 @@ function ListProduct() {
     if (!materialCat) return []
 
     // Lọc sản phẩm đúng material
-    return allProducts.filter(p => p.categoryId === materialCat._id)
+    return allProducts.filter(p => p.categoryId === materialCat._id && p.stock > 0)
   }, [categories, allProducts, genderSlug, typeSlug, materialSlug])
 
   // Banner theo type

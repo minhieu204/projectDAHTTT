@@ -4,6 +4,7 @@ import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined'
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '~/context/Cart/useCart'
 
@@ -28,6 +29,9 @@ function TopBar() {
   const handleCartClick = () => {
     navigate('/customer/cart')
   }
+  const handleOrderClick = () => {
+    navigate('/customer/myorders')
+  }
   return (
     <Box
       sx={{
@@ -35,7 +39,8 @@ function TopBar() {
         justifyContent: 'space-between',
         width: '100%',
         height: '49px',
-        alignItems: 'center'
+        alignItems: 'center',
+        position: 'relative'
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
@@ -72,12 +77,18 @@ function TopBar() {
           }}
         >
           <PinDropOutlinedIcon />
-          Cửa hàng
+          Cửa Hàng
         </Button>
       </Box>
       <Box
         sx={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
           height: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           cursor: 'pointer'
         }}
         onClick={handleHomeClick}
@@ -102,6 +113,24 @@ function TopBar() {
         >
           <PersonOutlineOutlinedIcon />
           Tài Khoản Của Tôi
+        </Button>
+        <Button
+          key='donhang'
+          sx={{
+            my: 2,
+            color: '#696969',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: 'white'
+            },
+          }}
+          onClick={handleOrderClick}
+        >
+          <LocalMallOutlinedIcon />
+          Đơn Hàng Của Tôi
         </Button>
         <Button
           key='giohang'
