@@ -76,7 +76,7 @@ const TableCategory = ({ onEditCategory }) => {
           const parentNames = []
 
           while (currentParent) {
-            parentNames.push(currentParent.name) // Thêm vào đầu để đúng thứ tự root → parent
+            parentNames.push(currentParent.name)
             currentParent = currentParent.parentId ? map[currentParent.parentId] : null
           }
 

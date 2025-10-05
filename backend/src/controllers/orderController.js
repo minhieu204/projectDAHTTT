@@ -4,7 +4,6 @@ import { orderService } from '~/services/orderService'
 // Tạo đơn hàng mới
 const createNew = async (req, res, next) => {
   try {
-    console.log("Order Data nhận từ frontend:", req.body)
 
     // user từ middleware (có thể undefined nếu chưa login)
     const userFromToken = req.user || {}

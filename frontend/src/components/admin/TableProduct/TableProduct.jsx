@@ -71,13 +71,16 @@ const TableProduct = ({ onEditProduct }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        let data
         if (!debouncedSearchQuery) {
-          const data = await fetchAllProductsAPI()
-          setRows(data)
+          data = await fetchAllProductsAPI()
         } else {
-          const data = await searchProductsAPI(debouncedSearchQuery)
-          setRows(data)
+          data = await searchProductsAPI(debouncedSearchQuery)
         }
+        const sortedData = data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )
+        setRows(sortedData)
       } catch {
         setRows([])
         setSnackbarMessage('Không thể tải dữ liệu sản phẩm. Vui lòng thử lại.')

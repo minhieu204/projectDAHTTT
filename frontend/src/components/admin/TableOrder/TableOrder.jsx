@@ -42,7 +42,10 @@ const TableOrder = () => {
         const data = debouncedSearchQuery
           ? await searchOrdersAPI(debouncedSearchQuery)
           : await fetchAllOrdersAPI()
-        setOrders(data)
+        const sortedData = data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )
+        setOrders(sortedData)
       } catch {
         setOrders([])
         setSnackbarMessage('Không thể tải đơn hàng.')
