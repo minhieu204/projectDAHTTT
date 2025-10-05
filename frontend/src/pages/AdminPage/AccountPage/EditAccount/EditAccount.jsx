@@ -91,7 +91,7 @@ function EditAccount() {
       setOpenSnackbar(true)
 
       setTimeout(() => {
-        navigate('/admin/users')
+        navigate('/admin/account')
       }, 800)
 
       setErrors({})

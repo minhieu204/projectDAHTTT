@@ -4,7 +4,7 @@ import { GET_DB } from '~/config/mongodb'
 import bcrypt from 'bcrypt' // hoặc bcryptjs
 
 const USER_COLLECTION_NAME = 'users'
-
+const OTP_COLLECTION_NAME = 'otp_tokens'
 // ✅ Schema validate
 export const USER_COLLECTION_SCHEMA = Joi.object({
   name: Joi.string().min(3).max(50).trim().required(),
@@ -16,7 +16,13 @@ export const USER_COLLECTION_SCHEMA = Joi.object({
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp('javascript').default(null)
 })
-
+// ✅ Schema validate OTP
+export const OTP_COLLECTION_SCHEMA = Joi.object({
+  email: Joi.string().email().required(),
+  otp: Joi.string().length(6).required(),
+  expiresAt: Joi.date().timestamp('javascript').required(),
+  createdAt: Joi.date().timestamp('javascript').default(Date.now)
+})
 const validateBeforeCreate = async (data) => {
   return await USER_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
 }
@@ -90,6 +96,35 @@ const getDetails = async (id) => {
     throw new Error(error)
   }
 }
+const updateByEmail = async (email, updateData) => {
+  if (updateData.password) {
+    updateData.password = await bcrypt.hash(updateData.password, 10)
+  }
+
+  const result = await GET_DB().collection(USER_COLLECTION_NAME)
+    .findOneAndUpdate(
+      { email },
+      { $set: updateData },
+      { returnDocument: 'after' }
+    )
+  if (!result.value) {
+    return await GET_DB().collection(USER_COLLECTION_NAME).findOne({ email })
+  }
+
+  return result.value
+}
+const updateStatus = async (userId, updateData) => {
+  const result = await GET_DB().collection(USER_COLLECTION_NAME)
+    .findOneAndUpdate(
+      { _id: new ObjectId(userId) },
+      { $set: updateData },
+      { returnDocument: 'after' }
+    )
+  if (!result.value) {
+    return await GET_DB().collection(USER_COLLECTION_NAME).findOne({ _id: new ObjectId(userId) })
+  }
+  return result.value
+}
 export const userModel = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
@@ -100,5 +135,7 @@ export const userModel = {
   getAll,
   search,
   deleteOne,
-  getDetails
+  getDetails,
+  updateByEmail,
+  updateStatus
 }

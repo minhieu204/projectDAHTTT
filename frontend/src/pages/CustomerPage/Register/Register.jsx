@@ -79,6 +79,7 @@ function Register() {
       sx={{
         height: '100vh',
         backgroundColor: '#f8f9fa',
+        backgroundImage: 'url("/public/background.jpg")',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'

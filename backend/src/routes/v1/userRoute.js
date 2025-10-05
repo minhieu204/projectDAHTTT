@@ -26,4 +26,18 @@ Router.route('/:id')
   .delete(userController.deleteOne)
   .get(userController.getDetails)
   .put(authMiddleware, userController.updateAccount)
+
+  Router.route('/check-email')
+  .post(userController.checkEmail)
+
+Router.route('/send-otp')
+  .post(userController.sendOtp)
+
+Router.route('/verify-otp')
+  .post(userController.verifyOtp)
+
+Router.route('/reset-password')
+  .post(userController.resetPassword)
+Router.route('/logout/:id')
+  .post(userController.logOut)
 export const userRoute = Router
