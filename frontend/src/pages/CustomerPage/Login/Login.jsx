@@ -176,7 +176,7 @@ function Login() {
       sx={{
         height: '100vh',
         backgroundColor: '#f8f9fa',
-        backgroundImage: 'url("/public/background.jpg")',
+        backgroundImage: 'url("/background.jpg")',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'

@@ -124,9 +124,15 @@ const MyOrders = () => {
     try {
       if (action === 'cancel') {
         const updated = await updateOrderAPI(orderId, { status: 'cancelled' })
-        setOrders(prev => prev.map(o => o._id === orderId ? updated : o))
+        setOrders(prev =>
+          prev.map(o => o._id === orderId
+            ? { ...o, status: updated.status }
+            : o
+          )
+        )
         setSnackbar({ open: true, message: 'Đã hủy đơn hàng', severity: 'success' })
-      } else if (action === 'pay') {
+      }
+      else if (action === 'pay') {
         // placeholder: ideally call payment API then update order paymentStatus
         // mock: update paymentStatus to 'paid'
         const updated = await updateOrderAPI(orderId, { paymentStatus: 'paid' })
