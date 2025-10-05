@@ -28,7 +28,7 @@ export const updateUserAPI = async (updateData, token) => {
   })
   return request.data
 }
-export const updateAccountAPI = async (id ,updateData, token) => {
+export const updateAccountAPI = async (id, updateData, token) => {
   const request = await axios.put(`${API_ROOT}/v1/user/${id}`, updateData, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -65,5 +65,27 @@ export const deleteUserAPI = async (userId) => {
 }
 export const getUserDetailAPI = async (userId) => {
   const request = await axios.get(`${API_ROOT}/v1/user/${userId}`)
+  return request.data
+}
+export const checkEmailAPI = async (email) => {
+  const request = await axios.post(`${API_ROOT}/v1/user/check-email`, { email })
+  return request.data
+}
+
+export const sendOtpAPI = async (email) => {
+  const request = await axios.post(`${API_ROOT}/v1/user/send-otp`, { email })
+  return request.data
+}
+
+export const verifyOtpAPI = async (email, otp) => {
+  const request = await axios.post(`${API_ROOT}/v1/user/verify-otp`, { email, otp })
+  return request.data
+}
+
+export const resetPasswordAPI = async (email, newPassword) => {
+  const request = await axios.post(`${API_ROOT}/v1/user/reset-password`, {
+    email,
+    newPassword
+  })
   return request.data
 }

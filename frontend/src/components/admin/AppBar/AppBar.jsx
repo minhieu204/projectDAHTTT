@@ -10,6 +10,10 @@ function AppBar() {
   const userName = user?.name || ''
 
   const handleLogout = () => {
+    const userStr = localStorage.getItem('user')
+    const user = JSON.parse(userStr)
+    const id = user._id
+    navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
     localStorage.removeItem('accessToken')
     localStorage.removeItem('user')
     navigate('/login')

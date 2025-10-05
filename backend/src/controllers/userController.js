@@ -108,6 +108,58 @@ const updateAccount = async (req, res, next) => {
   }
 }
 
+const checkEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body
+    const result = await userService.checkEmail(email)
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Gửi OTP về email
+const sendOtp = async (req, res, next) => {
+  try {
+    const { email } = req.body
+    const result = await userService.sendOtp(email)
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Xác thực OTP
+const verifyOtp = async (req, res, next) => {
+  try {
+    const { email, otp } = req.body
+    const result = await userService.verifyOtp(email, otp)
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Đặt lại mật khẩu
+const resetPassword = async (req, res, next) => {
+  try {
+    const { email, newPassword } = req.body
+    const result = await userService.resetPassword(email, newPassword)
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+  
+}
+const logOut = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const result = await userService.logOut(id)
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const userController = {
   register,
@@ -119,5 +171,10 @@ export const userController = {
   createUser,
   deleteOne,
   getDetails,
-  updateAccount
+  updateAccount,
+  checkEmail,
+  sendOtp,
+  verifyOtp,
+  resetPassword,
+  logOut
 }
