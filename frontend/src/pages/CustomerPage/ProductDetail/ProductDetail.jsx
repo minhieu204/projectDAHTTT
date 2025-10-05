@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import ServiceDetail from '~/components/customer/ServiceDetail/ServiceDetail'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getProductDetailAPI } from '~/apis/productAPIs'
+import { getRatingsByProductId } from '~/apis/ratingAPIs'
 import { useCart } from '~/context/Cart/useCart'
 
 const formatCurrency = (amount) =>
@@ -19,13 +20,22 @@ function ProductDetail() {
   const [product, setProduct] = useState({})
   const [_loading, setLoading] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
-
+  const [_ratings, setRatings] = useState([])
+  const [averageStar, setAverageStar] = useState(0)
   useEffect(() => {
     setLoading(true)
+    const calculateAverageRating = (ratings) => {
+      if (!ratings || ratings.length === 0) return 0
+      const total = ratings.reduce((sum, r) => sum + r.star, 0)
+      return total / ratings.length
+    }
     const fetchProduct = async () => {
       try {
         const product = await getProductDetailAPI(productId)
         setProduct(product)
+        const ratings = await getRatingsByProductId(productId)
+        setRatings(ratings)
+        setAverageStar(calculateAverageRating(ratings))
       } catch {
         //
       } finally {
@@ -77,7 +87,7 @@ function ProductDetail() {
           </Typography>
           <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <StarIcon sx={{ fontSize: 20, color: 'gold', }}/> (0)
+              <StarIcon sx={{ fontSize: 20, color: 'gold', }}/> ({averageStar.toFixed(1)})
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
               {product.sold} đã bán

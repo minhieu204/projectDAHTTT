@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Snackbar from "@mui/material/Snackbar";
+import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Snackbar from '@mui/material/Snackbar';
 
 import {
   AllUsersAPI,
   searchUserAPI,
   deleteUserAPI,
-} from "~/apis/userAPIs";
-import TablePageControls from "../TablePageControls/TablePageControls";
-import TableRowsPerPage from "../TableRowsPerPage/TableRowsPerPage";
+} from '~/apis/userAPIs';
+import TablePageControls from '../TablePageControls/TablePageControls';
+import TableRowsPerPage from '../TableRowsPerPage/TableRowsPerPage';
 const TableAccount = ({ onEditAccount }) => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const [deletingProductId, setDeletingProductId] = useState(null);
@@ -36,11 +36,11 @@ const TableAccount = ({ onEditAccount }) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const token = localStorage.getItem("accessToken");
+  const [searchQuery, setSearchQuery] = useState('');
+  const token = localStorage.getItem('accessToken');
 
   // Hook debounce để giảm số lần gọi API
   const useDebounce = (value, delay) => {
@@ -68,9 +68,9 @@ const TableAccount = ({ onEditAccount }) => {
       } catch {
         setRows([]);
         setSnackbarMessage(
-          "Không thể tải dữ liệu Tài khoản. Vui lòng thử lại."
+          'Không thể tải dữ liệu Tài khoản. Vui lòng thử lại.'
         );
-        setSnackbarSeverity("error");
+        setSnackbarSeverity('error');
         setOpenSnackbar(true);
       }
     };
@@ -91,11 +91,11 @@ const TableAccount = ({ onEditAccount }) => {
       await deleteUserAPI(deletingProductId);
       setRows(rows.filter((product) => product._id !== deletingProductId));
 
-      setSnackbarMessage("Tài khoản đã được xóa thành công!");
-      setSnackbarSeverity("success");
+      setSnackbarMessage('Tài khoản đã được xóa thành công!');
+      setSnackbarSeverity('success');
     } catch {
-      setSnackbarMessage("Lỗi khi xóa tài khoản. Vui lòng thử lại.");
-      setSnackbarSeverity("error");
+      setSnackbarMessage('Lỗi khi xóa tài khoản. Vui lòng thử lại.');
+      setSnackbarSeverity('error');
     } finally {
       setOpenSnackbar(true);
       setOpenDeleteConfirm(false);
@@ -109,7 +109,7 @@ const TableAccount = ({ onEditAccount }) => {
   };
 
   const handleCloseSnackbar = (_, reason) => {
-    if (reason !== "clickaway") {
+    if (reason !== 'clickaway') {
       setOpenSnackbar(false);
     }
   };
@@ -135,23 +135,23 @@ const TableAccount = ({ onEditAccount }) => {
         component={Paper}
         sx={{
           borderRadius: 2,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          overflowX: "auto",
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          overflowX: 'auto',
         }}
       >
-        <Table sx={{ minWidth: 1000 }} aria-label="user table">
+        <Table sx={{ minWidth: 1000 }} aria-label='user table'>
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-              <TableCell sx={{ width: "50px" }}>STT</TableCell>
-              <TableCell sx={{ width: "200px" }}>HỌ VÀ TÊN</TableCell>
-              <TableCell sx={{ width: "250px" }}>EMAIL</TableCell>
-              <TableCell sx={{ width: "120px" }}>PHÂN QUYỀN</TableCell>
-              <TableCell sx={{ width: "130px" }}>NGÀY TẠO</TableCell>
-              <TableCell sx={{ width: "130px" }}>CẬP NHẬT</TableCell>
-              <TableCell sx={{ width: "150px" }}>ĐIỆN THOẠI</TableCell>
-              <TableCell sx={{ width: "200px" }}>ĐỊA CHỈ</TableCell>
-              <TableCell sx={{ width: "120px" }}>Trạng thái</TableCell>
-              <TableCell sx={{ width: "120px" }}>Thao Tác</TableCell>
+            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableCell sx={{ width: '50px' }}>STT</TableCell>
+              <TableCell sx={{ width: '200px' }}>HỌ VÀ TÊN</TableCell>
+              <TableCell sx={{ width: '250px' }}>EMAIL</TableCell>
+              <TableCell sx={{ width: '120px' }}>PHÂN QUYỀN</TableCell>
+              <TableCell sx={{ width: '130px' }}>NGÀY TẠO</TableCell>
+              <TableCell sx={{ width: '130px' }}>CẬP NHẬT</TableCell>
+              <TableCell sx={{ width: '150px' }}>ĐIỆN THOẠI</TableCell>
+              <TableCell sx={{ width: '200px' }}>ĐỊA CHỈ</TableCell>
+              <TableCell sx={{ width: '120px' }}>Trạng thái</TableCell>
+              <TableCell sx={{ width: '120px' }}>Thao Tác</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -161,69 +161,69 @@ const TableAccount = ({ onEditAccount }) => {
                 <TableRow
                   key={row._id}
                   sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    "&:hover": { backgroundColor: "#fafafa" },
+                    '&:last-child td, &:last-child th': { border: 0 },
+                    '&:hover': { backgroundColor: '#fafafa' },
                   }}
                 >
                   <TableCell>{page * rowsPerPage + index + 1}</TableCell>
 
                   <TableCell>
-                    <Typography variant="body2">{row.name}</Typography>
+                    <Typography variant='body2'>{row.name}</Typography>
                   </TableCell>
 
                   <TableCell sx={{ maxWidth: 150 }}>
-                    <Typography variant="body2">{row.email}</Typography>
+                    <Typography variant='body2'>{row.email}</Typography>
                   </TableCell>
 
                   <TableCell sx={{ maxWidth: 200 }}>
-                    <Typography variant="body2">{row.role}</Typography>
+                    <Typography variant='body2'>{row.role}</Typography>
                   </TableCell>
 
                   <TableCell sx={{ maxWidth: 150 }}>
-                    <Typography variant="body2">
-                      {new Date(row.createdAt).toLocaleDateString("vi-VN")}
+                    <Typography variant='body2'>
+                      {new Date(row.createdAt).toLocaleDateString('vi-VN')}
                     </Typography>
                   </TableCell>
 
-                  <TableCell align="right">
-                    <Typography variant="body2">
-                      {new Date(row.updatedAt).toLocaleDateString("vi-VN")}
+                  <TableCell align='right'>
+                    <Typography variant='body2'>
+                      {new Date(row.updatedAt).toLocaleDateString('vi-VN')}
                     </Typography>
                   </TableCell>
 
                   <TableCell sx={{ maxWidth: 200 }}>
-                    <Typography variant="body2">{row.phone}</Typography>
+                    <Typography variant='body2'>{row.phone}</Typography>
                   </TableCell>
 
                   <TableCell sx={{ maxWidth: 200 }}>
-                    <Typography variant="body2">{row.address}</Typography>
+                    <Typography variant='body2'>{row.address}</Typography>
                   </TableCell>
 
-                  <TableCell align="center">
+                  <TableCell align='center'>
                     <Box
                       sx={{
-                        display: "inline-block",
+                        display: 'inline-block',
                         px: 1,
                         py: 0.5,
                         borderRadius: 1,
                         backgroundColor:
-                          row.status == "online" ? "#e8f5e8" : "#ffe6e6",
-                        color: row.status == "online" ? "#2e7d32" : "#d32f2f",
-                        fontSize: "0.75rem",
-                        fontWeight: "bold",
+                          row.status == 'online' ? '#e8f5e8' : '#ffe6e6',
+                        color: row.status == 'online' ? '#2e7d32' : '#d32f2f',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
                       }}
                     >
-                      {row.status == "online" ? "Online" : "Offline"}
+                      {row.status == 'online' ? 'Online' : 'Offline'}
                     </Box>
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>
                     <Box
-                      sx={{ display: "flex", justifyContent: "center", gap: 1 }}
+                      sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}
                     >
-                      <Tooltip title="Sửa tài khoản">
+                      <Tooltip title='Sửa tài khoản'>
                         <IconButton
-                          color="primary"
-                          size="small"
+                          color='primary'
+                          size='small'
                           onClick={() => handleEdit(row._id)}
                           sx={{
                             width: 46,
@@ -231,18 +231,18 @@ const TableAccount = ({ onEditAccount }) => {
                             minWidth: 32,
                             padding: 0,
                             borderRadius: 1,
-                            backgroundColor: "#e8f5e8",
-                            "&:hover": { backgroundColor: "#c8e6c9" },
+                            backgroundColor: '#e8f5e8',
+                            '&:hover': { backgroundColor: '#c8e6c9' },
                           }}
                         >
-                          <EditIcon fontSize="small" />
+                          <EditIcon fontSize='small' />
                         </IconButton>
                       </Tooltip>
 
-                      <Tooltip title="Xóa tài khoản">
+                      <Tooltip title='Xóa tài khoản'>
                         <IconButton
-                          color="error"
-                          size="small"
+                          color='error'
+                          size='small'
                           onClick={() => handleDelete(row._id)}
                           sx={{
                             width: 46,
@@ -250,11 +250,11 @@ const TableAccount = ({ onEditAccount }) => {
                             minWidth: 32,
                             padding: 0,
                             borderRadius: 1,
-                            backgroundColor: "#ffebee",
-                            "&:hover": { backgroundColor: "#ffcdd2" },
+                            backgroundColor: '#ffebee',
+                            '&:hover': { backgroundColor: '#ffcdd2' },
                           }}
                         >
-                          <DeleteIcon fontSize="small" />
+                          <DeleteIcon fontSize='small' />
                         </IconButton>
                       </Tooltip>
                     </Box>
@@ -278,13 +278,13 @@ const TableAccount = ({ onEditAccount }) => {
           <Typography>Bạn có chắc chắn muốn xóa tài khoản này không?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeleteConfirm} color="primary">
+          <Button onClick={handleCloseDeleteConfirm} color='primary'>
             Hủy
           </Button>
           <Button
             onClick={handleConfirmDelete}
-            color="error"
-            variant="contained"
+            color='error'
+            variant='contained'
           >
             Xóa
           </Button>
@@ -295,14 +295,14 @@ const TableAccount = ({ onEditAccount }) => {
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        sx={{ marginTop: "46px" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        sx={{ marginTop: '46px' }}
       >
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbarSeverity}
-          variant="filled"
-          sx={{ width: "100%" }}
+          variant='filled'
+          sx={{ width: '100%' }}
         >
           {snackbarMessage}
         </Alert>

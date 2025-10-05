@@ -6,36 +6,36 @@ import TableAccount from '~/components/admin/TableAccount/TableAccount'
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 
 function AccountPage() {
-    const navigate = useNavigate()
-    const handleAddAccountClick = () => {
-      navigate('/admin/account/add-account')
-    }
-    const handleEditAccountClick = (id) => {
-      navigate(`/admin/account/edit-account/${id}`)
-    }
-    return (
+  const navigate = useNavigate()
+  const handleAddAccountClick = () => {
+    navigate('/admin/account/add-account')
+  }
+  const handleEditAccountClick = (id) => {
+    navigate(`/admin/account/edit-account/${id}`)
+  }
+  return (
+    <Box
+      sx={{
+        backgroundColor: '#343a40',
+        height: 'auto',
+        overflow: 'auto',
+        mx: 5,
+        my: 1,
+        borderRadius: '8px'
+      }}
+    >
       <Box
         sx={{
-          backgroundColor: '#343a40',
-          height: 'auto',
-          overflow: 'auto',
-          mx: 5,
-          my: 1,
-          borderRadius: '8px'
+          color: 'white',
+          m: '16px 48px 16px 16px',
+          display: 'flex',
+          justifyContent: 'space-between'
         }}
       >
-        <Box
-          sx={{
-            color: 'white',
-            m: '16px 48px 16px 16px',
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Typography variant='h5'>
+        <Typography variant='h5'>
             Quản Lý Tài Khoản
-          </Typography>
-          <Box>
+        </Typography>
+        <Box>
           <Tooltip title='Thêm tài khoản'>
             <Button onClick={handleAddAccountClick} sx={{ backgroundColor: '#66FF99', height: '40px', minWidth: '46px', marginRight: '8px' }}>
               <AddOutlinedIcon sx={{ color: 'white' }}/>
@@ -46,12 +46,12 @@ function AccountPage() {
               <ManageAccountsOutlinedIcon sx={{ color: 'white' }}/>
             </Button>
           </Tooltip>
-          </Box>
-        </Box>
-        <Box sx={{ px: 6 }}>
-          <TableAccount onEditAccount={handleEditAccountClick} />
         </Box>
       </Box>
-    )
+      <Box sx={{ px: 6 }}>
+        <TableAccount onEditAccount={handleEditAccountClick} />
+      </Box>
+    </Box>
+  )
 }
 export default AccountPage

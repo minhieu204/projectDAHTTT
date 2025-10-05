@@ -5,12 +5,13 @@ import {
   Select, MenuItem, FormControl, InputLabel, TextField, Dialog,
   DialogTitle, DialogContent, DialogActions, Avatar, Chip,
   Snackbar, Alert, CircularProgress, Stack, IconButton,
-  Container
+  Container, Tooltip,
 } from '@mui/material'
+import StarIcon from '@mui/icons-material/Star'
 import CloseIcon from '@mui/icons-material/Close'
 import { fetchMyOrdersAPI, searchMyOrdersAPI, updateOrderAPI } from '~/apis/orderAPIs'
 import TablePageControls from '~/components/admin/TablePageControls/TablePageControls'
-
+import { addRatingAPI } from '~/apis/ratingAPIs'
 const statusColor = (status) => {
   switch (status) {
   case 'pending': return 'warning'
@@ -71,7 +72,10 @@ const MyOrders = () => {
   const [detailDialog, setDetailDialog] = useState({ open: false, order: null })
   const [confirmDialog, setConfirmDialog] = useState({ open: false, orderId: null, action: '' })
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
-
+  const [ratingDialog, setRatingDialog] = useState({ open: false, productId: null , productName: null, image: null })
+  const [ratingValue, setRatingValue] = useState(0)
+  const [ratingComment, setRatingComment] = useState('')
+  const [hoverRating, setHoverRating] = useState(0)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
@@ -103,7 +107,28 @@ const MyOrders = () => {
   }, [debouncedSearch, filterStatus])
 
   const paginated = orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-
+  const AddRatingHandler = async (ratingData) => {
+    try {
+      await addRatingAPI(ratingData)
+      setSnackbar({
+        open: true,
+        message: 'Đánh giá đã được thêm thành công!',
+        severity: 'success'
+      })
+    } catch (error) {
+      const backendMsg = error.response?.data?.message || 'Có lỗi xảy ra khi thêm đánh giá. Vui lòng thử lại!'
+      setSnackbar({
+        open: true,
+        message: backendMsg,
+        severity: 'error'
+      })
+    }
+    setRatingDialog({ open: false, productId: null })
+    setRatingValue(0)
+    setHoverRating(0)
+    setRatingComment('')
+  
+  }
   const handleViewDetail = (order) => {
     setDetailDialog({ open: true, order })
   }
@@ -317,6 +342,16 @@ const MyOrders = () => {
                         </Typography>
                       </Box>
                       <Typography sx={{ fontWeight: 700 }}>{(it.quantity * it.price).toLocaleString('vi-VN')}₫</Typography>
+                      {detailDialog.order.status === 'confirmed' && (
+                        <Tooltip title="Đánh giá sản phẩm này">
+                          <IconButton
+                            onClick={() => setRatingDialog({ open: true, productId: it.productId, productName: it.product?.name, image: it.product?.image })}
+                            sx={{ ml: 1, p: 0, bgcolor: 'transparent' }}
+                          >
+                            <StarIcon sx={{ color: 'gray', '&:hover': { color: 'gold' } }} fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                     </Box>
                   ))}
                 </Stack>
@@ -359,6 +394,79 @@ const MyOrders = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
+      <Dialog
+        open={ratingDialog.open}
+        onClose={() => {
+          setRatingDialog({ open: false, productId: null })
+          setRatingValue(0)
+          setHoverRating(0)
+          setRatingComment('')
+        }}
+      >
+        <DialogTitle>Đánh giá sản phẩm</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <IconButton
+                key={i}
+                onClick={() => setRatingValue(i)}
+                onMouseEnter={() => setHoverRating(i)}
+                onMouseLeave={() => setHoverRating(0)}
+                sx={{ color: i <= (hoverRating || ratingValue) ? 'gold' : 'gray' }}
+              >
+                <StarIcon />
+              </IconButton>
+            ))}
+          </Box>
+          <TextField
+            multiline
+            fullWidth
+            required
+            rows={3}
+            name="des"
+            placeholder="Viết nhận xét của bạn..."
+            sx={{ mt: 2 }}
+            value={ratingComment}
+            onChange={(e) => setRatingComment(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setRatingDialog({ open: false, productId: null })
+              setRatingValue(0)
+              setHoverRating(0)
+              setRatingComment('')
+            }}
+          >
+            Hủy
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (ratingValue === 0) {
+                setSnackbar({ open: true, message: 'Vui lòng chọn số sao để đánh giá', severity: 'error' })
+                return
+              }
+              if (!ratingComment.trim()) {
+                setSnackbar({ open: true, message: 'Vui lòng viết nhận xét của bạn', severity: 'error' })
+                return
+              }
+              // Gửi ratingValue + ratingComment cho backend
+              const ratingData = {
+                productId: ratingDialog.productId,
+                productName: ratingDialog.productName,
+                image: ratingDialog.image,
+                star: ratingValue,
+                description: ratingComment
+              }
+              AddRatingHandler(ratingData)
+            }}
+          >
+            Gửi
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   )
 }

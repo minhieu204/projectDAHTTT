@@ -12,7 +12,15 @@ function CreateInformation() {
     phone: user?.phone || '',
     address: user?.address || ''
   })
-
+  const handleLogout = () => {
+    const userStr = localStorage.getItem('user')
+    const user = JSON.parse(userStr)
+    const id = user._id
+    navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('user')
+    window.location.href = '/login'
+  }
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -123,6 +131,22 @@ function CreateInformation() {
           }}
         >
           Hoàn tất
+        </Button>
+        <Button
+          fullWidth
+          type='button'
+          variant='contained'
+          onClick={() => handleLogout()}
+          sx={{
+            mt: 3,
+            bgcolor: '#d32f2f',
+            borderRadius: '8px',
+            py: 1.5,
+            fontWeight: 'bold',
+            fontSize: '16px'
+          }}
+        >
+          Đăng xuất
         </Button>
       </Box>
     </Box>

@@ -28,7 +28,6 @@ const login = async (email, password) => {
 
   const isMatch = await bcrypt.compare(password, user.password)
   if (!isMatch) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Sai email hoặc mật khẩu')
-    await userModel.updateStatus(user._id.toString(), { status: 'online' })
   const token = jwt.sign(
     { userId: user._id.toString(), role: user.role },
     JWT_SECRET,
@@ -170,6 +169,9 @@ const updateStatus = async (userId, updateData) => {
 const logOut = async (userId) => {
   await userModel.updateStatus(userId, { status: 'offline' })
 }
+const logIn = async (userId) => {
+  await userModel.updateStatus(userId, { status: 'online' })
+}
 export const userService = {
   register,
   login,
@@ -185,5 +187,6 @@ export const userService = {
   verifyOtp,
   resetPassword,
   updateStatus,
-  logOut
+  logOut,
+  logIn
 }

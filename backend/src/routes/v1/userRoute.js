@@ -40,4 +40,6 @@ Router.route('/reset-password')
   .post(userController.resetPassword)
 Router.route('/logout/:id')
   .post(userController.logOut)
+  Router.route('/login/:id')
+  .post(userController.logIn)
 export const userRoute = Router
