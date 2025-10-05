@@ -1,7 +1,10 @@
 import { Button } from '@mui/material'
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 
-function SideBarItem({ icon: Icon, title, handleSideBarCllick }) {
+function SideBarItem({ icon: Icon, title, handleSideBarCllick, to }) {
+  const location = useLocation()
+  const isActive = location.pathname === to
   return (
     <Button
       sx={{
@@ -14,13 +17,11 @@ function SideBarItem({ icon: Icon, title, handleSideBarCllick }) {
         gap: 1,
         justifyContent: 'flex-start',
         textTransform: 'none',
-        '&:focus': {
-          backgroundColor: (theme) => theme.admin.focusColor,
-          color: '#fff',
-          transform: 'scale(1.02)',
-        },
+        backgroundColor: isActive ? (theme) => theme.admin.focusColor : 'transparent',
+        transform: isActive ? 'scale(1.02)' : 'none',
         '&:hover': {
           backgroundColor: (theme) => theme.admin.focusColor,
+          transform: 'scale(1.02)',
         }
       }}
       onClick={handleSideBarCllick}

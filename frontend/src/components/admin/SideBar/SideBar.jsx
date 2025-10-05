@@ -42,16 +42,16 @@ function SideBar() {
           py: '10px'
         }}
       >
-        <SideBarItem icon={DashboardOutlinedIcon} title='Trang Chủ' handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={PersonOutlineOutlinedIcon} title='Quản Lý Tài Khoản' handleSideBarCllick={() => { navigate('/admin/account') }}/>
-        <SideBarItem icon={ShoppingBagOutlinedIcon} title='Quản Lý Sản Phẩm' handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={ListAltOutlinedIcon} title='Quản Lý Danh Mục' handleSideBarCllick={() => { navigate('/admin/category') }}/>
-        <SideBarItem icon={ShoppingCartOutlinedIcon} title='Quản Lý Đơn Hàng' handleSideBarCllick={() => { navigate('/admin/order') }}/>
-        <SideBarItem icon={DiscountOutlinedIcon} title='Quản Lý Khuyến Mãi' handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={RateReviewOutlinedIcon} title='Quản Lý Đánh Giá' handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={PeopleAltOutlinedIcon} title='Quản Lý Khách Hàng' handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={GroupsOutlinedIcon} title='Quản Lý Nhân Viên' handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={StoreOutlinedIcon} title='Quản Lý Chi Nhánh' handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={DashboardOutlinedIcon} title='Trang Chủ' to="/admin/dashboard" handleSideBarCllick={() => { navigate('/admin/dashboard') }}/>
+        <SideBarItem icon={PersonOutlineOutlinedIcon} title='Quản Lý Tài Khoản' to="/admin/account" handleSideBarCllick={() => { navigate('/admin/account') }}/>
+        <SideBarItem icon={ShoppingBagOutlinedIcon} title='Quản Lý Sản Phẩm' to="/admin/product" handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={ListAltOutlinedIcon} title='Quản Lý Danh Mục' to="/admin/category" handleSideBarCllick={() => { navigate('/admin/category') }}/>
+        <SideBarItem icon={ShoppingCartOutlinedIcon} title='Quản Lý Đơn Hàng' to="/admin/order" handleSideBarCllick={() => { navigate('/admin/order') }}/>
+        <SideBarItem icon={DiscountOutlinedIcon} title='Quản Lý Khuyến Mãi' to="/admin/p" handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={RateReviewOutlinedIcon} title='Quản Lý Đánh Giá' to="/admin/c" handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={PeopleAltOutlinedIcon} title='Quản Lý Khách Hàng' to="/admin/customer" handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={GroupsOutlinedIcon} title='Quản Lý Nhân Viên' to="/admin/employee" handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={StoreOutlinedIcon} title='Quản Lý Chi Nhánh' to="/admin/store" handleSideBarCllick={() => { navigate('/admin/product') }}/>
       </Box>
     </Box>
   )
