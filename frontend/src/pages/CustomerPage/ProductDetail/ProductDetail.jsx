@@ -70,6 +70,23 @@ function ProductDetail() {
       }
     }
   }
+  const handleNowClick = () => {
+    navigate('/customer/checkout', {
+      state: {
+        products: [
+          {
+            _id: product._id,
+            name: product.name,
+            image: product.image,
+            price: product.price,
+            quantity: 1
+          }
+        ],
+        fromBuyNow: true
+      }
+    })
+  }
+
 
   return (
     <Container sx={{ px: 10, py: 4, display: 'flex', gap: 10 }}>
@@ -111,6 +128,11 @@ function ProductDetail() {
           </Box>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
+        <Button sx={{ width: '100%', mt: 2, textTransform: 'none', backgroundColor: '#ad2a36', color: 'white' }} onClick={handleNowClick} disabled={_loading || isAdding}>
+          <Typography sx={{ m: 0.5 }}>
+            Mua ngay
+          </Typography>
+        </Button>
         <Button variant='outlined' sx={{ width: '100%', mt: 2, textTransform: 'none' }} onClick={handleCartClick} disabled={_loading || isAdding || isOutOfStock}>
           <Typography sx={{ m: 0.5 }}>
             Thêm vào giỏ hàng

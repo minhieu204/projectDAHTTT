@@ -72,7 +72,7 @@ const MyOrders = () => {
   const [detailDialog, setDetailDialog] = useState({ open: false, order: null })
   const [confirmDialog, setConfirmDialog] = useState({ open: false, orderId: null, action: '' })
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
-  const [ratingDialog, setRatingDialog] = useState({ open: false, productId: null , productName: null, image: null })
+  const [ratingDialog, setRatingDialog] = useState({ open: false, productId: null, productName: null, image: null })
   const [ratingValue, setRatingValue] = useState(0)
   const [ratingComment, setRatingComment] = useState('')
   const [hoverRating, setHoverRating] = useState(0)
@@ -127,7 +127,6 @@ const MyOrders = () => {
     setRatingValue(0)
     setHoverRating(0)
     setRatingComment('')
-  
   }
   const handleViewDetail = (order) => {
     setDetailDialog({ open: true, order })

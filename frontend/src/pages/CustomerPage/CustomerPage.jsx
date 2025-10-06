@@ -8,19 +8,28 @@ function CustomerPage() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
     const userStr = localStorage.getItem('user')
-    const user = JSON.parse(userStr)
-    const id = user._id
-    const hasVisited = sessionStorage.getItem('visitedcustomer')
-    if (!hasVisited) {
-      if (id) {
-        navigator.sendBeacon(`http://localhost:8017/v1/user/login/${id}`, null)
-        sessionStorage.setItem('visited', 'true')
-      }
+    let user = null
+    let id = null
+
+    try {
+      user = userStr ? JSON.parse(userStr) : null
+      id = user?._id || null
+    } catch {
+      //
     }
+
+    const hasVisited = sessionStorage.getItem('visitedcustomer')
+
+    if (!hasVisited && id) {
+      navigator.sendBeacon(`http://localhost:8017/v1/user/login/${id}`, null)
+      sessionStorage.setItem('visitedcustomer', 'true')
+    }
+
     const handleBeforeUnload = () => {
-      if (!token) return
+      if (!token || !id) return
       navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
     }
+
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload)

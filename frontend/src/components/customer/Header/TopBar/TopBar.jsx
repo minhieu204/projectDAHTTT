@@ -12,8 +12,8 @@ function TopBar() {
   const navigate = useNavigate()
   const { cartItems = [] } = useCart()
   const itemCount = cartItems.reduce((sum, i) => sum + (i.quantity || 0), 0)
+  const token = localStorage.getItem('accessToken')
   const handleAccountClick = () => {
-    const token = localStorage.getItem('accessToken')
     if (!token) {
       navigate('/login')
     } else {
@@ -30,7 +30,11 @@ function TopBar() {
     navigate('/customer/cart')
   }
   const handleOrderClick = () => {
-    navigate('/customer/myorders')
+    if (!token) {
+      navigate('/login')
+    } else {
+      navigate('/customer/myorders')
+    }
   }
   return (
     <Box

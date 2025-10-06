@@ -11,27 +11,34 @@ function Checkout() {
   const { cartItems = [], updateQuantity, removeManyFromCart } = useContext(CartContext)
   const navigate = useNavigate()
   const location = useLocation()
-  const { products: initialProducts = [] } = location.state || {}
+  const { products: buyNowProducts = [], fromBuyNow = false } = location.state || {}
 
-  // Chọn sản phẩm từ state hoặc cartContext
+  // Lưu riêng state cho "Mua ngay" để thay đổi quantity được
+  const [buyNowState, setBuyNowState] = useState(
+    buyNowProducts.map(p => ({ ...p, quantity: p.quantity || 1 }))
+  )
+
+  // Danh sách sản phẩm thực tế để hiển thị
   const products = useMemo(() => {
-    if (!initialProducts || initialProducts.length === 0) {
-      return cartItems
+    if (fromBuyNow) {
+      return buyNowState.map(p => ({
+        productId: p._id,
+        product: p,
+        quantity: p.quantity || 1
+      }))
     }
-    return initialProducts.map(p => {
-      return cartItems.find(ci => ci.productId === p.productId) || p
-    })
-  }, [initialProducts, cartItems])
+    return cartItems
+  }, [fromBuyNow, buyNowState, cartItems])
 
-  // Tính tổng
   const subtotal = products.reduce((acc, item) => {
-    if (item?.product?.price) return acc + item.product.price * item.quantity
-    return acc
+    const price = item.product?.price || 0
+    const qty = item.quantity || 1
+    return acc + price * qty
   }, 0)
+
   const discount = 0
   const total = subtotal - discount
 
-  // Thông tin người mua
   const [buyerInfo, setBuyerInfo] = useState({
     name: '',
     phone: '',
@@ -51,12 +58,24 @@ function Checkout() {
           address: user.address || ''
         })
       } catch {
-        //
+        // ignore
       }
     }
   }, [])
 
-  // Xử lý đặt hàng
+  // Hàm thay đổi số lượng
+  const handleQuantityChange = (productId, newQty) => {
+    if (newQty < 1) return
+    if (fromBuyNow) {
+      setBuyNowState(prev =>
+        prev.map(p => (p._id === productId ? { ...p, quantity: newQty } : p))
+      )
+    } else {
+      updateQuantity(productId, newQty)
+    }
+  }
+
+  // Hàm đặt hàng
   const handlePlaceOrder = async () => {
     if (!buyerInfo.name || !buyerInfo.phone || !buyerInfo.email || !buyerInfo.address) {
       alert('Vui lòng nhập đầy đủ thông tin!')
@@ -64,35 +83,38 @@ function Checkout() {
     }
 
     try {
-      const savedUser = localStorage.getItem('user')
       let userId = null
-      if (savedUser) {
-        try {
-          const user = JSON.parse(savedUser)
-          userId = user._id || user.id || null
-        } catch {
-          userId = null
+
+      if (!fromBuyNow) {
+        // Nếu không phải mua ngay, lấy userId để lưu vào order
+        const savedUser = localStorage.getItem('user')
+        if (savedUser) {
+          try {
+            const user = JSON.parse(savedUser)
+            userId = user._id || user.id || null
+          } catch {
+            userId = null
+          }
         }
       }
 
-      // Chuẩn hóa data gửi lên API
       const orderData = {
         userId,
         buyerInfo,
-        items: products.map(p => ({
-          productId: p.productId,
+        items: products.map((p) => ({
+          productId: p.productId || p._id,
           quantity: p.quantity,
           price: p.product?.price || 0
         })),
         total
       }
 
-      // 1. Gửi API tạo đơn hàng
       const orderRes = await createOrderAPI(orderData)
 
       if (orderRes && (orderRes._id || orderRes.data?._id)) {
-        // 2. Xóa sản phẩm đã đặt khỏi giỏ hàng
-        await removeManyFromCart(products.map(p => p.productId))
+        if (!fromBuyNow) {
+          await removeManyFromCart(products.map((p) => p.productId))
+        }
 
         alert('Đặt hàng thành công!')
         navigate('/customer/thank-you', { state: { order: orderRes.data || orderRes } })
@@ -106,7 +128,16 @@ function Checkout() {
 
   return (
     <Box sx={{ backgroundColor: '#F5F5F5', py: 6 }}>
-      <Box sx={{ backgroundColor: 'white', width: '800px', minHeight: '600px', mx: 'auto', borderRadius: '8px', p: 3 }}>
+      <Box
+        sx={{
+          backgroundColor: 'white',
+          width: '800px',
+          minHeight: '600px',
+          mx: 'auto',
+          borderRadius: '8px',
+          p: 3
+        }}
+      >
         {/* Header */}
         <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
           <Box
@@ -121,11 +152,16 @@ function Checkout() {
           </Box>
         </Box>
 
-        {/* Danh sách sản phẩm */}
         {products.length === 0 ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 15 }}>
-            <img src="https://cdn.pnj.io/images/2023/relayout-pdp/empty_product_line.png" alt="" style={{ width: '300px', marginBottom: '10px' }} />
-            <Typography variant='body2' color='text.secondary'>Không có sản phẩm nào để thanh toán</Typography>
+            <img
+              src="https://cdn.pnj.io/images/2023/relayout-pdp/empty_product_line.png"
+              alt=""
+              style={{ width: '300px', marginBottom: '10px' }}
+            />
+            <Typography variant='body2' color='text.secondary'>
+              Không có sản phẩm nào để thanh toán
+            </Typography>
           </Box>
         ) : (
           <Box>
@@ -145,10 +181,10 @@ function Checkout() {
                     Mã: {item.product?.name?.split(' ').pop()}
                   </Typography>
 
-                  {/* Nút tăng giảm */}
+                  {/* Cho phép chỉnh quantity cho cả mua ngay */}
                   <Box sx={{ display: 'flex', border: '1px solid #ccc', borderRadius: '4px', overflow: 'hidden', width: '120px' }}>
                     <IconButton
-                      onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                      onClick={() => handleQuantityChange(item.productId, item.quantity - 1)}
                       size="small"
                       sx={{ borderRadius: 0, borderRight: '1px solid #ccc', p: '4px 8px' }}
                       disabled={item.quantity <= 1}
@@ -156,12 +192,20 @@ function Checkout() {
                       <RemoveIcon fontSize="small" />
                     </IconButton>
 
-                    <Typography variant='body2' sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography
+                      variant='body2'
+                      sx={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
                       {item.quantity}
                     </Typography>
 
                     <IconButton
-                      onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                      onClick={() => handleQuantityChange(item.productId, item.quantity + 1)}
                       size="small"
                       sx={{ borderRadius: 0, borderLeft: '1px solid #ccc', p: '4px 8px' }}
                       disabled={item.quantity >= (item.product?.stock ?? Infinity)}
@@ -179,19 +223,25 @@ function Checkout() {
               </Box>
             ))}
 
-            {/* Tổng kết */}
+            {/* Tổng tiền */}
             <Box sx={{ mt: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant='body2'>Tạm tính</Typography>
-                <Typography variant='body2'>{subtotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
+                <Typography variant='body2'>
+                  {subtotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                </Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant='body2'>Giảm giá</Typography>
-                <Typography variant='body2'>{discount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
+                <Typography variant='body2'>
+                  {discount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                </Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant='body2'>Tổng tiền</Typography>
-                <Typography variant='body2'>{total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
+                <Typography variant='body2'>
+                  {total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                </Typography>
               </Box>
             </Box>
 
