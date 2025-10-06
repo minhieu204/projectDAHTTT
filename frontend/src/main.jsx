@@ -100,10 +100,6 @@ let router = createBrowserRouter([
                 path: 'account/edit-account/:id',
                 element: <EditAccount />,
               },
-              {
-                path: 'promotion/add-promotion',
-                element: <AddPromotion />,
-              },
             ]
           }
         ]
