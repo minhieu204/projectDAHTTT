@@ -5,7 +5,7 @@ import { productModel } from '~/models/productModel'
 
 const createNew = async (reqBody, userFromToken) => {
   const newOrder = {
-    userId: reqBody.userId || userFromToken._id || userFromToken.id,
+    userId: reqBody.userId || userFromToken?._id || userFromToken?.id || null,
     buyerInfo: reqBody.buyerInfo,
     items: reqBody.items,
     total: reqBody.total,

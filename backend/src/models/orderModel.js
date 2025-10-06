@@ -6,7 +6,7 @@ const ORDER_COLLECTION_NAME = 'orders'
 
 // Schema validate với Joi
 export const ORDER_COLLECTION_SCHEMA = Joi.object({
-  userId: Joi.string().required(),
+  userId: Joi.string().allow(null, '').optional(),
   buyerInfo: Joi.object({
     name: Joi.string().required(),
     phone: Joi.string().required(),
