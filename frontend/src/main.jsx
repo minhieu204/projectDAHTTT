@@ -35,6 +35,9 @@ import AccountPage from './pages/AdminPage/AccountPage/AccountPage.jsx'
 import EditAccount from './pages/AdminPage/AccountPage/EditAccount/EditAccount.jsx'
 import AddAccount from './pages/AdminPage/AccountPage/AddAccount/AddAccount.jsx'
 import RatingsPage from './pages/AdminPage/RatingPage/RatingPage.jsx'
+import AddPromotion from './pages/AdminPage/PromotionPage/AddPromotion/AddPromotion.jsx'
+import PromotionPage from './pages/AdminPage/PromotionPage/PromotionPage.jsx'
+import EditPromotion from './pages/AdminPage/PromotionPage/EditPromotion/EditPromotion.jsx'
 
 let router = createBrowserRouter([
   {
@@ -103,6 +106,18 @@ let router = createBrowserRouter([
               {
                 path: 'rating',
                 element: <RatingsPage />,
+              },
+              {
+                path: 'promotion',
+                element: <PromotionPage />,
+              },
+              {
+                path: 'promotion/add-promotion',
+                element: <AddPromotion />,
+              },
+              {
+                path: 'promotion/edit-promotion/:promotionId',
+                element: <EditPromotion />,
               },
             ]
           }

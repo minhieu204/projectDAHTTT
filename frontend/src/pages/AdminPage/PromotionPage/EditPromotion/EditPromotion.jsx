@@ -13,20 +13,21 @@ import {
   FormControlLabel,
   Checkbox,
   Stack,
-  IconButton
+  IconButton,
+  CircularProgress
 } from '@mui/material'
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import SaveIcon from '@mui/icons-material/Save'
 import CloseIcon from '@mui/icons-material/Close'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import FieldCustom from '~/components/admin/FieldCustom/FieldCustom'
-import { createPromotionAPI } from '~/apis/promotionAPIs'
+import { getPromotionDetailAPI, updatePromotionAPI } from '~/apis/promotionAPIs'
 import { fetchAllProductsAPI } from '~/apis/productAPIs'
 
-function AddPromotion() {
+function EditPromotion() {
   const navigate = useNavigate()
+  const { promotionId } = useParams()
 
-  // Form state
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -37,11 +38,9 @@ function AddPromotion() {
   })
 
   const [products, setProducts] = useState([])
-
+  const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
-
-  // Dialog state
   const [openProductModal, setOpenProductModal] = useState(false)
   const [productSearch, setProductSearch] = useState('')
 
@@ -58,19 +57,40 @@ function AddPromotion() {
     fetchData()
   }, [])
 
-  // Snackbar
+  // Fetch promotion detail
+  useEffect(() => {
+    const fetchPromotion = async () => {
+      setLoading(true)
+      try {
+        const promo = await getPromotionDetailAPI(promotionId)
+        setFormData({
+          title: promo.title || '',
+          description: promo.description || '',
+          discountPercent: promo.discountPercent?.toString() || '',
+          startDate: promo.startDate || '',
+          endDate: promo.endDate || '',
+          productIds: promo.productIds || []
+        })
+      } catch {
+        setSnackbar({ open: true, message: 'Không thể lấy thông tin khuyến mãi!', severity: 'error' })
+      } finally {
+        setLoading(false)
+      }
+    }
+    if (promotionId) fetchPromotion()
+  }, [promotionId])
+
+  // Handlers
   const handleCloseSnackbar = (_, reason) => {
     if (reason !== 'clickaway') setSnackbar(prev => ({ ...prev, open: false }))
   }
 
-  // Input change
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
     setErrors(prev => ({ ...prev, [name]: '' }))
   }
 
-  // Validate
   const validate = () => {
     const tempErrors = {
       title: formData.title ? '' : 'Vui lòng nhập tên khuyến mãi.',
@@ -84,27 +104,31 @@ function AddPromotion() {
     return Object.values(tempErrors).every(x => x === '')
   }
 
-  // Submit
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     if (!validate()) return
 
+    setLoading(true)
     try {
       const promotionData = {
-        ...formData,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
         discountPercent: parseInt(formData.discountPercent, 10),
+        startDate: formData.startDate,
+        endDate: formData.endDate,
         productIds: Array.isArray(formData.productIds) ? formData.productIds : [formData.productIds]
       }
-      await createPromotionAPI(promotionData)
-      setSnackbar({ open: true, message: 'Thêm khuyến mãi thành công!', severity: 'success' })
+      await updatePromotionAPI(promotionId, promotionData)
+      setSnackbar({ open: true, message: 'Khuyến mãi đã được cập nhật!', severity: 'success' })
       setTimeout(() => navigate('/admin/promotion'), 800)
       setErrors({})
     } catch {
-      setSnackbar({ open: true, message: 'Có lỗi xảy ra khi thêm khuyến mãi!', severity: 'error' })
+      setSnackbar({ open: true, message: 'Có lỗi xảy ra khi cập nhật khuyến mãi!', severity: 'error' })
+    } finally {
+      setLoading(false)
     }
   }
 
-  // Filtered products
   const filteredProducts = products.filter(p =>
     p.label.toLowerCase().includes(productSearch.toLowerCase())
   )
@@ -112,7 +136,7 @@ function AddPromotion() {
   return (
     <Box sx={{ backgroundColor: '#343a40', mx: 5, my: 1, borderRadius: 2, overflow: 'auto' }}>
       <Box sx={{ color: 'white', m: '16px 48px 16px 16px', display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h5">Thêm khuyến mãi</Typography>
+        <Typography variant="h5">Chỉnh sửa khuyến mãi</Typography>
       </Box>
 
       <Box component="form" onSubmit={handleSubmit} sx={{ px: 6 }}>
@@ -163,9 +187,9 @@ function AddPromotion() {
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button type="submit" variant="contained" startIcon={<AddOutlinedIcon />}
-            sx={{ my: 2, gap: 1, textTransform: 'none', fontSize: '18px' }}>
-            Thêm khuyến mãi
+          <Button type="submit" variant="contained" startIcon={loading ? <CircularProgress size={22} color="inherit" /> : <SaveIcon />}
+            sx={{ my: 2, gap: 1, textTransform: 'none', fontSize: '18px' }} disabled={loading}>
+            {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
           </Button>
         </Box>
       </Box>
@@ -226,4 +250,4 @@ function AddPromotion() {
   )
 }
 
-export default AddPromotion
+export default EditPromotion

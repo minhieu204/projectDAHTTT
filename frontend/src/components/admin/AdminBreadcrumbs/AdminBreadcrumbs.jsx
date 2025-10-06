@@ -14,6 +14,9 @@ const breadcrumbNameMap = {
   '/admin/account': 'Account',
   '/admin/account/add-account': 'Add Account',
   '/admin/account/edit-account': 'Edit Account',
+  '/admin/promotion': 'Promotion',
+  '/admin/promotion/add-promotion': 'Add Promotion',
+  '/admin/promotion/edit-promotion': 'Edit Promotion',
 }
 
 const AdminBreadcrumbs = () => {

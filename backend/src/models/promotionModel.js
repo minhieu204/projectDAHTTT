@@ -12,10 +12,6 @@ const PROMOTION_COLLECTION_SCHEMA = Joi.object({
   startDate: Joi.date().required(),
   endDate: Joi.date().required(),
 
-  categoryIds: Joi.array()
-    .items(Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE))
-    .default([]),
-
   productIds: Joi.array()
     .items(Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE))
     .default([]),

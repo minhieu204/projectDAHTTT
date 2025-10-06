@@ -25,3 +25,10 @@ export const deletePromotionAPI = async (promotionId) => {
   const request = await axios.delete(`${API_ROOT}/v1/promotion/${promotionId}`)
   return request.data
 }
+
+export const searchPromotionsAPI = async (keyword) => {
+  const request = await axios.get(`${API_ROOT}/v1/promotion/search`, {
+    params: { q: keyword }
+  })
+  return request.data
+}

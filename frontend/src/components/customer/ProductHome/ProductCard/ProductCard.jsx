@@ -5,7 +5,14 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
-const ProductCard = ({ product, isNew }) => {
+const ProductCard = ({ product, promotions = [], isNew }) => {
+  const now = new Date()
+  const appliedPromotions = promotions.filter(promo =>
+    promo.productIds?.includes(product._id) &&
+    new Date(promo.startDate) <= now &&
+    new Date(promo.endDate) >= now
+  )
+
   return (
     <Card sx={{ maxWidth: 400, borderRadius: 2, position: 'relative', m: 1, cursor: 'pointer', minHeight: '360px' }}>
       {isNew && (
@@ -26,8 +33,8 @@ const ProductCard = ({ product, isNew }) => {
 
       <CardMedia
         component="img"
-        width= '168px'
-        height= '168px'
+        width='168px'
+        height='168px'
         image={product.image}
         alt={product.name}
       />
@@ -38,9 +45,17 @@ const ProductCard = ({ product, isNew }) => {
         <Typography sx={{ fontSize: '16px', color: '#c48c46', textAlign: 'center', mt: 1 }}>
           {product.price} ₫
         </Typography>
-        <Typography sx={{ fontSize: '10px', color: '#DC2626', textAlign: 'center', mt: 1 }}>
-          Ưu đãi lên đến 2 Triệu & giảm thêm 1% cho khách hàng mới
-        </Typography>
+
+        {/* Hiển thị promotion nếu có và đang áp dụng */}
+        {appliedPromotions.map((promo, index) => (
+          <Typography
+            key={index}
+            sx={{ fontSize: '10px', color: '#DC2626', textAlign: 'center', mt: 1 }}
+          >
+            {promo.title} giảm {promo.discountPercent}%
+          </Typography>
+        ))}
+
         <Typography sx={{ fontSize: '10px', color: '#5A5A5A', textAlign: 'right', mt: 1 }}>
           {product.sold} đã bán
         </Typography>
