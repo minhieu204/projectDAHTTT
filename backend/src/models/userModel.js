@@ -4,7 +4,6 @@ import { GET_DB } from '~/config/mongodb'
 import bcrypt from 'bcrypt' // hoặc bcryptjs
 
 const USER_COLLECTION_NAME = 'users'
-const OTP_COLLECTION_NAME = 'otp_tokens'
 // ✅ Schema validate
 export const USER_COLLECTION_SCHEMA = Joi.object({
   name: Joi.string().min(3).max(50).trim().required(),

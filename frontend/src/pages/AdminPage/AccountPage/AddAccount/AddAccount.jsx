@@ -24,7 +24,6 @@ function AddAccount() {
     address: ''
   })
 
-  // State lỗi validation
   const [errors, setErrors] = useState({})
 
   // Snackbar

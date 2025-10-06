@@ -160,6 +160,15 @@ const logOut = async (req, res, next) => {
     next(error)
   }
 }
+const logIn = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const result = await userService.logIn(id)
+    res.status(StatusCodes.OK).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const userController = {
   register,
@@ -176,5 +185,6 @@ export const userController = {
   sendOtp,
   verifyOtp,
   resetPassword,
-  logOut
+  logOut,
+  logIn
 }

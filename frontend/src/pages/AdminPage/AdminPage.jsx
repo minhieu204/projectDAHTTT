@@ -8,11 +8,18 @@ import { useEffect } from 'react'
 
 function AdminPage() {
   useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+    const userStr = localStorage.getItem('user')
+    const user = JSON.parse(userStr)
+    const id = user._id
+    const hasVisited = sessionStorage.getItem('visited')
+    if (!hasVisited) {
+      if (id) {
+        navigator.sendBeacon(`http://localhost:8017/v1/user/login/${id}`, null)
+        sessionStorage.setItem('visited', 'true')
+      }
+    }
     const handleBeforeUnload = () => {
-      const token = localStorage.getItem('accessToken')
-      const userStr = localStorage.getItem('user')
-      const user = JSON.parse(userStr)
-      const id = user._id
       if (!token) return
       navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
     }
