@@ -19,6 +19,7 @@ function CreateInformation() {
     navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
     localStorage.removeItem('accessToken')
     localStorage.removeItem('user')
+    sessionStorage.removeItem('visitedcustomer')
     window.location.href = '/login'
   }
   const handleChange = (e) => {

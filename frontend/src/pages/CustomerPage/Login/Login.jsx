@@ -20,7 +20,7 @@ function Login() {
       const userStr = localStorage.getItem('user')
       const user = JSON.parse(userStr)
       const role = user.role
-      if (role === 'admin') navigate('/admin')
+      if (role === 'admin' || role === 'employee') navigate('/admin')
       else if (role === 'customer') navigate('/customer')
     }
   }, [navigate])
@@ -84,7 +84,7 @@ function Login() {
       setOpenSnackbar(true)
 
       setTimeout(() => {
-        if (role === 'admin') navigate('/admin')
+        if (role === 'admin'|| role === 'employee') navigate('/admin')
         else if (role === 'customer') navigate('/customer')
         else navigate('/')
       }, 800)

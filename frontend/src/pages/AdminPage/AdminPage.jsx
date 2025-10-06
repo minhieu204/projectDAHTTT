@@ -1,27 +1,67 @@
-import { Box, Breadcrumbs, Link, Typography } from '@mui/material'
+import { Box, Breadcrumbs, Link, Typography, Snackbar, Alert } from '@mui/material'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import AdminBreadcrumbs from '~/components/admin/AdminBreadcrumbs/AdminBreadcrumbs'
 import AppBar from '~/components/admin/AppBar/AppBar'
 import SideBar from '~/components/admin/SideBar/SideBar'
+import { useState } from 'react'
 import { useEffect } from 'react'
+import { createShiftAPI } from '~/apis/workshiftAPIs'
 
 function AdminPage() {
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
+  const handleCloseSnackbar = () => setSnackbar(s => ({ ...s, open: false }))
+  const AddworkshiftHandler = async (ratingData) => {
+    try {
+      const res= await createShiftAPI(ratingData)
+      localStorage.setItem('workshift', JSON.stringify(res.newShift))
+      setSnackbar({
+        open: true,
+        message: 'Ca làm việc đã được thêm thành công!',
+        severity: 'success'
+      })
+    } catch (error) {
+      const backendMsg = error.response?.data?.message || 'Có lỗi xảy ra khi thêm ca làm việc. Vui lòng thử lại!'
+      setSnackbar({
+        open: true,
+        message: backendMsg,
+        severity: 'error'
+      })
+    }
+
+  }
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
     const userStr = localStorage.getItem('user')
     const user = JSON.parse(userStr)
     const id = user._id
+    const role = user.role
     const hasVisited = sessionStorage.getItem('visited')
     if (!hasVisited) {
       if (id) {
         navigator.sendBeacon(`http://localhost:8017/v1/user/login/${id}`, null)
         sessionStorage.setItem('visited', 'true')
+        if (role === 'employee') {
+          const workshift = {
+            employeeId: id,
+            workDate: new Date().toISOString().split('T')[0], // yyyy-mm-dd
+            startTime: new Date(),
+            endTime: null,
+            shiftStatus: 'Scheduled',
+          }
+          AddworkshiftHandler(workshift)
+        }
       }
     }
     const handleBeforeUnload = () => {
       if (!token) return
+      const shiftStr = localStorage.getItem('workshift')
+      const shift = JSON.parse(shiftStr)
+      const shiftid = shift._id
+      navigator.sendBeacon(`http://localhost:8017/v1/workshift/${shiftid}/close`, null)
       navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
+      sessionStorage.removeItem('visited')
+      localStorage.removeItem('workshift')
     }
 
     window.addEventListener('beforeunload', handleBeforeUnload)
@@ -40,6 +80,11 @@ function AdminPage() {
       }}
     >
       <SideBar />
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} variant="filled">
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: '100%',

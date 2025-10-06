@@ -28,6 +28,7 @@ function CustomerPage() {
     const handleBeforeUnload = () => {
       if (!token || !id) return
       navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
+      sessionStorage.removeItem('visitedcustomer')
     }
 
     window.addEventListener('beforeunload', handleBeforeUnload)
