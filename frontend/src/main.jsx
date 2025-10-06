@@ -34,6 +34,7 @@ import MyOrders from './pages/CustomerPage/MyOrders/MyOrders.jsx'
 import AccountPage from './pages/AdminPage/AccountPage/AccountPage.jsx'
 import EditAccount from './pages/AdminPage/AccountPage/EditAccount/EditAccount.jsx'
 import AddAccount from './pages/AdminPage/AccountPage/AddAccount/AddAccount.jsx'
+import RatingsPage from './pages/AdminPage/RatingPage/RatingPage.jsx'
 
 let router = createBrowserRouter([
   {
@@ -98,6 +99,10 @@ let router = createBrowserRouter([
               {
                 path: 'account/edit-account/:id',
                 element: <EditAccount />,
+              },
+              {
+                path: 'rating',
+                element: <RatingsPage />,
               },
             ]
           }
