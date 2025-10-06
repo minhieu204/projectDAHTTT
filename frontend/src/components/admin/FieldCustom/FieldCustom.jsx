@@ -8,6 +8,7 @@ function FieldCustom({
   rows,
   placeholder,
   options,
+  multiple = false,
   ...rest
 }) {
   const isSelect = !!options
@@ -40,6 +41,7 @@ function FieldCustom({
         placeholder={placeholder}
         {...inputProps}
         {...rest}
+        SelectProps={isSelect ? { multiple } : {}}
         sx={{
           '& .MuiOutlinedInput-root': {
             '& .MuiOutlinedInput-notchedOutline': {
