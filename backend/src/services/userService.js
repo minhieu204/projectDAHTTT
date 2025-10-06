@@ -65,6 +65,28 @@ const search = async (name) => {
     throw error
   }
 }
+const employee = async (name) => {
+  try {
+    const products = await userModel.employee(name)
+    if (!products) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'No Account found matching your query')
+    }
+    return products
+  } catch (error) {
+    throw error
+  }
+}
+const searchEmployee = async (name) => {
+  try {
+    const products = await userModel.searchemployee(name)
+    if (!products) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'No Account found matching your query')
+    }
+    return products
+  } catch (error) {
+    throw error
+  }
+}
 const getAll = async () => {
   try {
     const products = await userModel.getAll()
@@ -188,5 +210,7 @@ export const userService = {
   resetPassword,
   updateStatus,
   logOut,
-  logIn
+  logIn,
+  employee,
+  searchEmployee
 }

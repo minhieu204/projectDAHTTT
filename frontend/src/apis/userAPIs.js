@@ -51,6 +51,21 @@ export const AllUsersAPI = async (token) => {
   })
   return request.data
 }
+export const AllEmployeeAPI = async (token) => {
+  const request = await axios.get(`${API_ROOT}/v1/user/employee?role=employee`, { headers: {
+    Authorization: `Bearer ${token}`
+  }
+  })
+  return request.data
+}
+export const searchEmployeeAPI = async (query, token) => {
+  const request = await axios.get(`${API_ROOT}/v1/user/employee/search?name=${query}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return request.data
+}
 export const createUserAPI = async (userData, token) => {
   const response = await axios.post(`${API_ROOT}/v1/user/`, userData, {
     headers: {

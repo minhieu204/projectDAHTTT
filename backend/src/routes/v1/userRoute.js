@@ -18,6 +18,12 @@ Router.route('/profile')
 Router.route('/search')
   .get(userController.search)
 
+Router.route('/employee')
+  .get(userController.employee)
+
+Router.route('/employee/search')
+  .get(userController.searchEmployee)
+
 Router.route('/')
 .get(userController.getAll)
 .post(userController.createUser)
