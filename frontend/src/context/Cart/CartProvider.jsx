@@ -15,6 +15,10 @@ const CartProvider = ({ children }) => {
   const fetchCart = async () => {
     try {
       setLoading(true)
+      const userStr = localStorage.getItem('user')
+      if (!userStr) {
+        return
+      }
       const res = await getCartByUserAPI()
       if (res.success) {
         setCartItems(res.data?.items || [])

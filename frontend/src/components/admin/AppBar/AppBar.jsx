@@ -15,13 +15,15 @@ function AppBar() {
     const id = user._id
     const shiftStr = localStorage.getItem('workshift')
     const shift = JSON.parse(shiftStr)
-    const shiftid = shift._id
+    if (shift) {
+      const shiftid = shift._id
+      navigator.sendBeacon(`http://localhost:8017/v1/workshift/${shiftid}/close`, null)
+      localStorage.removeItem('workshift')
+    }
     navigator.sendBeacon(`http://localhost:8017/v1/user/logout/${id}`, null)
-    navigator.sendBeacon(`http://localhost:8017/v1/workshift/${shiftid}/close`, null)
     localStorage.removeItem('accessToken')
     localStorage.removeItem('user')
     sessionStorage.removeItem('visited')
-    localStorage.removeItem('workshift')
     navigate('/login')
   }
   return (

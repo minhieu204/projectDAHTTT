@@ -54,7 +54,7 @@ let router = createBrowserRouter([
       },
       {
         path: '/admin',
-        element: <PrivateRoute allowedRoles={['admin']} />,
+        element: <PrivateRoute allowedRoles={['admin', 'employee']} />,
         children: [
           {
             element: <AdminPage />,
