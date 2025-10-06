@@ -38,6 +38,7 @@ import RatingsPage from './pages/AdminPage/RatingPage/RatingPage.jsx'
 import AddPromotion from './pages/AdminPage/PromotionPage/AddPromotion/AddPromotion.jsx'
 import PromotionPage from './pages/AdminPage/PromotionPage/PromotionPage.jsx'
 import EditPromotion from './pages/AdminPage/PromotionPage/EditPromotion/EditPromotion.jsx'
+import Dashboard from './pages/AdminPage/DashBoard/DashBoard.jsx'
 
 let router = createBrowserRouter([
   {
@@ -61,7 +62,11 @@ let router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <ProductPage />
+                element: <Dashboard />
+              },
+              {
+                path: 'dashboard',
+                element: <Dashboard />,
               },
               {
                 path: 'product',
