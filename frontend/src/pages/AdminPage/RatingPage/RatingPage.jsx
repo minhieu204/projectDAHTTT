@@ -24,7 +24,7 @@ function RatingsPage() {
         }}
       >
         <Typography variant='h5'>
-            Quản Lý Tài Khoản
+            Quản Lý Đánh Giá
         </Typography>
       </Box>
       <Box sx={{ px: 6 }}>
