@@ -4,7 +4,6 @@ import {
   Paper,
   Typography,
   CircularProgress,
-  Grid
 } from '@mui/material'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import PeopleIcon from '@mui/icons-material/People'
@@ -51,7 +50,7 @@ const Dashboard = () => {
 
         const totalProducts = products.length
         const totalOrders = orders.length
-        const totalCustomers = users.length
+        const totalCustomers = users.filter((u) => u.role === 'customer').length
         const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0)
 
         const top10Products = [...products]
@@ -73,16 +72,18 @@ const Dashboard = () => {
 
         const userTotalSpend = orders.reduce((acc, o) => {
           const uid = o.userId?._id || o.userId
-          acc[uid] = (acc[uid] || 0) + (o.totalAmount || 0)
+          acc[uid] = (acc[uid] || 0) + (o.total || 0)
           return acc
         }, {})
         const top10Customers = Object.entries(userTotalSpend)
           .map(([userId, total]) => {
-            const user = users.find((u) => u._id === userId)
-            return { name: user?.name || 'Unknown', total }
+            const user = users.find((u) => u._id === userId && u.role === 'customer')
+            return user ? { name: user.name, total } : null
           })
+          .filter(Boolean)
           .sort((a, b) => b.total - a.total)
-          .slice(0, 10)
+          .slice(0, 3)
+
 
         setSummary({
           totalProducts,
@@ -172,88 +173,72 @@ const Dashboard = () => {
             mt: 3
           }}
         >
-          {/* Hàng 1: 2 chart cạnh nhau */}
-          <Box
+          <Paper
+            elevation={3}
             sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              gap: 3
+              flex: '1 1 48%',
+              p: 3,
+              borderRadius: 3,
+              minWidth: 350
             }}
           >
-            {/* Pie Chart */}
-            <Paper
-              elevation={3}
-              sx={{
-                flex: '1 1 48%',
-                p: 3,
-                borderRadius: 3,
-                minWidth: 350
-              }}
-            >
-              <Typography variant="h6" align="center" fontWeight={600} mb={2}>
-                Top 10 Product Sell
-              </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    dataKey="value"
-                    data={topProducts}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    label={({ name, percent }) =>
-                      `${name} ${(percent * 100).toFixed(0)}%`
-                    }
-                  >
-                    {topProducts.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </Paper>
+            <Typography variant="h6" align="center" fontWeight={600} mb={2}>
+              Top 5 Product Sell
+            </Typography>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  data={topProducts}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                >
+                  {topProducts.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Paper>
 
-            {/* Bar Chart - Order Status */}
-            <Paper
-              elevation={3}
-              sx={{
-                flex: '1 1 48%',
-                p: 3,
-                borderRadius: 3,
-                minWidth: 350
-              }}
-            >
-              <Typography variant="h6" align="center" fontWeight={600} mb={2}>
-                Status Order
-              </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={orderStatus}>
-                  <XAxis dataKey="status" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar
-                    dataKey="quantity"
-                    fill="#8884d8"
-                    radius={[6, 6, 0, 0]}
-                    barSize={50}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </Paper>
-          </Box>
-
-          {/* Hàng 2: Full width */}
+          {/* Bar Chart - Order Status */}
+          <Paper
+            elevation={3}
+            sx={{
+              flex: '1 1 48%',
+              p: 3,
+              borderRadius: 3,
+              minWidth: 350
+            }}
+          >
+            <Typography variant="h6" align="center" fontWeight={600} mb={2}>
+              Status Order
+            </Typography>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={orderStatus}>
+                <XAxis dataKey="status" />
+                <YAxis />
+                <Tooltip />
+                <Bar
+                  dataKey="quantity"
+                  fill="#8884d8"
+                  radius={[6, 6, 0, 0]}
+                  barSize={50}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </Paper>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
             <Typography variant="h6" align="center" fontWeight={600} mb={2}>
               Top Customer Buy Most
             </Typography>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={topCustomers}>
+              <BarChart data={topCustomers} margin={{ top: 20, right: 30, left: 50, bottom: 10 }}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip
