@@ -75,6 +75,32 @@ const search = async (query) => {
     throw new Error(error)
   }
 }
+const employee = async (query) => {
+  try {
+    const regex = new RegExp(query, 'i')
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).find({ role: regex }).toArray()
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+const searchemployee = async (query) => {
+  try {
+    const regex = new RegExp(query, 'i')
+    const result = await GET_DB()
+      .collection(USER_COLLECTION_NAME)
+      .find({
+        $and: [
+          { role: 'employee' },
+          { name: regex }
+        ]
+      })
+      .toArray()
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 const deleteOne = async (productId) => {
   try {
     const result = await GET_DB().collection(USER_COLLECTION_NAME).deleteOne({
@@ -136,5 +162,7 @@ export const userModel = {
   deleteOne,
   getDetails,
   updateByEmail,
-  updateStatus
+  updateStatus,
+  employee,
+  searchemployee
 }

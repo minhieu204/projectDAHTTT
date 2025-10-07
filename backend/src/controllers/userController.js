@@ -58,6 +58,36 @@ const search = async (req, res, next) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" })
   }
 }
+const employee = async (req, res, next) => {
+  try {
+    const { role } = req.query
+
+    if (!role || role.trim() === '') {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Search query "role" is required' })
+    }
+
+    const products = await userService.employee(role.trim())
+    res.status(StatusCodes.OK).json(products)
+  } catch (error) {
+    console.error("Search error:", error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" })
+  }
+}
+const searchEmployee = async (req, res, next) => {
+  try {
+    const { name } = req.query
+
+    if (!name || name.trim() === '') {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Search query "name" is required' })
+    }
+
+    const products = await userService.searchEmployee(name.trim())
+    res.status(StatusCodes.OK).json(products)
+  } catch (error) {
+    console.error("Search error:", error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" })
+  }
+}
 const getAll = async (req, res, next) => {
   try {
     const products = await userService.getAll()
@@ -185,5 +215,7 @@ export const userController = {
   verifyOtp,
   resetPassword,
   logOut,
-  logIn
+  logIn,
+  employee,
+  searchEmployee
 }
