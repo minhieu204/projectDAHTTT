@@ -6,7 +6,7 @@ import { fetchCustomerInsightsAPI } from '~/apis/customerAPIs'
 const currencyVN = (n = 0) =>
   new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n)
 
-function CustomerPage() {
+function Customer() {
   const [insights, setInsights] = useState([])
 
   useEffect(() => {
@@ -53,4 +53,4 @@ function CustomerPage() {
   )
 }
 
-export default CustomerPage
+export default Customer

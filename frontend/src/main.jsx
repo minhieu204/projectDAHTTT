@@ -41,6 +41,9 @@ import Dashboard from './pages/AdminPage/DashBoard/DashBoard.jsx'
 import EmployeePage from './pages/AdminPage/EmployeePage/EmployeePage.jsx'
 import SalaryPage from './pages/AdminPage/EmployeePage/SalaryPage/SalaryPage'
 import AddSalaryPage from './pages/AdminPage/EmployeePage/SalaryPage/AddSalaryPage/AddSalaryPage'
+import BranchPage from './pages/AdminPage/BranchPage/BranchPage'
+import Customer from './pages/AdminPage/Customer/Customer'
+import StoreLocator from './pages/CustomerPage/StoreLocator/StoreLocator'
 
 let router = createBrowserRouter([
   {
@@ -138,6 +141,14 @@ let router = createBrowserRouter([
                 path: 'employee/addsalary/:id',
                 element: <AddSalaryPage/>,
               },
+              {
+                path: 'branch',
+                element: <BranchPage/>,
+              },
+              {
+                path: 'customer',
+                element: <Customer/>,
+              },
             ]
           }
         ]
@@ -173,6 +184,10 @@ let router = createBrowserRouter([
           {
             path: 'myorders',
             element: <MyOrders />,
+          },
+          {
+            path: 'storelocator',
+            element: <StoreLocator />,
           },
           {
             path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',

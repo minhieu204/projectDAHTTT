@@ -202,7 +202,7 @@ const MyOrders = () => {
 
         <Box sx={{ flex: 1 }} />
 
-        <FormControl size="small" sx={{ minWidth: 120 }}>
+        <FormControl size="small" sx={{ minWidth: 80 }}>
           <InputLabel id="rows-label">Số hàng</InputLabel>
           <Select
             labelId="rows-label"
@@ -235,7 +235,7 @@ const MyOrders = () => {
               <Grid key={o._id}>
                 <Card variant="outlined">
                   <CardContent>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', minWidth: '534px' }}>
                       <Box>
                         <Typography variant="subtitle2" color="text.secondary">Mã đơn</Typography>
                         <Typography variant="body1" sx={{ fontWeight: 'bold' }}>{o._id}</Typography>

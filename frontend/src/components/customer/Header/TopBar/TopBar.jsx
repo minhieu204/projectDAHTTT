@@ -26,6 +26,9 @@ function TopBar() {
   const handleStoryClick = () => {
     navigate('/customer/story')
   }
+  const handleStoreClick = () => {
+    navigate('/customer/storelocator')
+  }
   const handleCartClick = () => {
     navigate('/customer/cart')
   }
@@ -79,6 +82,7 @@ function TopBar() {
               backgroundColor: 'white'
             },
           }}
+          onClick={handleStoreClick}
         >
           <PinDropOutlinedIcon />
           Cửa Hàng
