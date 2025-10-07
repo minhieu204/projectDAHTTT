@@ -5,14 +5,40 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { fetchAllCategorysAPI } from '~/apis/categoryAPIs'
 import { useNavigate } from 'react-router-dom'
 import StarIcon from '@mui/icons-material/Star'
+import { getRatingsByProductId } from '~/apis/ratingAPIs'
 import { fetchAllProductsAPI, searchProductsAPI } from '~/apis/productAPIs'
+
+// ==== Component con để load rating ====
+function StarRating({ productId }) {
+  const [avg, setAvg] = useState(0)
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const ratings = await getRatingsByProductId(productId)
+        const total = ratings.reduce((sum, r) => sum + r.star, 0)
+        const average = ratings.length ? (total / ratings.length).toFixed(1) : 0
+        setAvg(average)
+      } catch {
+        setAvg(0)
+      }
+    }
+    fetch()
+  }, [productId])
+
+  return (
+    <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+      <StarIcon sx={{ fontSize: 20, color: 'gold' }} /> ({avg})
+    </Typography>
+  )
+}
 
 const StyledListHeader = styled(ListSubheader)({
   backgroundImage: 'var(--Paper-overlay)',
   fontWeight: 600
 })
 
-// Hàm chuyển mảng danh mục phẳng thành dạng cây
+// ==== Hàm build tree danh mục ====
 function buildCategoryTree(data) {
   const map = {}
   data.forEach((cat) => (map[cat._id] = { ...cat, children: [] }))
@@ -33,20 +59,18 @@ function NavBar() {
   const [anchorEls, setAnchorEls] = useState({})
   const [openModal, setOpenModal] = useState(false)
   const navigate = useNavigate()
-
   const [searchQuery, setSearchQuery] = useState('')
   const [rows, setRows] = useState([])
 
   const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value)
     useEffect(() => {
-      const handler = setTimeout(() => {
-        setDebouncedValue(value)
-      }, delay)
+      const handler = setTimeout(() => setDebouncedValue(value), delay)
       return () => clearTimeout(handler)
     }, [value, delay])
     return debouncedValue
   }
+
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   useEffect(() => {
@@ -66,11 +90,10 @@ function NavBar() {
     fetchProducts()
   }, [debouncedSearchQuery])
 
-  // Fetch danh mục từ API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await fetchAllCategorysAPI() // trả về mảng danh mục
+        const data = await fetchAllCategorysAPI()
         setCategories(data)
         setCategoryTree(buildCategoryTree(data))
       } catch {
@@ -225,9 +248,7 @@ function NavBar() {
                           <Typography variant="body2">
                             {product.price?.toLocaleString('vi-VN')} ₫
                           </Typography>
-                          <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <StarIcon sx={{ fontSize: 20, color: 'gold' }} /> ({product.rating || 0})
-                          </Typography>
+                          <StarRating productId={product._id} />
                           <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', pr: 2 }}>
                             {product.sold || 0} đã bán
                           </Typography>

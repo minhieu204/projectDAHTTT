@@ -8,7 +8,10 @@ function AppBar() {
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
   const userName = user?.name || ''
-
+  const id=user?._id || ''
+  const handleEditAccountClick = () => {
+    navigate(`/admin/account/edit-account/${id}`)
+  }
   const handleLogout = () => {
     const userStr = localStorage.getItem('user')
     const user = JSON.parse(userStr)
@@ -46,8 +49,11 @@ function AppBar() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          textTransform: 'none'
+          textTransform: 'none',
+          cursor: 'pointer',
+          '&:hover': { opacity: 0.8 }, 
         }}
+        onClick={() => handleEditAccountClick()}
       >
         Xin chào, {userName}
       </Box>
