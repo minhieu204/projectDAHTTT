@@ -50,7 +50,7 @@ function SideBar() {
         <SideBarItem icon={DiscountOutlinedIcon} title='Quản Lý Khuyến Mãi' to="/admin/promotion" handleSideBarCllick={() => { navigate('/admin/promotion') }}/>
         <SideBarItem icon={RateReviewOutlinedIcon} title='Quản Lý Đánh Giá' to="/admin/rating" handleSideBarCllick={() => { navigate('/admin/rating') }}/>
         <SideBarItem icon={PeopleAltOutlinedIcon} title='Quản Lý Khách Hàng' to="/admin/customer" handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={GroupsOutlinedIcon} title='Quản Lý Nhân Viên' to="/admin/employee" handleSideBarCllick={() => { navigate('/admin/product') }}/>
+        <SideBarItem icon={GroupsOutlinedIcon} title='Quản Lý Nhân Viên' to="/admin/employee" handleSideBarCllick={() => { navigate('/admin/employee') }}/>
         <SideBarItem icon={StoreOutlinedIcon} title='Quản Lý Chi Nhánh' to="/admin/store" handleSideBarCllick={() => { navigate('/admin/product') }}/>
       </Box>
     </Box>

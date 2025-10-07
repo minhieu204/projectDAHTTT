@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './theme'
 import { ThemeProvider } from '@mui/material'
@@ -39,6 +38,9 @@ import AddPromotion from './pages/AdminPage/PromotionPage/AddPromotion/AddPromot
 import PromotionPage from './pages/AdminPage/PromotionPage/PromotionPage.jsx'
 import EditPromotion from './pages/AdminPage/PromotionPage/EditPromotion/EditPromotion.jsx'
 import Dashboard from './pages/AdminPage/DashBoard/DashBoard.jsx'
+import EmployeePage from './pages/AdminPage/EmployeePage/EmployeePage.jsx'
+import SalaryPage from './pages/AdminPage/EmployeePage/SalaryPage/SalaryPage'
+import AddSalaryPage from './pages/AdminPage/EmployeePage/SalaryPage/AddSalaryPage/AddSalaryPage'
 
 let router = createBrowserRouter([
   {
@@ -123,6 +125,18 @@ let router = createBrowserRouter([
               {
                 path: 'promotion/edit-promotion/:promotionId',
                 element: <EditPromotion />,
+              },
+              {
+                path: 'employee',
+                element: <EmployeePage/>,
+              },
+              {
+                path: 'employee/salary/:id',
+                element: <SalaryPage/>,
+              },
+              {
+                path: 'employee/addsalary/:id',
+                element: <AddSalaryPage/>,
               },
             ]
           }
