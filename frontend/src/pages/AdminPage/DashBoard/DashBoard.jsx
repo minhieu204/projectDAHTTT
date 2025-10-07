@@ -134,21 +134,21 @@ const Dashboard = () => {
         {/* === Top Cards === */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{ width: '250px' }}>
-            <Paper sx={{ p: 2, bgcolor: 'black', color: 'white' }}>
+            <Paper sx={{ p: 2, background: 'linear-gradient(135deg, #6A11CB 0%, #2575FC 100%)', color: 'white' }}>
               <Typography variant="subtitle2">Products</Typography>
               <Typography variant="h4">{summary.totalProducts}</Typography>
               <ShoppingCartIcon />
             </Paper>
           </Box>
           <Box sx={{ width: '250px' }}>
-            <Paper sx={{ p: 2, bgcolor: 'black', color: 'white' }}>
+            <Paper sx={{ p: 2, background: 'linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%)', color: 'white' }}>
               <Typography variant="subtitle2">Orders</Typography>
               <Typography variant="h4">{summary.totalOrders}</Typography>
               <ShoppingCartIcon />
             </Paper>
           </Box>
           <Box sx={{ width: '280px' }}>
-            <Paper sx={{ p: 2, bgcolor: 'black', color: 'white' }}>
+            <Paper sx={{ p: 2, background: 'linear-gradient(135deg, #F7971E 0%, #FFD200 100%)', color: 'white' }}>
               <Typography variant="subtitle2">Revenue</Typography>
               <Typography variant="h4">
                 {summary.totalRevenue.toLocaleString('vi-VN')}  ₫
@@ -157,7 +157,7 @@ const Dashboard = () => {
             </Paper>
           </Box>
           <Box sx={{ width: '250px' }}>
-            <Paper sx={{ p: 2, bgcolor: 'black', color: 'white' }}>
+            <Paper sx={{ p: 2, background: 'linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)', color: 'white' }}>
               <Typography variant="subtitle2">Customers</Typography>
               <Typography variant="h4">{summary.totalCustomers}</Typography>
               <PeopleIcon />

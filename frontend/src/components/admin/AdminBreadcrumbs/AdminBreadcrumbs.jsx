@@ -4,6 +4,7 @@ import { Breadcrumbs, Link, Typography } from '@mui/material'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 
 const breadcrumbNameMap = {
+  '/admin/dashboard': 'Dashboard',
   '/admin/product': 'Product',
   '/admin/product/add-product': 'Add Product',
   '/admin/product/edit-product': 'Edit Product',
@@ -37,7 +38,7 @@ const AdminBreadcrumbs = () => {
       separator={<NavigateNextIcon fontSize="small" />}
       aria-label="breadcrumb"
     >
-      <Link component={RouterLink} underline="hover" color="inherit" to="/">
+      <Link component={RouterLink} underline="hover" color="inherit" to="/admin/dashboard">
         Home
       </Link>
       {pathnames.map((value, index) => {
