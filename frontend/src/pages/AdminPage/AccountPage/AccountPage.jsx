@@ -3,7 +3,6 @@ import React from 'react'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import { useNavigate } from 'react-router-dom'
 import TableAccount from '~/components/admin/TableAccount/TableAccount'
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 
 function AccountPage() {
   const navigate = useNavigate()
@@ -39,11 +38,6 @@ function AccountPage() {
           <Tooltip title='Thêm tài khoản'>
             <Button onClick={handleAddAccountClick} sx={{ backgroundColor: '#66FF99', height: '40px', minWidth: '46px', marginRight: '8px' }}>
               <AddOutlinedIcon sx={{ color: 'white' }}/>
-            </Button>
-          </Tooltip>
-          <Tooltip title='Tài khoản của tôi'>
-            <Button onClick={handleAddAccountClick} sx={{ backgroundColor: '#0096c7', height: '40px', minWidth: '46px' }}>
-              <ManageAccountsOutlinedIcon sx={{ color: 'white' }}/>
             </Button>
           </Tooltip>
         </Box>
