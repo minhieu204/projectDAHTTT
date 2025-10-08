@@ -69,10 +69,6 @@ function BranchPage() {
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography sx={{ color: '#cfd4da' }}>
-              Home <span style={{ opacity: 0.7, padding: '0 6px' }}>›</span> <b>Branch</b>
-            </Typography>
-
             <Tooltip title="Thêm chi nhánh">
               <Button
                 onClick={() => setOpenAdd(true)}

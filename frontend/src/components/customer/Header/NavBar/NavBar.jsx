@@ -226,7 +226,7 @@ function NavBar() {
                         '&:hover': { backgroundColor: '#f9f9f9' }
                       }}
                       onClick={() => {
-                        navigate(`/customer/product/${product.slug}`)
+                        navigate(`/customer/productdetail/${product._id}`)
                         setOpenModal(false)
                       }}
                     >
