@@ -204,51 +204,53 @@ function ProductDetail() {
         </Box>
       </Container>
       {/* Box hiển thị đánh giá sản phẩm */}
-      <Box sx={{ mt: 4, px: 10 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Đánh giá sản phẩm
-        </Typography>
-        {_ratings && _ratings.length > 0 ? (
-          _ratings.map((review, index) => {
-            const formattedDate = new Date(review.createdAt).toLocaleDateString('vi-VN')
-            return (
-              <Box
-                key={index}
-                sx={{
-                  p: 2,
-                  mb: 2,
-                  border: '1px solid #ddd',
-                  borderRadius: 2,
-                  backgroundColor: '#fafafa'
-                }}
-              >
-                {/* Ngày tạo */}
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                  {formattedDate}
-                </Typography>
-                {/* Sao đánh giá */}
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <StarIcon
-                      key={i}
-                      sx={{
-                        fontSize: 20,
-                        color: i < review.star ? 'gold' : '#ccc'
-                      }}
-                    />
-                  ))}
-                </Box>
-                {/* Nội dung */}
-                <Typography variant="body1">{review.description}</Typography>
-              </Box>
-            )
-          })
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            Chưa có đánh giá nào cho sản phẩm này
+      <Container>
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Đánh giá sản phẩm
           </Typography>
-        )}
-      </Box>
+          {_ratings && _ratings.length > 0 ? (
+            _ratings.map((review, index) => {
+              const formattedDate = new Date(review.createdAt).toLocaleDateString('vi-VN')
+              return (
+                <Box
+                  key={index}
+                  sx={{
+                    p: 2,
+                    mb: 2,
+                    border: '1px solid #ddd',
+                    borderRadius: 2,
+                    backgroundColor: '#fafafa'
+                  }}
+                >
+                  {/* Ngày tạo */}
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {formattedDate}
+                  </Typography>
+                  {/* Sao đánh giá */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <StarIcon
+                        key={i}
+                        sx={{
+                          fontSize: 20,
+                          color: i < review.star ? 'gold' : '#ccc'
+                        }}
+                      />
+                    ))}
+                  </Box>
+                  {/* Nội dung */}
+                  <Typography variant="body1">{review.description}</Typography>
+                </Box>
+              )
+            })
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              Chưa có đánh giá nào cho sản phẩm này
+            </Typography>
+          )}
+        </Box>
+      </Container>
     </>
   )
 }

@@ -44,6 +44,7 @@ import AddSalaryPage from './pages/AdminPage/EmployeePage/SalaryPage/AddSalaryPa
 import BranchPage from './pages/AdminPage/BranchPage/BranchPage'
 import Customer from './pages/AdminPage/Customer/Customer'
 import StoreLocator from './pages/CustomerPage/StoreLocator/StoreLocator'
+import WorkShiftPage from './pages/AdminPage/EmployeePage/WorkShiftPage/WorkShiftPage'
 
 let router = createBrowserRouter([
   {
@@ -52,11 +53,7 @@ let router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Register />
-      },
-      {
-        path: '/login',
-        element: <Login />,
+        element: <HomePage />
       },
       {
         path: '/admin',
@@ -142,6 +139,10 @@ let router = createBrowserRouter([
                 element: <AddSalaryPage/>,
               },
               {
+                path: 'employee/workshift/:id',
+                element: <WorkShiftPage/>,
+              },
+              {
                 path: 'branch',
                 element: <BranchPage/>,
               },
@@ -200,6 +201,14 @@ let router = createBrowserRouter([
         ]
       },
     ]
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
   },
 ])
 

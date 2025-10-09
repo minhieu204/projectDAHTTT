@@ -268,7 +268,7 @@ function Login() {
           sx={{ mt: 2, textAlign: 'center' }}
         >
           Chưa có tài khoản?{' '}
-          <a href="/" style={{ color: '#0d6efd' }}>
+          <a href="/register" style={{ color: '#0d6efd' }}>
             Đăng ký
           </a>
         </Typography>

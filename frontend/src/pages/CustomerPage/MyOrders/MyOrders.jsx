@@ -91,12 +91,7 @@ const MyOrders = () => {
         const sorted = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
         setOrders(sorted)
-      } catch (err) {
-        setSnackbar({
-          open: true,
-          message: err?.response?.data?.message || 'Không thể tải đơn hàng',
-          severity: 'error'
-        })
+      } catch {
         setOrders([])
       } finally {
         setLoading(false)
@@ -226,7 +221,7 @@ const MyOrders = () => {
         </Box>
       ) : orders.length === 0 ? (
         <Box sx={{ textAlign: 'center', py: 12 }}>
-          <Typography variant="h6" color="text.secondary">Không có đơn hàng.</Typography>
+          <Typography variant="h6" color="text.secondary">Chưa có đơn hàng.</Typography>
         </Box>
       ) : (
         <>
