@@ -1,15 +1,38 @@
 import axios from 'axios'
-const API_ROOT = import.meta.env.VITE_API_ROOT || 'http://localhost:8017'
+import { API_ROOT } from '../util/constants'
 
-export const fetchCustomerInsightsAPI = async () => {
-  const { data } = await axios.get(`${API_ROOT}/v1/customer`)
-  return data || []
+export const fetchCustomersAPI = async (token) => {
+  const res = await axios.get(`${API_ROOT}/v1/customers`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  })
+  return res.data
 }
-export const fetchCustomerSummaryAPI = async () => {
-  const { data } = await axios.get(`${API_ROOT}/v1/customer/summary`)
-  return data || { totalCustomers: 0, totalOrders: 0, totalAmount: 0 }
+
+export const searchCustomersAPI = async (q, token) => {
+  const res = await axios.get(`${API_ROOT}/v1/customers/search?q=${encodeURIComponent(q)}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  })
+  return res.data
 }
-export const searchCustomersAPI = async (name) => {
-  const { data } = await axios.get(`${API_ROOT}/v1/customer/search`, { params: { name } })
-  return data || []
+
+export const getCustomerDetailAPI = async (id, token) => {
+  const res = await axios.get(`${API_ROOT}/v1/customers/${id}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  })
+  return res.data
+}
+
+export const getCustomerSummaryAPI = async (id, token) => {
+  const res = await axios.get(`${API_ROOT}/v1/customers/${id}/summary`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  })
+  return res.data
+}
+
+export const getCustomerOrdersAPI = async (customerId, token) => {
+  const res = await axios.get(
+    `${API_ROOT}/v1/order?userId=${encodeURIComponent(customerId)}`,
+    { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+  )
+  return res.data
 }
