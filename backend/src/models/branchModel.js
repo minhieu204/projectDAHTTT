@@ -6,7 +6,6 @@ import ApiError from '~/utils/ApiError'
 
 export const BRANCH_COLLECTION_NAME = 'branches'
 
-// ❌ Đã bỏ lat/lng khỏi schema
 export const BRANCH_COLLECTION_SCHEMA = Joi.object({
   name: Joi.string().required().min(2).max(255).trim().strict(),
   phone: Joi.string().allow(''),

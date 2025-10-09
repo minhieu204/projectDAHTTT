@@ -1,4 +1,3 @@
-// src/pages/CustomerDetail.jsx
 import React, { useEffect, useState } from 'react'
 import {
   Box, Card, CardContent, Typography, CircularProgress, Alert,
@@ -22,8 +21,6 @@ export default function CustomerDetail() {
   const [user, setUser] = useState(null)
   const [stats, setStats] = useState({ totalOrders: 0, totalAmount: 0, tier: 'Standard' })
   const [orders, setOrders] = useState([])
-
-  // Dialog state
   const [openDetail, setOpenDetail] = useState(false)
   const [currentOrder, setCurrentOrder] = useState(null)
 
@@ -68,7 +65,6 @@ export default function CustomerDetail() {
         <Typography variant="h5">Thông tin khách hàng</Typography>
       </Box>
 
-      {/* Thông tin khách hàng: mỗi thông tin 1 dòng */}
       <Box sx={{ px: 6 }}>
         <Card sx={{ borderRadius: 2 }}>
           <CardContent>
@@ -81,7 +77,6 @@ export default function CustomerDetail() {
         </Card>
       </Box>
 
-      {/* Thống kê */}
       <Box sx={{ px: 6, pt: 2 }}>
         <Card sx={{ borderRadius: 2, mb: 2 }}>
           <CardContent sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
@@ -101,7 +96,6 @@ export default function CustomerDetail() {
         </Card>
       </Box>
 
-      {/* Bảng đơn hàng của khách */}
       <Box sx={{ px: 6, pb: 4 }}>
         <Card sx={{ borderRadius: 2 }}>
           <CardContent>
@@ -159,7 +153,6 @@ export default function CustomerDetail() {
         </Card>
       </Box>
 
-      {/* Dialog chi tiết đơn hàng */}
       <Dialog open={openDetail} onClose={closeOrderDialog} maxWidth="md" fullWidth>
         <DialogTitle>Chi tiết đơn hàng</DialogTitle>
         <DialogContent dividers>
@@ -178,7 +171,6 @@ export default function CustomerDetail() {
                 </TableHead>
                 <TableBody>
                   {(currentOrder.items || []).map((it, i) => {
-                    // cố gắng bắt các kiểu field phổ biến
                     const name = it.name || it.productName || it.title || it.product?.name || '—'
                     const sku = it.sku || it.product?.sku
                     const quantity = it.quantity || it.qty || 1

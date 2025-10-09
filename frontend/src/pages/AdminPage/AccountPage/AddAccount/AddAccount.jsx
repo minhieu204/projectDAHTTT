@@ -1,4 +1,3 @@
-// src/pages/CustomerDetail.jsx
 import React, { useEffect, useState } from 'react'
 import {
   Box, Card, CardContent, Grid, Typography,

@@ -21,7 +21,6 @@ function EditBranch({ id, open, onClose, onSuccess, onError }) {
         address: d.address || '',
         provinceCode: d.provinceCode || '',
         districtCode: d.districtCode || '',
-        // ❌ bỏ lat/lng
         services: (d.services || []).join(', '),
         openingHours: d.openingHours || '',
         isActive: d.isActive ?? true

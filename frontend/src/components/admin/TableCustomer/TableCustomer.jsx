@@ -1,4 +1,3 @@
-// src/components/admin/TableCustomer/TableCustomer.jsx
 import React, { useEffect, useState } from 'react'
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
