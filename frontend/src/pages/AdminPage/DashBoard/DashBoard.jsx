@@ -147,7 +147,7 @@ const Dashboard = () => {
               <ShoppingCartIcon />
             </Paper>
           </Box>
-          <Box sx={{ width: '280px' }}>
+          <Box sx={{ width: '290px' }}>
             <Paper sx={{ p: 2, background: 'linear-gradient(135deg, #F7971E 0%, #FFD200 100%)', color: 'white' }}>
               <Typography variant="subtitle2">Revenue</Typography>
               <Typography variant="h4">

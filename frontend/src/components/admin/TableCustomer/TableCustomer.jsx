@@ -3,8 +3,7 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, Typography, Snackbar, Alert, Button,
   Dialog, DialogTitle, DialogContent, DialogActions,
-  Box, Stack, Divider, CircularProgress, TextField, TablePagination,
-  FormControl, Select, MenuItem
+  Box, Stack, Divider, CircularProgress
 } from '@mui/material'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import {
@@ -13,6 +12,8 @@ import {
   getCustomerSummaryAPI,
   getCustomerOrdersAPI
 } from '~/apis/customerAPIs'
+import TablePageControls from '../TablePageControls/TablePageControls'
+import TableRowsPerPage from '../TableRowsPerPage/TableRowsPerPage'
 
 const formatVND = (n) =>
   new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(n) || 0)
@@ -25,29 +26,31 @@ const TableCustomer = () => {
   const [snack, setSnack] = useState({ open: false, message: '', severity: 'success' })
   const token = localStorage.getItem('accessToken')
 
-  // Dialog state
   const [openDetail, setOpenDetail] = useState(false)
   const [loadingDetail, setLoadingDetail] = useState(false)
   const [detailUser, setDetailUser] = useState(null)
   const [detailStats, setDetailStats] = useState({ totalOrders: 0, totalAmount: 0, tier: 'Standard' })
   const [detailOrders, setDetailOrders] = useState([])
 
-  // Debounce
+  // debounce hook
   const useDebounce = (value, delay) => {
     const [debounced, setDebounced] = useState(value)
     useEffect(() => {
-      const h = setTimeout(() => setDebounced(value), delay)
-      return () => clearTimeout(h)
+      const handler = setTimeout(() => setDebounced(value), delay)
+      return () => clearTimeout(handler)
     }, [value, delay])
     return debounced
   }
-  const debounced = useDebounce(searchQuery, 300)
+  const debouncedSearch = useDebounce(searchQuery, 300)
 
   // Fetch list
   useEffect(() => {
     (async () => {
       try {
-        const data = debounced ? await searchCustomersAPI(debounced, token) : await fetchCustomersAPI(token)
+        const data = debouncedSearch
+          ? await searchCustomersAPI(debouncedSearch, token)
+          : await fetchCustomersAPI(token)
+
         const filtered = (data || []).map(u => ({
           _id: u._id,
           name: u.fullName || u.name || '',
@@ -62,131 +65,77 @@ const TableCustomer = () => {
         setSnack({ open: true, message: 'Không thể tải danh sách khách hàng.', severity: 'error' })
       }
     })()
-  }, [debounced])
+  }, [debouncedSearch, token])
 
-  // Open detail dialog
+  // Mở chi tiết
   const handleOpenDetail = async (id) => {
     setOpenDetail(true)
     setLoadingDetail(true)
     try {
-      // 1) profile + stats
-      const summary = await getCustomerSummaryAPI(id, token) // { user, stats }
+      const summary = await getCustomerSummaryAPI(id, token)
       setDetailUser(summary?.user || null)
       let stats = summary?.stats || { totalOrders: 0, totalAmount: 0, tier: 'Standard' }
 
-      // 2) orders (filter by userId for sure)
-      try {
-        const ordersRaw = await getCustomerOrdersAPI(id, token)
-        const orders = Array.isArray(ordersRaw) ? ordersRaw : []
-        const filtered = orders.filter(o => {
-          const uid = o.userId || o.user || o.user?._id || o.userId?._id
-          return String(uid) === String(id)
-        })
-        setDetailOrders(filtered)
-
-        // 3) recompute stats for UI consistency
-        const totalOrders = filtered.length
-        const totalAmount = filtered.reduce((s, o) => s + Number(o?.total || 0), 0)
-        stats = { ...stats, totalOrders, totalAmount }
-      } catch {
-        setDetailOrders([])
-        setSnack({ open: true, message: 'Không tải được danh sách đơn hàng của khách.', severity: 'warning' })
-      }
+      const ordersRaw = await getCustomerOrdersAPI(id, token)
+      const orders = Array.isArray(ordersRaw) ? ordersRaw : []
+      const filtered = orders.filter(o => {
+        const uid = o.userId || o.user || o.user?._id || o.userId?._id
+        return String(uid) === String(id)
+      })
+      setDetailOrders(filtered)
+      const totalOrders = filtered.length
+      const totalAmount = filtered.reduce((s, o) => s + Number(o?.total || 0), 0)
+      stats = { ...stats, totalOrders, totalAmount }
       setDetailStats(stats)
     } catch {
-      setDetailUser(null)
-      setDetailStats({ totalOrders: 0, totalAmount: 0, tier: 'Standard' })
-      setDetailOrders([])
       setSnack({ open: true, message: 'Không thể tải chi tiết khách hàng.', severity: 'error' })
     } finally {
       setLoadingDetail(false)
     }
   }
-  const handleCloseDetail = () => setOpenDetail(false)
 
-  // Pagination helpers
+  const handleCloseDetail = () => setOpenDetail(false)
   const handleChangePage = (_, newPage) => setPage(newPage)
-  const handleChangeRowsPerPage = (e) => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0) }
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(parseInt(e.target.value, 10))
+    setPage(0)
+  }
 
   return (
     <>
-      {/* Header controls: Số hàng mỗi trang + Search (giống các trang khác) */}
-      <Box sx={{ color:'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1, mb: 1.5 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography variant="body2">Số khách mỗi trang:</Typography>
-          <FormControl
-            variant="standard"
-            sx={{
-              minWidth: 72,
-              // chữ và icon trắng
-              '& .MuiInputBase-root': { color: '#fff' },
-              '& .MuiSvgIcon-root': { color: '#fff' },
-              // gạch chân trắng (trước, hover, sau)
-              '& .MuiInput-underline:before': { borderBottomColor: 'rgba(255,255,255,0.6)' },
-              '& .MuiInput-underline:hover:before': { borderBottomColor: '#fff' },
-              '& .MuiInput-underline:after': { borderBottomColor: '#fff' }
-            }}
-          >
-            <Select
-              value={rowsPerPage}
-              onChange={(e) => { setRowsPerPage(Number(e.target.value)); setPage(0) }}
-              // làm nền trong suốt cho phần hiển thị
-              sx={{ '& .MuiSelect-select': { backgroundColor: 'transparent' } }}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={25}>25</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+      {/* Search + chọn số hàng giống TableProduct */}
+      <TableRowsPerPage
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[10, 25, 100]}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
-        <Box sx={{ color:'white', display: 'flex', alignItems: 'center', gap: 1, minWidth: 320 }}>
-          <Typography variant="body2">Search:</Typography>
-          <TextField
-            fullWidth
-            size="small"
-            variant="standard"
-            placeholder="Tìm theo tên hoặc email..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            InputProps={{
-              sx: {
-                color: '#fff',
-                '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.7)' },
-                '&:before,&:after': { borderBottomColor: 'rgba(255,255,255,0.6)' },
-                '&:hover:not(.Mui-disabled):before': { borderBottomColor: '#fff' }
-              }
-            }}
-          />
-        </Box>
-      </Box>
-
-      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 2, mt: 1 }}>
+      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 2 }}>
         <Table sx={{ minWidth: 900 }}>
           <TableHead>
             <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-              <TableCell sx={{ width: 60 }}>STT</TableCell>
+              <TableCell>STT</TableCell>
               <TableCell>HỌ TÊN</TableCell>
               <TableCell>EMAIL</TableCell>
               <TableCell>SỐ ĐIỆN THOẠI</TableCell>
               <TableCell>ĐỊA CHỈ</TableCell>
-              <TableCell align="center" sx={{ width: 160 }}>Thao tác</TableCell>
+              <TableCell align="center">Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
               <TableRow key={row._id} sx={{ '&:hover': { backgroundColor: '#fafafa' } }}>
                 <TableCell>{page * rowsPerPage + idx + 1}</TableCell>
-                <TableCell><Typography variant='body2'>{row.name}</Typography></TableCell>
-                <TableCell><Typography variant='body2'>{row.email}</Typography></TableCell>
-                <TableCell><Typography variant='body2'>{row.phone}</Typography></TableCell>
-                <TableCell><Typography variant='body2'>{row.address}</Typography></TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.phone}</TableCell>
+                <TableCell>{row.address}</TableCell>
                 <TableCell align="center">
                   <Button
                     size="small"
                     startIcon={<VisibilityOutlinedIcon />}
                     onClick={() => handleOpenDetail(row._id)}
-                    sx={{ textTransform: 'none' }}
                   >
                     Xem chi tiết
                   </Button>
@@ -200,20 +149,17 @@ const TableCustomer = () => {
             )}
           </TableBody>
         </Table>
-
-        {/* Phân trang dưới bảng */}
-        <TablePagination
-          component="div"
-          count={rows.length}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[10, 25, 100]}
-        />
       </TableContainer>
 
-      {/* =============== DIALOG CHI TIẾT KHÁCH HÀNG =============== */}
+      {/* Component phân trang riêng */}
+      <TablePageControls
+        page={page}
+        rowsPerPage={rowsPerPage}
+        count={rows.length}
+        onChangePage={handleChangePage}
+      />
+
+      {/* Dialog chi tiết khách */}
       <Dialog open={openDetail} onClose={handleCloseDetail} maxWidth="md" fullWidth>
         <DialogTitle>Chi tiết khách hàng</DialogTitle>
         <DialogContent dividers>
@@ -223,7 +169,6 @@ const TableCustomer = () => {
             </Box>
           ) : (
             <>
-              {/* Thông tin khách (mỗi thông tin 1 dòng) */}
               <Stack spacing={1.25} sx={{ mb: 2 }}>
                 <OneLine label="Họ và tên" value={detailUser?.fullName || detailUser?.name || '—'} />
                 <OneLine label="Email" value={detailUser?.email || '—'} required />
@@ -234,16 +179,14 @@ const TableCustomer = () => {
 
               <Divider sx={{ my: 1.5 }} />
 
-              {/* Thống kê */}
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
                 <StatBox title="Tổng số đơn hàng" value={detailStats.totalOrders} />
                 <StatBox title="Tổng giá trị đơn hàng" value={formatVND(detailStats.totalAmount)} />
                 <StatBox title="Hạng thẻ khách hàng" value={detailStats.tier} />
               </Box>
 
-              {/* Danh sách đơn hàng */}
               <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 700 }}>Đơn hàng của khách</Typography>
-              <TableContainer component={Paper} sx={{ borderRadius: 1, boxShadow: 0 }}>
+              <TableContainer component={Paper}>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
@@ -289,7 +232,7 @@ const TableCustomer = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         sx={{ mt: '46px' }}
       >
-        <Alert onClose={() => setSnack(s => ({ ...s, open: false }))} severity={snack.severity} variant="filled" sx={{ width: '100%' }}>
+        <Alert severity={snack.severity} variant="filled" sx={{ width: '100%' }}>
           {snack.message}
         </Alert>
       </Snackbar>
@@ -297,7 +240,7 @@ const TableCustomer = () => {
   )
 }
 
-/** Sub components **/
+/** Sub components */
 const OneLine = ({ label, value, required = false }) => (
   <Box>
     <Typography variant="subtitle2" color="text.secondary" sx={{ display: 'inline' }}>

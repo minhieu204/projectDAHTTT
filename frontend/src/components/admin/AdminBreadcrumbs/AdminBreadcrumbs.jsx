@@ -24,6 +24,7 @@ const breadcrumbNameMap = {
   '/admin/employee/addsalary': 'Add Salary',
   '/admin/employee/workshift': 'Workshift',
   '/admin/branch': 'Branch',
+  '/admin/customer': 'Customer',
 }
 
 const AdminBreadcrumbs = () => {

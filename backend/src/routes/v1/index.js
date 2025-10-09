@@ -10,6 +10,7 @@ import { promotionRoute } from "./promotionRoute"
 import { workShiftRoute } from "./workshiftRoute"
 import { salaryRoute } from "./salaryRoute"
 import { branchRoute } from "./branchRoute"
+import { customerRoute } from "./customerRoute"
 
 const Router = express.Router()
 
@@ -36,5 +37,7 @@ Router.use('/workshift', workShiftRoute)
 Router.use('/salary', salaryRoute)
 
 Router.use('/branches', branchRoute)
+
+Router.use('/customers', customerRoute)
 
 export const APIs_V1 = Router
