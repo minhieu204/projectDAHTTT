@@ -15,12 +15,6 @@ function HomePage() {
       <Container sx={{ mt: 3 }}>
         <Service />
         <ProductHome />
-        <Box>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab mollitia temporibus veniam magnam voluptatibus tempore ex possimus itaque officia commodi obcaecati at perferendis, doloribus quisquam voluptatem placeat aut cum iure?
-          Porro illo molestias molestiae necessitatibus. Enim aliquam, aliquid beatae eaque reprehenderit ratione voluptates placeat fugit, temporibus cupiditate quam natus ea iure ipsa unde iste neque adipisci ipsam autem quis odio!
-          Repudiandae laboriosam velit dicta ex, tenetur, maiores quaerat aspernatur beatae nisi obcaecati nemo sapiente facere quibusdam cumque quis esse, porro assumenda? Nisi, fugit beatae nesciunt minima explicabo repudiandae commodi officia!
-          Id maxime assumenda voluptatum alias natus tempora porro atque quod dolores a accusantium quaerat laborum sunt sed totam, nulla laboriosam velit adipisci quia esse! Sed dolorem omnis incidunt error aperiam?
-        </Box>
       </Container>
     </>
   )

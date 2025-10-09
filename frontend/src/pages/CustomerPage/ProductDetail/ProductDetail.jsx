@@ -78,7 +78,7 @@ function ProductDetail() {
   }
 
   const handleNowClick = () => {
-    navigate('/customer/checkout', {
+    navigate('/checkout', {
       state: {
         products: [
           {

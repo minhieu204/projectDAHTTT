@@ -1,4 +1,4 @@
-import { Badge, Box, Button, IconButton } from '@mui/material'
+import { Badge, Box, Button } from '@mui/material'
 import React from 'react'
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined'
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
@@ -17,26 +17,26 @@ function TopBar() {
     if (!token) {
       navigate('/login')
     } else {
-      navigate('/customer/editprofile')
+      navigate('/editprofile')
     }
   }
   const handleHomeClick = () => {
-    navigate('/customer')
+    navigate('/')
   }
   const handleStoryClick = () => {
-    navigate('/customer/story')
+    navigate('/story')
   }
   const handleStoreClick = () => {
-    navigate('/customer/storelocator')
+    navigate('/storelocator')
   }
   const handleCartClick = () => {
-    navigate('/customer/cart')
+    navigate('/cart')
   }
   const handleOrderClick = () => {
     if (!token) {
       navigate('/login')
     } else {
-      navigate('/customer/myorders')
+      navigate('/myorders')
     }
   }
   return (

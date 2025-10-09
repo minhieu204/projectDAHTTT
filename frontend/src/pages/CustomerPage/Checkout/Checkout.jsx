@@ -123,7 +123,7 @@ function Checkout() {
           await removeManyFromCart(products.map((p) => p.productId))
         }
         alert('Đặt hàng thành công!')
-        navigate('/customer/thank-you', { state: { order: orderRes.data || orderRes } })
+        navigate('/thank-you', { state: { order: orderRes.data || orderRes } })
       } else {
         alert(orderRes.message || 'Đặt hàng thất bại, vui lòng thử lại!')
       }

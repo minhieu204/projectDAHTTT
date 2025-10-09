@@ -62,7 +62,7 @@ function CartPage() {
     const productsToCheckout = cartItems.filter(item =>
       selectedItems.includes(item.productId)
     )
-    navigate('/customer/checkout', { state: { products: productsToCheckout } })
+    navigate('/checkout', { state: { products: productsToCheckout } })
   }
 
   return (

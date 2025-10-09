@@ -21,7 +21,7 @@ function Login() {
       const user = JSON.parse(userStr)
       const role = user.role
       if (role === 'admin' || role === 'employee') navigate('/admin')
-      else if (role === 'customer') navigate('/customer')
+      else if (role === 'customer') navigate('/')
     }
   }, [navigate])
   const [form, setForm] = useState({ email: '', password: '' })
@@ -85,8 +85,8 @@ function Login() {
 
       setTimeout(() => {
         if (role === 'admin'|| role === 'employee') navigate('/admin')
-        else if (role === 'customer') navigate('/customer')
-        else navigate('/')
+        else if (role === 'customer') navigate('/')
+        else navigate('/login')
       }, 800)
     } catch (err) {
       const msg = err.response?.data?.message || 'Đăng nhập thất bại, vui lòng thử lại!'

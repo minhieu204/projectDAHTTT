@@ -59,9 +59,9 @@ function Footer() {
               VỀ PNJ
             </Typography>
             {['Quan hệ cổ đông (IR)', 'Tuyển dụng', 'Xuất khẩu', 'Kinh doanh sỉ'].map((text) => (
-              <Link key={text} href="#" color="text.secondary" display="block" underline="hover" variant="body2" sx={{ mb: 0.5 }}>
+              <Typography key={text} color="text.secondary" display="block" variant="body2" sx={{ mb: 0.5 }}>
                 {text}
-              </Link>
+              </Typography>
             ))}
           </Grid>
 
@@ -71,15 +71,10 @@ function Footer() {
               DỊCH VỤ KHÁCH HÀNG
               </Typography>
               {['Hướng dẫn đo size trang sức', 'Mua hàng trả góp', 'Hướng dẫn mua hàng và thanh toán', 'Tổng Hợp Các Chính Sách PNJ'].map((text) => (
-                <Link key={text} href="#" color="text.secondary" display="block" underline="hover" variant="body2" sx={{ mb: 0.5 }}>
+                <Typography key={text} color="text.secondary" display="block" variant="body2" sx={{ mb: 0.5 }}>
                   {text}
-                </Link>
+                </Typography>
               ))}
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1.5 }}>
-                PHƯƠNG THỨC THANH TOÁN
-              </Typography>
             </Box>
           </Grid>
 
@@ -111,13 +106,6 @@ function Footer() {
                 </a>
               ))}
             </Box>
-
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1.5 }}>
-              QUAN TÂM ZALO OA PNJ
-            </Typography>
-            <Button variant="contained" color="primary" size="small" sx={{ textTransform: 'none', mb: 2 }}>
-              Quan tâm
-            </Button>
             <Box>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                 CHỨNG NHẬN

@@ -115,7 +115,7 @@ function ListProduct() {
                   flexDirection: 'column',
                   justifyContent: 'space-between'
                 }}
-                onClick={() => navigate(`/customer/productdetail/${product._id}`)}
+                onClick={() => navigate(`/productdetail/${product._id}`)}
               >
                 {isNew && (
                   <Box sx={{

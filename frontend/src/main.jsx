@@ -49,157 +49,147 @@ import WorkShiftPage from './pages/AdminPage/EmployeePage/WorkShiftPage/WorkShif
 let router = createBrowserRouter([
   {
     path: '/',
-    element: <PageRoute />,
+    element: <CustomerPage />,
     children: [
       {
         index: true,
         element: <HomePage />
       },
       {
-        path: '/admin',
-        element: <PrivateRoute allowedRoles={['admin', 'employee']} />,
-        children: [
-          {
-            element: <AdminPage />,
-            children: [
-              {
-                index: true,
-                element: <Dashboard />
-              },
-              {
-                path: 'dashboard',
-                element: <Dashboard />,
-              },
-              {
-                path: 'product',
-                element: <ProductPage />,
-              },
-              {
-                path: 'product/add-product',
-                element: <AddProduct />,
-              },
-              {
-                path: 'product/edit-product/:productId',
-                element: <EditProduct />,
-              },
-              {
-                path: 'category',
-                element: <CategoryPage />,
-              },
-              {
-                path: 'category/add-category',
-                element: <AddCategory />,
-              },
-              {
-                path: 'category/edit-category/:categoryId',
-                element: <EditCategory />,
-              },
-              {
-                path: 'order',
-                element: <OrderPage />,
-              },
-              {
-                path: 'account',
-                element: <AccountPage />,
-              },
-              {
-                path: 'account/add-account',
-                element: <AddAccount />,
-              },
-              {
-                path: 'account/edit-account/:id',
-                element: <EditAccount />,
-              },
-              {
-                path: 'rating',
-                element: <RatingsPage />,
-              },
-              {
-                path: 'promotion',
-                element: <PromotionPage />,
-              },
-              {
-                path: 'promotion/add-promotion',
-                element: <AddPromotion />,
-              },
-              {
-                path: 'promotion/edit-promotion/:promotionId',
-                element: <EditPromotion />,
-              },
-              {
-                path: 'employee',
-                element: <EmployeePage/>,
-              },
-              {
-                path: 'employee/salary/:id',
-                element: <SalaryPage/>,
-              },
-              {
-                path: 'employee/addsalary/:id',
-                element: <AddSalaryPage/>,
-              },
-              {
-                path: 'employee/workshift/:id',
-                element: <WorkShiftPage/>,
-              },
-              {
-                path: 'branch',
-                element: <BranchPage/>,
-              },
-              {
-                path: 'customer',
-                element: <Customer/>,
-              },
-            ]
-          }
-        ]
+        path: 'editprofile',
+        element: <CreateInformation />,
       },
       {
-        path: '/customer',
-        element: <CustomerPage />,
+        path: 'story',
+        element: <StoryPage />,
+      },
+      {
+        path: 'cart',
+        element: <CartPage />,
+      },
+      {
+        path: 'checkout',
+        element: <Checkout />,
+      },
+      {
+        path: 'thank-you',
+        element: <ThankYou />,
+      },
+      {
+        path: 'myorders',
+        element: <MyOrders />,
+      },
+      {
+        path: 'storelocator',
+        element: <StoreLocator />,
+      },
+      {
+        path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',
+        element: <ListProduct />,
+      },
+      {
+        path: 'productdetail/:productId',
+        element: <ProductDetail />,
+      },
+    ]
+  },
+  {
+    path: '/admin',
+    element: <PrivateRoute allowedRoles={['admin', 'employee']} />,
+    children: [
+      {
+        element: <AdminPage />,
         children: [
           {
             index: true,
-            element: <HomePage />
+            element: <Dashboard />
           },
           {
-            path: 'editprofile',
-            element: <CreateInformation />,
+            path: 'dashboard',
+            element: <Dashboard />,
           },
           {
-            path: 'story',
-            element: <StoryPage />,
+            path: 'product',
+            element: <ProductPage />,
           },
           {
-            path: 'cart',
-            element: <CartPage />,
+            path: 'product/add-product',
+            element: <AddProduct />,
           },
           {
-            path: 'checkout',
-            element: <Checkout />,
+            path: 'product/edit-product/:productId',
+            element: <EditProduct />,
           },
           {
-            path: 'thank-you',
-            element: <ThankYou />,
+            path: 'category',
+            element: <CategoryPage />,
           },
           {
-            path: 'myorders',
-            element: <MyOrders />,
+            path: 'category/add-category',
+            element: <AddCategory />,
           },
           {
-            path: 'storelocator',
-            element: <StoreLocator />,
+            path: 'category/edit-category/:categoryId',
+            element: <EditCategory />,
           },
           {
-            path: 'listproduct/:genderSlug/:typeSlug/:materialSlug',
-            element: <ListProduct />,
+            path: 'order',
+            element: <OrderPage />,
           },
           {
-            path: 'productdetail/:productId',
-            element: <ProductDetail />,
+            path: 'account',
+            element: <AccountPage />,
+          },
+          {
+            path: 'account/add-account',
+            element: <AddAccount />,
+          },
+          {
+            path: 'account/edit-account/:id',
+            element: <EditAccount />,
+          },
+          {
+            path: 'rating',
+            element: <RatingsPage />,
+          },
+          {
+            path: 'promotion',
+            element: <PromotionPage />,
+          },
+          {
+            path: 'promotion/add-promotion',
+            element: <AddPromotion />,
+          },
+          {
+            path: 'promotion/edit-promotion/:promotionId',
+            element: <EditPromotion />,
+          },
+          {
+            path: 'employee',
+            element: <EmployeePage/>,
+          },
+          {
+            path: 'employee/salary/:id',
+            element: <SalaryPage/>,
+          },
+          {
+            path: 'employee/addsalary/:id',
+            element: <AddSalaryPage/>,
+          },
+          {
+            path: 'employee/workshift/:id',
+            element: <WorkShiftPage/>,
+          },
+          {
+            path: 'branch',
+            element: <BranchPage/>,
+          },
+          {
+            path: 'customer',
+            element: <Customer/>,
           },
         ]
-      },
+      }
     ]
   },
   {

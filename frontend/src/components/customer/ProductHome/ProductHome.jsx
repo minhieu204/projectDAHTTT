@@ -61,7 +61,7 @@ function ProductHome() {
       <Box sx={{ width: '90%', margin: 'auto' }}>
         <Slider {...settings}>
           {productsToShow.map(product => (
-            <Box key={product._id} onClick={() => navigate(`/customer/productdetail/${product._id}`)}>
+            <Box key={product._id} onClick={() => navigate(`/productdetail/${product._id}`)}>
               <ProductCard
                 product={product}
                 isNew={selectedButton === 'new'}

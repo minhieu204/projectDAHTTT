@@ -153,7 +153,7 @@ function NavBar() {
                     <MenuItem
                       key={material._id}
                       onClick={() => {
-                        navigate(`/customer/listproduct/${root.slug}/${type.slug}/${material.slug}`)
+                        navigate(`/listproduct/${root.slug}/${type.slug}/${material.slug}`)
                         handleMenuClose(root._id)}
                       }
                     >
@@ -226,7 +226,7 @@ function NavBar() {
                         '&:hover': { backgroundColor: '#f9f9f9' }
                       }}
                       onClick={() => {
-                        navigate(`/customer/productdetail/${product._id}`)
+                        navigate(`/productdetail/${product._id}`)
                         setOpenModal(false)
                       }}
                     >

@@ -11,7 +11,7 @@ function ThankYou() {
     return (
       <Box sx={{ textAlign: 'center', mt: 10 }}>
         <Typography variant="h6">Không tìm thấy đơn hàng</Typography>
-        <Button sx={{ mt: 2 }} variant="contained" onClick={() => navigate('/customer')}>
+        <Button sx={{ mt: 2 }} variant="contained" onClick={() => navigate('/')}>
           Quay về trang chủ
         </Button>
       </Box>
@@ -66,7 +66,7 @@ function ThankYou() {
           variant="contained"
           sx={{ mt: 4, bgcolor: '#003468', '&:hover': { bgcolor: '#004c8f' } }}
           fullWidth
-          onClick={() => navigate('/customer')}
+          onClick={() => navigate('/')}
         >
           Quay về trang chủ
         </Button>
