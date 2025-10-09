@@ -11,7 +11,6 @@ const empty = {
   provinceCode: '',
   districtCode: '',
   phone: '',
-  // ❌ bỏ lat/lng
   services: '',
   openingHours: '',
   isActive: true
@@ -26,8 +25,6 @@ function AddBranch({ open, onClose, onSuccess, onError }) {
   const handleSubmit = async () => {
     const name = (form.name || '').trim()
     if (!name || name.length < 2) return onError?.('Tên chi nhánh phải có ít nhất 2 ký tự')
-
-    // ✅ chuẩn hóa dữ liệu theo schema backend (không có lat/lng)
     const payload = {
       name,
       phone: (form.phone || '').trim(),
@@ -64,25 +61,25 @@ function AddBranch({ open, onClose, onSuccess, onError }) {
             <TextField label='Tên chi nhánh' fullWidth size='small'
               value={form.name} onChange={onChange('name')} />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField label='Số điện thoại' fullWidth size='small'
-              value={form.phone} onChange={onChange('phone')} />
-          </Grid>
           <Grid item xs={12}>
             <TextField label='Địa chỉ' fullWidth size='small'
               value={form.address} onChange={onChange('address')} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField label='Tỉnh/TP' fullWidth size='small'
-              value={form.provinceCode} onChange={onChange('provinceCode')} />
-          </Grid>
-          <Grid item xs={12} md={6}>
             <TextField label='Quận/Huyện' fullWidth size='small'
               value={form.districtCode} onChange={onChange('districtCode')} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField label='Tỉnh/TP' fullWidth size='small'
+              value={form.provinceCode} onChange={onChange('provinceCode')} />
           </Grid>
           <Grid item xs={12}>
             <TextField label='Dịch vụ (phân tách dấu phẩy)' fullWidth size='small'
               value={form.services} onChange={onChange('services')} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField label='Số điện thoại' fullWidth size='small'
+              value={form.phone} onChange={onChange('phone')} />
           </Grid>
           <Grid item xs={12}>
             <TextField label='Giờ mở cửa (ví dụ 09:00-21:00)' fullWidth size='small'
