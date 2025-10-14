@@ -15,8 +15,8 @@ import { useNavigate } from 'react-router-dom'
 
 function SideBar() {
   const navigate = useNavigate()
-  const role = localStorage.getItem('role')
-
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const role = user.role
   const adminMenu = [
     { icon: DashboardOutlinedIcon, title: 'Trang Chủ', path: '/admin/dashboard' },
     { icon: PersonOutlineOutlinedIcon, title: 'Quản Lý Tài Khoản', path: '/admin/account' },

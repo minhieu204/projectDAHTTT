@@ -51,7 +51,7 @@ function AppBar() {
           justifyContent: 'center',
           textTransform: 'none',
           cursor: 'pointer',
-          '&:hover': { opacity: 0.8 }, 
+          '&:hover': { opacity: 0.8 },
         }}
         onClick={() => handleEditAccountClick()}
       >
