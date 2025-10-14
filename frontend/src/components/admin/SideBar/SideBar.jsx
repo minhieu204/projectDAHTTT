@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import React from 'react'
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined'
 import SideBarItem from './SideBarItem/SideBarItem'
@@ -15,13 +15,33 @@ import { useNavigate } from 'react-router-dom'
 
 function SideBar() {
   const navigate = useNavigate()
+  const role = localStorage.getItem('role')
+
+  const adminMenu = [
+    { icon: DashboardOutlinedIcon, title: 'Trang Chủ', path: '/admin/dashboard' },
+    { icon: PersonOutlineOutlinedIcon, title: 'Quản Lý Tài Khoản', path: '/admin/account' },
+    { icon: ShoppingBagOutlinedIcon, title: 'Quản Lý Sản Phẩm', path: '/admin/product' },
+    { icon: ListAltOutlinedIcon, title: 'Quản Lý Danh Mục', path: '/admin/category' },
+    { icon: ShoppingCartOutlinedIcon, title: 'Quản Lý Đơn Hàng', path: '/admin/order' },
+    { icon: DiscountOutlinedIcon, title: 'Quản Lý Khuyến Mãi', path: '/admin/promotion' },
+    { icon: RateReviewOutlinedIcon, title: 'Quản Lý Đánh Giá', path: '/admin/rating' },
+    { icon: PeopleAltOutlinedIcon, title: 'Quản Lý Khách Hàng', path: '/admin/customer' },
+    { icon: GroupsOutlinedIcon, title: 'Quản Lý Nhân Viên', path: '/admin/employee' },
+    { icon: StoreOutlinedIcon, title: 'Quản Lý Chi Nhánh', path: '/admin/branch' }
+  ]
+
+  const employeeMenu = [
+    { icon: DashboardOutlinedIcon, title: 'Trang Chủ', path: '/admin/dashboard' },
+    { icon: ShoppingBagOutlinedIcon, title: 'Quản Lý Sản Phẩm', path: '/admin/product' },
+    { icon: ListAltOutlinedIcon, title: 'Quản Lý Danh Mục', path: '/admin/category' },
+    { icon: ShoppingCartOutlinedIcon, title: 'Quản Lý Đơn Hàng', path: '/admin/order' },
+    { icon: RateReviewOutlinedIcon, title: 'Quản Lý Đánh Giá', path: '/admin/rating' }
+  ]
+
+  const menuItems = role === 'admin' ? adminMenu : employeeMenu
+
   return (
-    <Box
-      sx={{
-        backgroundColor: '#343a40',
-        flex: '0 0 250px',
-      }}
-    >
+    <Box sx={{ backgroundColor: '#343a40', flex: '0 0 250px' }}>
       <Box
         sx={{
           height: '72px',
@@ -30,8 +50,9 @@ function SideBar() {
           justifyContent: 'center'
         }}
       >
-        <img src="/logo.png" alt="" style={{ width: '120px' }} />
+        <img src="/logo.png" alt="logo" style={{ width: '120px' }} />
       </Box>
+
       <Box
         sx={{
           height: 'calc(100% - 72px)',
@@ -42,16 +63,15 @@ function SideBar() {
           py: '10px'
         }}
       >
-        <SideBarItem icon={DashboardOutlinedIcon} title='Trang Chủ' to="/admin/dashboard" handleSideBarCllick={() => { navigate('/admin/dashboard') }}/>
-        <SideBarItem icon={PersonOutlineOutlinedIcon} title='Quản Lý Tài Khoản' to="/admin/account" handleSideBarCllick={() => { navigate('/admin/account') }}/>
-        <SideBarItem icon={ShoppingBagOutlinedIcon} title='Quản Lý Sản Phẩm' to="/admin/product" handleSideBarCllick={() => { navigate('/admin/product') }}/>
-        <SideBarItem icon={ListAltOutlinedIcon} title='Quản Lý Danh Mục' to="/admin/category" handleSideBarCllick={() => { navigate('/admin/category') }}/>
-        <SideBarItem icon={ShoppingCartOutlinedIcon} title='Quản Lý Đơn Hàng' to="/admin/order" handleSideBarCllick={() => { navigate('/admin/order') }}/>
-        <SideBarItem icon={DiscountOutlinedIcon} title='Quản Lý Khuyến Mãi' to="/admin/promotion" handleSideBarCllick={() => { navigate('/admin/promotion') }}/>
-        <SideBarItem icon={RateReviewOutlinedIcon} title='Quản Lý Đánh Giá' to="/admin/rating" handleSideBarCllick={() => { navigate('/admin/rating') }}/>
-        <SideBarItem icon={PeopleAltOutlinedIcon} title='Quản Lý Khách Hàng' to="/admin/customer" handleSideBarCllick={() => { navigate('/admin/customer') }}/>
-        <SideBarItem icon={GroupsOutlinedIcon} title='Quản Lý Nhân Viên' to="/admin/employee" handleSideBarCllick={() => { navigate('/admin/employee') }}/>
-        <SideBarItem icon={StoreOutlinedIcon} title='Quản Lý Chi Nhánh' to="/admin/branch" handleSideBarCllick={() => { navigate('/admin/branch') }}/>
+        {menuItems.map((item) => (
+          <SideBarItem
+            key={item.title}
+            icon={item.icon}
+            title={item.title}
+            to={item.path}
+            handleSideBarCllick={() => navigate(item.path)}
+          />
+        ))}
       </Box>
     </Box>
   )
