@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Typography, Snackbar, Alert, CircularProgress } from '@mui/material'
 import FieldCustom from '~/components/admin/FieldCustom/FieldCustom'
-import {updateAccountAPI, getUserDetailAPI } from '~/apis/userAPIs'
+import { updateAccountAPI, getUserDetailAPI } from '~/apis/userAPIs'
 import { useNavigate, useParams } from 'react-router-dom'
 import SaveIcon from '@mui/icons-material/Save'
 
@@ -63,13 +63,18 @@ function EditAccount() {
   const validate = () => {
     const tempErrors = {
       email: /\S+@\S+\.\S+/.test(formData.email) ? '' : 'Email không hợp lệ.',
-      phone: formData.phone 
+      phone: formData.phone
         ? (/^[0-9]{9,11}$/.test(formData.phone) ? '' : 'SĐT không hợp lệ.')
         : '' // nếu hong nhập thì cho pass
     }
 
     setErrors(tempErrors)
     return Object.values(tempErrors).every(x => x === '')
+  }
+
+  let isEmployee = false
+  if (formData.role === 'employee') {
+    isEmployee = true
   }
 
   const handleSubmit = async (event) => {
@@ -90,9 +95,14 @@ function EditAccount() {
       setSnackbarSeverity('success')
       setOpenSnackbar(true)
 
-      setTimeout(() => {
-        navigate('/admin/account')
-      }, 800)
+      !isEmployee ?
+        setTimeout(() => {
+          navigate('/admin/account')
+        }, 800)
+        :
+        setTimeout(() => {
+          navigate('/admin')
+        }, 800)
 
       setErrors({})
     } catch {
@@ -104,17 +114,23 @@ function EditAccount() {
     }
   }
 
+  const style = isEmployee ? { backgroundColor: '#343a40', height: 'auto', overflow: 'auto', mx: 5, my: 1, mt: -4, borderRadius: '8px' } :
+    { backgroundColor: '#343a40', height: 'auto', overflow: 'auto', mx: 5, my: 1, borderRadius: '8px' }
+
   return (
-    <Box sx={{ backgroundColor: '#343a40', height: 'auto', overflow: 'auto', mx: 5, my: 1, borderRadius: '8px' }}>
+    <Box sx={style}>
       <Box sx={{ color: 'white', m: '16px 48px 16px 16px', display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h5">Chỉnh sửa người dùng</Typography>
+        {!isEmployee ? null : (
+          <img src="/image.png" alt="" style={{ marginTop: '-10px', marginRight: '-40px' }}/>
+        )}
       </Box>
 
       <Box sx={{ px: 6 }} component="form" onSubmit={handleSubmit}>
         <FieldCustom
           label="Họ và tên"
           InputProps={{
-            readOnly: true, 
+            readOnly: true,
           }}
           value={formData.name}
           onChange={handleChange}
