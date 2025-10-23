@@ -62,11 +62,6 @@ const TableRatings = () => {
         }
       } catch {
         setRows([])
-        setSnackbarMessage(
-          'Không thể tải dữ liệu Đánh giá. Vui lòng thử lại.'
-        )
-        setSnackbarSeverity('error')
-        setOpenSnackbar(true)
       }
     }
     fetchUsers()

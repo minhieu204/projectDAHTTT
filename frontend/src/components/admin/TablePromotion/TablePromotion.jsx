@@ -64,9 +64,6 @@ const TablePromotion = ({ onEditPromotion }) => {
         setRows(sortedData)
       } catch {
         setRows([])
-        setSnackbarMessage('Không thể tải dữ liệu khuyến mãi. Vui lòng thử lại.')
-        setSnackbarSeverity('error')
-        setOpenSnackbar(true)
       }
     }
     fetchPromotions()
