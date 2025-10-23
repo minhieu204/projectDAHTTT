@@ -12,6 +12,9 @@ function CreateInformation() {
     phone: user?.phone || '',
     address: user?.address || ''
   })
+
+  const [errors, setErrors] = useState({ email: '', phone: '' })
+
   const handleLogout = () => {
     const userStr = localStorage.getItem('user')
     const user = JSON.parse(userStr)
@@ -22,12 +25,38 @@ function CreateInformation() {
     sessionStorage.removeItem('visitedcustomer')
     window.location.href = '/login'
   }
+
+  const validate = (data = form) => {
+    const nextErrors = { email: '', phone: '' }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!data.email) nextErrors.email = 'Email là bắt buộc'
+    else if (!emailRegex.test(data.email)) nextErrors.email = 'Email không hợp lệ (phải có @ và tên miền)'
+    const phoneRegex = /^\d{10}$/
+    if (!data.phone) nextErrors.phone = 'Số điện thoại là bắt buộc'
+    else if (!phoneRegex.test(data.phone)) nextErrors.phone = 'Số điện thoại phải gồm đúng 10 chữ số'
+    setErrors(nextErrors)
+    return !nextErrors.email && !nextErrors.phone
+  }
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    if (name === 'phone') {
+      const onlyDigits = value.replace(/\D/g, '').slice(0, 10)
+      const nextForm = { ...form, phone: onlyDigits }
+      setForm(nextForm)
+      validate(nextForm)
+      return
+    }
+
+    const nextForm = { ...form, [name]: value }
+    setForm(nextForm)
+    validate(nextForm)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!validate()) return
+
     try {
       const updateData = {
         name: form.fullName,
@@ -39,8 +68,8 @@ function CreateInformation() {
       const updatedUser = await updateUserAPI(updateData, token)
       localStorage.setItem('user', JSON.stringify(updatedUser))
       alert('Cập nhật thông tin thành công!')
-    } catch {
-      //
+    } catch (error) {
+      alert(error?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật thông tin')
     }
   }
 
@@ -58,8 +87,9 @@ function CreateInformation() {
       }}
     >
       <Box
-        component='form'
+        component="form"
         onSubmit={handleSubmit}
+        noValidate
         sx={{
           maxWidth: 600,
           mx: 'auto',
@@ -70,17 +100,15 @@ function CreateInformation() {
           boxShadow: 4
         }}
       >
-        <FormLabel
-          sx={{ display: 'flex', justifyContent: 'center', fontSize: '28px', color: '#0c3860', mb: 2 }}
-        >
+        <FormLabel sx={{ display: 'flex', justifyContent: 'center', fontSize: '28px', color: '#0c3860', mb: 2 }}>
           Cập nhật thông tin
         </FormLabel>
 
         <TextField
           fullWidth
-          margin='normal'
-          label='Họ và tên'
-          name='fullName'
+          margin="normal"
+          label="Họ và tên"
+          name="fullName"
           value={form.fullName}
           onChange={handleChange}
           required
@@ -88,31 +116,36 @@ function CreateInformation() {
 
         <TextField
           fullWidth
-          margin='normal'
-          label='Email'
-          name='email'
-          type='email'
+          margin="normal"
+          label="Email"
+          name="email"
+          type="email"
           value={form.email}
           onChange={handleChange}
           required
+          error={!!errors.email}
+          helperText={errors.email}
         />
 
         <TextField
           fullWidth
-          margin='normal'
-          label='Số điện thoại'
-          name='phone'
-          type='tel'
+          margin="normal"
+          label="Số điện thoại"
+          name="phone"
+          type="tel"
           value={form.phone}
           onChange={handleChange}
           required
+          inputProps={{ inputMode: 'numeric', pattern: '\\d*', maxLength: 10 }}
+          error={!!errors.phone}
+          helperText={errors.phone}
         />
 
         <TextField
           fullWidth
-          margin='normal'
-          label='Địa chỉ'
-          name='address'
+          margin="normal"
+          label="Địa chỉ"
+          name="address"
           value={form.address}
           onChange={handleChange}
           required
@@ -120,32 +153,19 @@ function CreateInformation() {
 
         <Button
           fullWidth
-          type='submit'
-          variant='contained'
-          sx={{
-            mt: 3,
-            bgcolor: '#4a3aff',
-            borderRadius: '8px',
-            py: 1.5,
-            fontWeight: 'bold',
-            fontSize: '16px'
-          }}
+          type="submit"
+          variant="contained"
+          sx={{ mt: 3, bgcolor: '#4a3aff', borderRadius: '8px', py: 1.5, fontWeight: 'bold', fontSize: '16px' }}
         >
           Hoàn tất
         </Button>
+
         <Button
           fullWidth
-          type='button'
-          variant='contained'
-          onClick={() => handleLogout()}
-          sx={{
-            mt: 3,
-            bgcolor: '#d32f2f',
-            borderRadius: '8px',
-            py: 1.5,
-            fontWeight: 'bold',
-            fontSize: '16px'
-          }}
+          type="button"
+          variant="contained"
+          onClick={handleLogout}
+          sx={{ mt: 3, bgcolor: '#d32f2f', borderRadius: '8px', py: 1.5, fontWeight: 'bold', fontSize: '16px' }}
         >
           Đăng xuất
         </Button>
