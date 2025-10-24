@@ -91,11 +91,56 @@ function Checkout() {
     }
   }
 
-  const handlePlaceOrder = async () => {
-    if (!buyerInfo.name || !buyerInfo.phone || !buyerInfo.email || !buyerInfo.address) {
-      alert('Vui lòng nhập đầy đủ thông tin!')
-      return
+  const [errors, setErrors] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    address: ''
+  })
+
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regex.test(email)
+  }
+
+  const validatePhone = (phone) => {
+    const regex = /^(0[1-9][0-9]{8})$/
+    return regex.test(phone)
+  }
+
+  const handleBlur = (field) => {
+    const value = buyerInfo[field].trim()
+    let error = ''
+
+    switch (field) {
+    case 'name':
+      if (!value) error = 'Vui lòng nhập họ và tên'
+      break
+    case 'phone':
+      if (!value) error = 'Vui lòng nhập số điện thoại'
+      else if (!validatePhone(value))
+        error = 'Số điện thoại không hợp lệ (phải có 10 số, bắt đầu bằng 0)'
+      break
+    case 'email':
+      if (!value) error = 'Vui lòng nhập email'
+      else if (!validateEmail(value)) error = 'Email không hợp lệ'
+      break
+    case 'address':
+      if (!value) error = 'Vui lòng nhập địa chỉ'
+      break
+    default:
+      break
     }
+
+    setErrors((prev) => ({ ...prev, [field]: error }))
+  }
+
+
+  const handlePlaceOrder = async () => {
+    Object.keys(buyerInfo).forEach((field) => handleBlur(field))
+
+    if (Object.values(buyerInfo).some((v) => !v.trim())) return
+    if (Object.values(errors).some((e) => e)) return
 
     try {
       let userId = null
@@ -218,10 +263,48 @@ function Checkout() {
             <Box sx={{ mt: 4, p: 2, border: '1px solid #eee', borderRadius: '8px' }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>Thông tin người mua</Typography>
               <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>
-                <TextField label="Họ và tên *" fullWidth value={buyerInfo.name} onChange={(e) => setBuyerInfo({ ...buyerInfo, name: e.target.value })} />
-                <TextField label="Số điện thoại *" fullWidth value={buyerInfo.phone} onChange={(e) => setBuyerInfo({ ...buyerInfo, phone: e.target.value })} />
-                <TextField label="Email *" fullWidth value={buyerInfo.email} onChange={(e) => setBuyerInfo({ ...buyerInfo, email: e.target.value })} />
-                <TextField label="Địa chỉ *" fullWidth multiline minRows={2} value={buyerInfo.address} onChange={(e) => setBuyerInfo({ ...buyerInfo, address: e.target.value })} />
+                <TextField
+                  label="Họ và tên *"
+                  fullWidth
+                  value={buyerInfo.name}
+                  onChange={(e) => setBuyerInfo({ ...buyerInfo, name: e.target.value })}
+                  onBlur={() => handleBlur('name')}
+                  error={!!errors.name}
+                  helperText={errors.name}
+                />
+
+                <TextField
+                  label="Số điện thoại *"
+                  fullWidth
+                  value={buyerInfo.phone}
+                  onChange={(e) => setBuyerInfo({ ...buyerInfo, phone: e.target.value })}
+                  onBlur={() => handleBlur('phone')}
+                  error={!!errors.phone}
+                  helperText={errors.phone}
+                />
+
+                <TextField
+                  label="Email *"
+                  fullWidth
+                  value={buyerInfo.email}
+                  onChange={(e) => setBuyerInfo({ ...buyerInfo, email: e.target.value })}
+                  onBlur={() => handleBlur('email')}
+                  error={!!errors.email}
+                  helperText={errors.email}
+                />
+
+                <TextField
+                  label="Địa chỉ *"
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  value={buyerInfo.address}
+                  onChange={(e) => setBuyerInfo({ ...buyerInfo, address: e.target.value })}
+                  onBlur={() => handleBlur('address')}
+                  error={!!errors.address}
+                  helperText={errors.address}
+                />
+
               </Box>
               <Button variant="contained" sx={{ mt: 3, bgcolor: '#003468', '&:hover': { bgcolor: '#004c8f' } }} onClick={handlePlaceOrder} fullWidth>
                 Đặt hàng
